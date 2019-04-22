@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  first_name: MyString
-  email: MyString
+  first_name: Lew
+  last_name: Alcindor
+  email: l.alcindor@ucla.edu
 
 two:
-  first_name: MyString
-  email: MyString
+  first_name: Christian
+  last_name: Laettner
+  email: clettner@duke.edu
