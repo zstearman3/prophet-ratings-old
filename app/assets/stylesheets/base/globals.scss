@@ -1,3 +1,5 @@
+@import "base/variables.scss"; 
+
 /* header */
 .navbar-inverse{
   background-color: #0a0d5e;
@@ -7,7 +9,7 @@
 }
 
 body {
- padding-top: 30px; 
+ padding-top: 40px; 
 }
 
 
@@ -40,4 +42,27 @@ footer ul {
 footer ul li {
   float: left;
   margin-left: 15px;
+}
+
+/* forms */
+
+form{
+  .field{
+    margin-bottom: 5px;
+  }
+}
+
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .has-error !optional;
+  .form-control {
+    color: $state-danger-text;
+  }
 }
