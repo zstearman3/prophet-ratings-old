@@ -4,8 +4,10 @@ one:
   first_name: Lew
   last_name: Alcindor
   email: l.alcindor@ucla.edu
+  password_digest: <%= User.digest('password') %>
 
 two:
   first_name: Christian
   last_name: Laettner
   email: clettner@duke.edu
+  password_digest: <%= User.digest('password') %>
