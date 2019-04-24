@@ -2,7 +2,7 @@
 
 /* header */
 .navbar-inverse{
-  background-color: #0a0d5e;
+  background-color: $prophet-blue;
   #logo {
     float: left;
   }
@@ -65,4 +65,13 @@ form{
   .form-control {
     color: $state-danger-text;
   }
+}
+
+/* debugger */
+
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
 }
