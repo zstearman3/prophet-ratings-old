@@ -1,0 +1,8 @@
+<%= image_tag("Prophet_Logo_White.png", width: '150', alt: 'Prophet Ratings') %>
+
+<p>Hey <%= @user.first_name %>, </p>
+
+<p>Welcome to Prophet Ratings! Click on the link below to activate our account:</p>
+
+<%= link_to "Activate", edit_account_activation_url(@user.activation_token,
+                                                    email: @user.email) %>
