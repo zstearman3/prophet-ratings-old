@@ -2,7 +2,9 @@
 
 /* header */
 .navbar-inverse{
+  background-image: linear-gradient(-120deg, rgba(0,0,0,0), 90%, rgba(225,225,225,1));
   background-color: $prophet-blue;
+  border-bottom: none;
   #logo {
     float: left;
   }

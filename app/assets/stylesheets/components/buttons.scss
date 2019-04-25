@@ -1,0 +1,19 @@
+@import "base/variables.scss"; 
+
+.btn-standard {
+  background-color: $prophet-blue;
+  color: white;
+  border: none;
+  transition: transform 200ms ease,
+              box-shadow 200ms ease;
+  &:hover {
+    transform: translate(-2px, -1px);
+    box-shadow: 2px 1px lightgrey;
+    background-color: $prophet-blue;
+    color: white;
+  }
+}
+
+.btn-wide {
+  width: 100%;
+}
