@@ -29,7 +29,7 @@ class TeamsController < ApplicationController
 
   def update
     if @team.update(team_params)
-      flash[:success] = "Team was successfully updated"
+      flash[:success] = "Team was successfully updated."
       redirect_to @team
     else
       render 'edit'
@@ -37,6 +37,9 @@ class TeamsController < ApplicationController
   end
 
   def destroy
+    @team.destroy
+    flash[:success] = "Team was successfully deleted."
+    redirect_to teams_url
   end
   
   private
@@ -50,6 +53,6 @@ class TeamsController < ApplicationController
     end
   
     def team_params
-      params.require(:team).permit(:school)
+      params.require(:team).permit(:school, :name, :wins, :losses, :conference_wins, :conference_losses)
     end
 end
