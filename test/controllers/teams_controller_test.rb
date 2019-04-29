@@ -2,6 +2,7 @@ require 'test_helper'
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:one)
     @team = teams(:one)
   end
 
@@ -16,6 +17,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
+    log_in_as @user
     get new_team_url
     assert_response :success
   end

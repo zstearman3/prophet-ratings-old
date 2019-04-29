@@ -18,6 +18,11 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
   
+  # Returns true if the give user is the current user.
+  def current_user?(user)
+    user == current_user
+  end
+  
   # Returns the current logged-in user (if any).
   def current_user
     if (user_id = session[:user_id])
@@ -53,4 +58,21 @@ module SessionsHelper
   def store_location
     session[:forwarding_url] = request.original_url if request.get?
   end
+  
+  private
+  # Common before filters for ensuring correct user.
+    def logged_in_user
+      unless logged_in?
+        store_location
+        flash[:danger] = "Please log in."
+        redirect_to login_url
+      end
+    end
+    
+    def admin_user
+      unless current_user.admin?
+        flash[:danger] = "You do not have access to this page."
+        redirect_to root_url
+      end
+    end
 end

@@ -1,0 +1,22 @@
+<%= form_for(@team) do |form| %>
+  <% if @team.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        <%= pluralize(@team.errors.count, "error") %> prohibited this team from being saved:
+      </div>
+      <ul>
+      <% @team.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class = "field">
+    <%= form.label :school %>
+    <%= form.text_field :school, class: 'form-control', id: :team_school %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit "Create School", class: "btn btn-standard btn-wide" %>
+  </div>
+<% end %>

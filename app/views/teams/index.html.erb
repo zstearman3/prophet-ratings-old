@@ -1,2 +1,34 @@
-<h1>Teams#index</h1>
-<p>Find me in app/views/teams/index.html.erb</p>
+<% provide(:title, 'Teams') %>
+
+<h1>Teams</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>School</th>
+      <th>Nickname</th>
+      <th>Conference</th>
+      <th>Record</th>
+      <th>Conference Record</th>
+      <% if logged_in? && current_user.admin? %>
+        <th>Actions</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @teams.each do |team| %>
+      <tr>
+        <td><%= team.school %></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <% if logged_in? && current_user.admin? %>
+          <td><%= link_to('Edit', edit_team_path(team)) + " | " +
+                  link_to('Destroy', team, method: :delete, data: { confirm: 'Are you sure?' }) %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
