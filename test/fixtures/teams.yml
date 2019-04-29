@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  school: MyString
+  name: MyString
+  ap_rank: 1
+  wins: 1
+  losses: 1
+  conference_wins: 1
+  conference_losses: 1
+  team_logo_url: MyString
