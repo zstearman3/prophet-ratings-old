@@ -14,7 +14,7 @@ Next, migrate the databse:
 $ rails db:migrate
 ```
 
-Finally, run the test wuite to verify that everything is working correctly:
+Finally, run the test suite to verify that everything is working correctly:
 ```
 $ rails test
 ```
