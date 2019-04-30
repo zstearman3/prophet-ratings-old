@@ -21,6 +21,11 @@
     <%= form.text_field :name, class: 'form-control', id: :team_name %>
   </div>
   
+  <div class= "field">
+    <%= form.label :conference %>
+    <%= form.collection_select :conference_id, Conference.all, :id, :name, class: 'form-control', id: :team_conference %>
+  </div>
+  
   <div class = "field">
     <%= form.label :wins %>
     <%= form.number_field :wins, class: 'form-control', id: :team_wins %>
@@ -42,6 +47,6 @@
   </div>
   
   <div class="actions">
-    <%= form.submit "Create School", class: "btn btn-standard btn-wide" %>
+    <%= form.submit yield(:button_text), class: "btn btn-standard btn-wide" %>
   </div>
 <% end %>

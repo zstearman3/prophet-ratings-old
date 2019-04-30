@@ -1,11 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  school: MyString
-  name: MyString
+  school: Oklahoma
+  name: Sooners
   ap_rank: 1
-  wins: 1
-  losses: 1
-  conference_wins: 1
-  conference_losses: 1
+  wins: 19
+  losses: 11
+  conference_wins: 10
+  conference_losses: 6
   team_logo_url: MyString
+  conference: big_12

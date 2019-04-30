@@ -20,7 +20,7 @@
       <tr>
         <td><%= team.school %></td>
         <td><%= team.name %></td>
-        <td></td>
+        <td><%= team.conference.name %></td>
         <td><%= team.wins.to_s + "-" + team.losses.to_s %></td>
         <td><%= team.conference_wins.to_s + "-" + team.conference_losses.to_s %></td>
         <% if logged_in? && current_user.admin? %>

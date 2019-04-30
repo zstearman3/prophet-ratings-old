@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+big_12:
+  name: Big XII
 
-two:
-  name: MyString
+big_10:
+  name: Big 10
