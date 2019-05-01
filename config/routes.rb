@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'stadia/new'
+
   get 'seasons/new'
 
   get 'sessions/new'
@@ -16,4 +18,5 @@ Rails.application.routes.draw do
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :teams
   resources :seasons,             only: [:new, :create, :edit, :update]
+  resources :stadia,              only: [:new, :create, :edit, :update]
 end

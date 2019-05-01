@@ -1,0 +1,18 @@
+<%= form_for(@stadium) do |form| %>
+  <% if @stadium.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        <%= pluralize(@stadium.errors.count, "error") %> prohibited this stadium from being saved:
+      </div>
+      <ul>
+        <% @stadium.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: 'form-control', id: :stadium_name %>
+  </div>
+<% end %>

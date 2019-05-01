@@ -11,37 +11,37 @@
       </ul>
     </div>
   <% end %>
-  <div class = "field">
+  <div class="field">
     <%= form.label :school %>
     <%= form.text_field :school, class: 'form-control', id: :team_school %>
   </div>
 
-  <div class = "field">
+  <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name, class: 'form-control', id: :team_name %>
   </div>
   
-  <div class= "field">
+  <div class="field">
     <%= form.label :conference %>
     <%= form.collection_select :conference_id, Conference.all, :id, :name, {prompt: 'Select Conference'}, {class: 'form-control', id: :team_conference} %>
   </div>
   
-  <div class = "field">
+  <div class="field">
     <%= form.label :wins %>
     <%= form.number_field :wins, class: 'form-control', id: :team_wins %>
   </div>
   
-  <div class = "field">
+  <div class="field">
     <%= form.label :losses %>
     <%= form.number_field :losses, class: 'form-control', id: :team_losses %>
   </div>
   
-  <div class = "field">
+  <div class="field">
     <%= form.label :conference_wins %>
     <%= form.number_field :conference_wins, class: 'form-control', id: :team_conference_wins %>
   </div>
   
-  <div class = "field">
+  <div class="field">
     <%= form.label :conference_losses %>
     <%= form.number_field :conference_losses, class: 'form-control', id: :team_conference_losses %>
   </div>
