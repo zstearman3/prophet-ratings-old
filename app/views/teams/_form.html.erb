@@ -23,7 +23,7 @@
   
   <div class= "field">
     <%= form.label :conference %>
-    <%= form.collection_select :conference_id, Conference.all, :id, :name, class: 'form-control', id: :team_conference %>
+    <%= form.collection_select :conference_id, Conference.all, :id, :name, {prompt: 'Select Conference'}, {class: 'form-control', id: :team_conference} %>
   </div>
   
   <div class = "field">

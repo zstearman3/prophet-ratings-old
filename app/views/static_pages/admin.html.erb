@@ -1,0 +1,21 @@
+<% provide(:title, 'Admin') %>
+
+<h1>Admin Actions</h1>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3>Users</h3>
+    <%= link_to 'View Users', users_path %>
+    
+    <h3>Seasons</h3>
+    <%= link_to 'Create Season', seasons_new_url %>
+    
+    <h3>Teams</h3>
+    <p><%= link_to 'View Teams', teams_url %></p>
+    <p><%= link_to 'Create Team', new_team_path %></p>
+  </div>
+  
+  <div class="col-sm-6">
+    <h3>Stadiums</h3>
+  </div>
+</div>
