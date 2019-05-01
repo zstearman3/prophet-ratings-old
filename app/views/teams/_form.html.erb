@@ -46,6 +46,11 @@
     <%= form.number_field :conference_losses, class: 'form-control', id: :team_conference_losses %>
   </div>
   
+  <div class="field">
+    <%= form.label :stadium %>
+    <%= form.collection_select :stadium_id, Stadium.all, :id, :name, {prompt: 'Select Stadium'}, {class: 'form-control', id: :team_conference} %>
+  </div>
+  
   <div class="actions">
     <%= form.submit yield(:button_text), class: "btn btn-standard btn-wide" %>
   </div>

@@ -1,2 +1,3 @@
-<h1>Teams#show</h1>
-<p>Find me in app/views/teams/show.html.erb</p>
+<h1><%= @team.school + " " + @team.name %></h1>
+<small><%= @team.stadium.name unless @team.stadium.nil? %></small>
+

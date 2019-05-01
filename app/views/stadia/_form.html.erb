@@ -15,4 +15,28 @@
     <%= form.label :name %>
     <%= form.text_field :name, class: 'form-control', id: :stadium_name %>
   </div>
+  
+  <div class="field">
+    <%= form.label :city %>
+    <%= form.text_field :city, class: 'form-control', id: :stadium_city %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :state %>
+    <%= form.text_field :state, class: 'form-control', id: :stadium_state %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :country %>
+    <%= form.text_field :country, class: 'form-control', id: :stadium_country %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :capacity %>
+    <%= form.number_field :capacity, class: 'form-control', id: :stadium_capacity %>
+  </div>
+  
+  <div clas="actions">
+    <%= form.submit yield(:button_text), class: 'btn btn-standard btn-wide' %>
+  </div>
 <% end %>
