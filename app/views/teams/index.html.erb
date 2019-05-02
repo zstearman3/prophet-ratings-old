@@ -18,7 +18,7 @@
   <tbody>
     <% @teams.each do |team| %>
       <tr>
-        <td><%= team.school %></td>
+        <td><%= link_to team.school, team %></td>
         <td><%= team.name %></td>
         <td><%= team.conference.name %></td>
         <td><%= team.wins.to_s + "-" + team.losses.to_s %></td>

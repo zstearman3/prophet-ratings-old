@@ -1,3 +1,6 @@
 <h1><%= @team.school + " " + @team.name %></h1>
 <small><%= @team.stadium.name unless @team.stadium.nil? %></small>
+<% @team.players.each do |player| %>
+ <p><%= player.first_name + " " + player.last_name %></p>
+<% end %>
 
