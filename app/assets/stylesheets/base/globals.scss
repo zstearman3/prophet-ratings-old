@@ -82,6 +82,14 @@ form{
   margin-left: 0;
 }
 
+/* tables */
+
+.table-sm {
+  td {
+    padding: 4px !important;
+  }
+}
+
 /* debugger */
 
 .debug_dump {
