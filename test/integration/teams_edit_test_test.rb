@@ -3,7 +3,7 @@ require 'test_helper'
 class TeamsEditTestTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:one)
-    @team = teams(:one)
+    @team = teams(:sooners)
   end
   
   test "successful edit" do

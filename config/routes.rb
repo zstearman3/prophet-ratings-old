@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resources :teams
   resources :seasons,             only: [:new, :create, :edit, :update]
   resources :stadia,              only: [:new, :create, :edit, :update]
+  resources :players,             only: [:show]
 end

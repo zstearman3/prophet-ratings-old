@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TeamTest < ActiveSupport::TestCase
   def setup
-    @team = teams(:one)
+    @team = teams(:sooners)
   end
   
   test "should be valid" do

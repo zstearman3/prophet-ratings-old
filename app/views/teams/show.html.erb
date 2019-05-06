@@ -1,6 +1,23 @@
 <h1><%= @team.school + " " + @team.name %></h1>
-<small><%= @team.stadium.name unless @team.stadium.nil? %></small>
-<% @team.players.each do |player| %>
- <p><%= player.first_name + " " + player.last_name %></p>
-<% end %>
-
+<h3><%= @team.stadium.name unless @team.stadium.nil? %></h3>
+<h2>Roster</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Pos</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @team.players.each do |player| %>
+      <tr>
+        <td><%= player.jersey %></td>
+        <td><%= link_to player.first_name + " " + player.last_name, player %></td>
+        <td><%= player.position %></td>
+        <td><%= player.year %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

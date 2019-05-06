@@ -2,6 +2,10 @@
 
 one:
   first_name: MyString
+  last_name: MyString
+  team: sooners
 
 two:
   first_name: MyString
+  last_name: MyString
+  team: sooners
