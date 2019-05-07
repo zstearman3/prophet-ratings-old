@@ -1,0 +1,31 @@
+<% year = params[:season].to_i %>
+<%= link_to 'Previous Season', team_seasons_path(season: year - 1) %>
+<%= link_to 'Next Season', team_seasons_path(season: year + 1) %>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Team</th>
+      <th>Record</th>
+      <th>FG%</th>
+      <th>2P%</th>
+      <th>3P%</th>
+      <th>FT%</th>
+      <th>EFG%</th>
+      <th>TS%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @team_seasons.each do |season| %>
+      <tr>
+        <td><%= season.team.school %></td>
+        <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+        <td><%= season.field_goals_percentage %></td>
+        <td><%= season.two_pointers_percentage %></td>
+        <td><%= season.three_pointers_percentage %></td>
+        <td><%= season.free_throws_percentage %></td>
+        <td><%= season.effective_field_goals_percentage %></td>
+        <td><%= season.true_shooting_percentage %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
