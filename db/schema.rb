@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190507194727) do
+ActiveRecord::Schema.define(version: 20190508032007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,59 @@ ActiveRecord::Schema.define(version: 20190507194727) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "player_seasons", force: :cascade do |t|
+    t.integer "season_type"
+    t.integer "year"
+    t.string "name"
+    t.string "team_name"
+    t.string "position"
+    t.datetime "updated"
+    t.integer "games"
+    t.integer "minutes"
+    t.integer "field_goals_made"
+    t.integer "field_goals_attempted"
+    t.decimal "field_goals_percentage"
+    t.decimal "effective_field_goals_percentage"
+    t.integer "two_pointers_made"
+    t.integer "two_pointers_attempted"
+    t.decimal "two_pointers_percentage"
+    t.integer "three_pointers_made"
+    t.integer "three_pointers_attempted"
+    t.decimal "three_pointers_percentage"
+    t.integer "free_throws_made"
+    t.integer "free_throws_attempted"
+    t.decimal "free_throws_percentage"
+    t.integer "offensive_rebounds"
+    t.integer "defensive_rebounds"
+    t.integer "rebounds"
+    t.decimal "offensive_rebounds_percentage"
+    t.decimal "defensive_rebounds_percentage"
+    t.decimal "total_rebounds_percentage"
+    t.integer "assists"
+    t.integer "steals"
+    t.integer "blocked_shots"
+    t.integer "turnovers"
+    t.integer "personal_fouls"
+    t.integer "points"
+    t.decimal "true_shooting_percentage"
+    t.decimal "player_efficiency_rating"
+    t.decimal "assists_percentage"
+    t.decimal "steals_percentage"
+    t.decimal "blocks_percentage"
+    t.decimal "turnovers_percentage"
+    t.decimal "usage_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "player_id"
+    t.bigint "team_id"
+    t.bigint "season_id"
+    t.bigint "team_season_id"
+    t.index ["player_id"], name: "index_player_seasons_on_player_id"
+    t.index ["season_id"], name: "index_player_seasons_on_season_id"
+    t.index ["team_id"], name: "index_player_seasons_on_team_id"
+    t.index ["team_season_id"], name: "index_player_seasons_on_team_season_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -145,6 +198,10 @@ ActiveRecord::Schema.define(version: 20190507194727) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "player_seasons", "players"
+  add_foreign_key "player_seasons", "seasons"
+  add_foreign_key "player_seasons", "team_seasons"
+  add_foreign_key "player_seasons", "teams"
   add_foreign_key "players", "teams"
   add_foreign_key "team_seasons", "seasons"
   add_foreign_key "team_seasons", "teams"

@@ -21,3 +21,25 @@
     <% end %>
   </tbody>
 </table>
+
+<h2>Stats</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Points</th>
+      <th>Asssists</th>
+      <th>Rebounds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @team.player_seasons.each do |player_season| %>
+      <tr>
+        <td><%= player_season.name %></td>
+        <td><%= player_season.points %></td>
+        <td><%= player_season.assists %></td>
+        <td><%= player_season.rebounds %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

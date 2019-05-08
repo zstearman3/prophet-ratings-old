@@ -128,4 +128,61 @@ namespace :setup do
     end
   end
 
+  task player_seasons: :environment do
+    url = URI.parse('https://api.sportsdata.io/v3/cbb/stats/json/PlayerSeasonStats/2019?key='+ sd_api_key)
+    puts url
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
+      http.request(req)
+    end
+    json_res =  res.body
+    obj = JSON.parse(json_res)
+    obj.each do |item|
+      player_season = PlayerSeason.find_or_create_by(id: item['StatID'])
+      player_season.team_season = TeamSeason.find_by(year: item['Season'], team_id: item['TeamID'])
+      player_season.team_id = item['TeamID']
+      player_season.season_id = Season.find_by(season: item['Season']).id
+      player_season.year = item['Season']
+      player_season.season_type = item['SeasonType']
+      player_season.name = item['Name']
+      player_season.position = item['Position']
+      player_season.team_name = item['Team']
+      player_season.updated = item['Updated']
+      player_season.games = item['Games']
+      player_season.minutes = item['Minutes']
+      player_season.field_goals_made = item['FieldGoalsMade']
+      player_season.field_goals_attempted = item['FieldGoalsAttempted']
+      player_season.field_goals_percentage = item['FieldGoalsPercentage']
+      player_season.effective_field_goals_percentage = item['EffectiveFieldGoalsPercentage']
+      player_season.two_pointers_made = item['TwoPointersMade']
+      player_season.two_pointers_attempted = item['TwoPointersAttempted']
+      player_season.two_pointers_percentage = item['TwoPointersPercentage']
+      player_season.three_pointers_made = item['ThreePointersMade']
+      player_season.three_pointers_attempted = item['ThreePointersAttempted']
+      player_season.three_pointers_percentage = item['ThreePointersPercentage']
+      player_season.free_throws_made = item['FreeThrowsMade']
+      player_season.free_throws_attempted = item['FreeThrowsAttempted']
+      player_season.free_throws_percentage = item['FreeThrowsPercentage']
+      player_season.offensive_rebounds = item['OffensiveRebounds']
+      player_season.defensive_rebounds = item['DefensiveRebounds']
+      player_season.rebounds = item['Rebounds']
+      player_season.offensive_rebounds_percentage = item['OffensiveReboundsPercentage']
+      player_season.defensive_rebounds_percentage = item['DefensiveReboundsPercentage']
+      player_season.total_rebounds_percentage = item['TotalReboundsPercentage']
+      player_season.assists = item['assists']
+      player_season.steals = item['steals']
+      player_season.blocked_shots = item['blocked_shots']
+      player_season.turnovers = item['turnovers']
+      player_season.personal_fouls = item['personal_fouls']
+      player_season.points = item['points']
+      player_season.true_shooting_percentage = item['TrueShootingPercentage']
+      player_season.player_efficiency_rating = item['PlayerEfficiencyRating']
+      player_season.assists_percentage = item['AssistsPercentage']
+      player_season.steals_percentage = item['StealsPercentage']
+      player_season.blocks_percentage = item['BlocksPercentage']
+      player_season.turnovers_percentage = item['TurnOversPercentage']
+      player_season.usage_rate = item['UsageRatePercentage']
+      player_season.save
+    end
+  end
 end
