@@ -5,8 +5,8 @@ class TeamSeasonsControllerTest < ActionDispatch::IntegrationTest
     @user = users(:one)
   end
   
-  test "should get index" do
-    get team_seasons_path(season: '2019')
+  test "should get team shooting" do
+    get team_shooting_path(season: '2019')
     assert_response :success
   end
 end

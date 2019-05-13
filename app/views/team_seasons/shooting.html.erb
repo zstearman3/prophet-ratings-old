@@ -1,6 +1,6 @@
 <% year = params[:season].to_i %>
-<%= link_to 'Previous Season', team_seasons_path(season: year - 1) %>
-<%= link_to 'Next Season', team_seasons_path(season: year + 1) %>
+<%= link_to 'Previous Season', team_shooting_path(season: year - 1) %>
+<%= link_to 'Next Season', team_shooting_path(season: year + 1) %>
 <table class="table table-sm">
   <thead>
     <tr>

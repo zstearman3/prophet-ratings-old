@@ -1,5 +1,5 @@
 class TeamSeasonsController < ApplicationController
-  def index
+  def shooting
     @team_seasons = TeamSeason.where(year: params[:season])
   end
 end
