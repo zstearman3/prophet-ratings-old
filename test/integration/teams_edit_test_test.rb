@@ -11,7 +11,7 @@ class TeamsEditTestTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
     log_in_as @user
     get edit_team_path(@team)
-    school = "Kansas"
+    school = "Villanova"
     patch team_path(@team), params: { team: { school: school,
                                               conference_id: @team.conference_id } }
     assert_not flash.empty?

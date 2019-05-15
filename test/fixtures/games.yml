@@ -4,8 +4,19 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
+one:
+  away_team: jayhawks
+  home_team: sooners
+  stadium: one
+  season: one
+  year: 2019
+  home_team_name: 'Oklahoma'
+  away_team_name: 'Kansas'
+  home_team_score: 79
+  away_team_score: 70
+  day: <%= Date.today %>
+  status: 'Final'
+  
 #
 two: {}
 # column: value

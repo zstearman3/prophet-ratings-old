@@ -41,6 +41,24 @@ namespace :setup do
         team.save
       end
     end
+    
+    url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/Stadiums?key=' + sd_api_key)
+    puts url
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
+      http.request(req)
+    end
+    json_res =  res.body
+    obj = JSON.parse(json_res)
+    obj.each do |item|
+      stadium = Stadium.find_or_create_by(id: item['StadiumID'])
+      stadium.name = item['Name']
+      stadium.city = item['City']
+      stadium.state = item['State']
+      stadium.country = item['Country']
+      stadium.capacity = item['Capacity']
+      stadium.save
+    end
   end
   
   task get_players: :environment do
