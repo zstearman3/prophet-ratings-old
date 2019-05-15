@@ -9,8 +9,8 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th>Away Team</th>
-      <th>Home Team</th>
+      <th>Matchup</th>
+      <th>Time</th>
       <th>Point Spread</th>
       <th>Over/Under</th>
       <th>Away Score</th>
@@ -20,19 +20,22 @@
   <tbody>
     <% @games.each do |game| %>
       <tr>
+        <td>
         <!--Away Team Link-->
         <% if game.away_team %>
-          <td><%= link_to game.away_team_name, game.away_team %></td>
+          <%= link_to game.away_team_name, game.away_team %>
         <% else %>
-          <td><%= game.away_team_name %></td>
+          <%= game.away_team_name %>
         <% end %>
-        
+         @ 
         <!--Home Team Link-->
         <% if game.home_team %>
-          <td><%= link_to game.home_team_name, game.home_team %></td>
+          <%= link_to game.home_team_name, game.home_team %>
         <% else %>
-          <td><%= game.home_team_name %></td>
-        <% end %>
+          <%= game.home_team_name %>
+        <% end %>  
+        </td>
+        <td><%= link_to game.date_time.strftime("%I:%M%p"), game unless game.date_time.nil? %></td>
         <td><%= game.point_spread %></td>
         <td><%= game.over_under %></td>
         <td><%= game.away_team_score %></td>
