@@ -2,6 +2,10 @@
 
 <h1>Games</h1>
 
+<% previous_day = (Date.parse(params[:date]) - 1.day).strftime('%Y%m%d') %>
+<% next_day = (Date.parse(params[:date]) + 1.day).strftime('%Y%m%d') %>
+<%= link_to "Previous Day", games_path(date: previous_day) %>
+<%= link_to "Next Day", games_path(date: next_day), class: 'align-right' %>
 <table class="table table-sm">
   <thead>
     <tr>

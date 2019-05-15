@@ -188,34 +188,45 @@ namespace :setup do
   end
   
   task get_games: :environment do
-    url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/GamesByDate/2019-FEB-01?key='+ sd_api_key)
-    puts url
-    req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
-      http.request(req)
-    end
-    json_res =  res.body
-    obj = JSON.parse(json_res)
-    obj.each do |item|
-      game = Game.find_or_create_by(id: item['GameID'])
-      game.year = item['Season']
-      game.season_type = item['SeasonType']
-      game.status = item['Status']
-      game.day = item['Day']
-      game.date_time = item['DateTime']
-      game.away_team_name = item['AwayTeam']
-      game.home_team_name = item['HomeTeam']
-      game.away_team_score = item['AwayTeamScore']
-      game.home_team_score = item['HomeTeamScore']
-      game.point_spread = item['PointSpread']
-      game.over_under = item['OverUnder']
-      game.away_team_money_line = item['AwayTeamMoneyLine']
-      game.home_team_money_line = item['HomeTeamMoneyLine']
-      # game.stadium_id = item['Stadium']['StadiumID'] unless item['Stadium'].nil?
-      game.season = Season.find_by(season: item['Season'])
-      game.away_team_id = item['AwayTeamID']
-      game.home_team_id = item['HomeTeamID']
-      game.save
+    season = Season.find_by(season: 2019)
+    (season.regular_season_start_date..season.regular_season_end_date).each do |date|
+      str_date = date.strftime('%Y-%^b-%d')
+      url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/GamesByDate/' + str_date + '?key='+ sd_api_key)
+      puts url
+      req = Net::HTTP::Get.new(url.to_s)
+      res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
+        http.request(req)
+      end
+      json_res =  res.body
+      obj = JSON.parse(json_res)
+      obj.each do |item|
+        game = Game.find_or_create_by(id: item['GameID'])
+        game.year = item['Season']
+        game.season_type = item['SeasonType']
+        game.status = item['Status']
+        game.day = item['Day']
+        game.date_time = item['DateTime']
+        game.away_team_name = item['AwayTeam']
+        game.home_team_name = item['HomeTeam']
+        game.away_team_score = item['AwayTeamScore']
+        game.home_team_score = item['HomeTeamScore']
+        game.point_spread = item['PointSpread']
+        game.over_under = item['OverUnder']
+        game.away_team_money_line = item['AwayTeamMoneyLine']
+        game.home_team_money_line = item['HomeTeamMoneyLine']
+        ##########################
+        # This code does not currently save games if the away team id, home team id, or stadium id doesn't exist.
+        ##########################
+        game.stadium_id = item['Stadium']['StadiumID'] unless item['Stadium'].nil?
+        game.season = Season.find_by(season: item['Season'])
+        game.away_team_id = item['AwayTeamID']
+        game.home_team_id = item['HomeTeamID']
+        begin
+          game.save
+        rescue Exception => e
+          # exception goes here
+        end
+      end
     end
   end
 end
