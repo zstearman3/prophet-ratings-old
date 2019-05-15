@@ -1,0 +1,39 @@
+<% provide(:title, 'Games') %>
+
+<h1>Games</h1>
+
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Away Team</th>
+      <th>Home Team</th>
+      <th>Point Spread</th>
+      <th>Over/Under</th>
+      <th>Away Score</th>
+      <th>Home Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @games.each do |game| %>
+      <tr>
+        <!--Away Team Link-->
+        <% if game.away_team %>
+          <td><%= link_to game.away_team_name, game.away_team %></td>
+        <% else %>
+          <td><%= game.away_team_name %></td>
+        <% end %>
+        
+        <!--Home Team Link-->
+        <% if game.home_team %>
+          <td><%= link_to game.home_team_name, game.home_team %></td>
+        <% else %>
+          <td><%= game.home_team_name %></td>
+        <% end %>
+        <td><%= game.point_spread %></td>
+        <td><%= game.over_under %></td>
+        <td><%= game.away_team_score %></td>
+        <td><%= game.home_team_score %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
