@@ -5,6 +5,8 @@ class GamesController < ApplicationController
   end
   
   def show
+    @away_team_game = @game.team_games.find_by(home_or_away: 'AWAY')
+    @home_team_game = @game.team_games.find_by(home_or_away: 'HOME')
   end
   
   private 

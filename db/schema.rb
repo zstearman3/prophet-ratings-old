@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190515032433) do
+ActiveRecord::Schema.define(version: 20190517032320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,52 @@ ActiveRecord::Schema.define(version: 20190515032433) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "team_games", force: :cascade do |t|
+    t.integer "season_type"
+    t.integer "year"
+    t.string "team_abbreviation"
+    t.string "team_name"
+    t.integer "wins"
+    t.integer "losses"
+    t.string "opponent_name"
+    t.date "day"
+    t.datetime "date_time"
+    t.string "home_or_away"
+    t.integer "num_games"
+    t.integer "minutes"
+    t.integer "field_goals_made"
+    t.integer "field_goals_attempted"
+    t.decimal "field_goals_percentage"
+    t.integer "two_pointers_made"
+    t.integer "two_pointers_attempted"
+    t.decimal "two_pointers_percentage"
+    t.integer "three_pointers_made"
+    t.integer "three_pointers_attempted"
+    t.decimal "three_pointers_percentage"
+    t.integer "free_throws_made"
+    t.integer "free_throws_attempted"
+    t.decimal "free_throws_percentage"
+    t.integer "offensive_rebounds"
+    t.integer "defensive_rebounds"
+    t.integer "rebounds"
+    t.integer "assists"
+    t.integer "steals"
+    t.integer "blocked_shots"
+    t.integer "turnovers"
+    t.integer "personal_fouls"
+    t.integer "points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "team_id"
+    t.bigint "season_id"
+    t.bigint "game_id"
+    t.bigint "opponent_id"
+    t.index ["game_id"], name: "index_team_games_on_game_id"
+    t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
+    t.index ["season_id"], name: "index_team_games_on_season_id"
+    t.index ["team_id"], name: "index_team_games_on_team_id"
+  end
+
   create_table "team_seasons", force: :cascade do |t|
     t.integer "season_type"
     t.integer "year"
@@ -243,6 +289,10 @@ ActiveRecord::Schema.define(version: 20190515032433) do
   add_foreign_key "player_seasons", "team_seasons"
   add_foreign_key "player_seasons", "teams"
   add_foreign_key "players", "teams"
+  add_foreign_key "team_games", "games"
+  add_foreign_key "team_games", "seasons"
+  add_foreign_key "team_games", "teams"
+  add_foreign_key "team_games", "teams", column: "opponent_id"
   add_foreign_key "team_seasons", "seasons"
   add_foreign_key "team_seasons", "teams"
   add_foreign_key "teams", "conferences"
