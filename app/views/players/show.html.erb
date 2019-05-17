@@ -1,0 +1,5 @@
+<h1><%= @player.first_name + " " + @player.last_name %></h1>
+<% @player.player_seasons.each do |season| %> 
+ <%= season.team_name %>
+ <%= season.games %>
+<% end %>
