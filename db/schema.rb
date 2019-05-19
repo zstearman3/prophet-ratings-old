@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190517032320) do
+ActiveRecord::Schema.define(version: 20190519031856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,44 @@ ActiveRecord::Schema.define(version: 20190517032320) do
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["season_id"], name: "index_games_on_season_id"
     t.index ["stadium_id"], name: "index_games_on_stadium_id"
+  end
+
+  create_table "player_games", force: :cascade do |t|
+    t.integer "season_type"
+    t.integer "year"
+    t.string "name"
+    t.string "team_name"
+    t.string "position"
+    t.string "injury_status"
+    t.string "opponent_name"
+    t.date "day"
+    t.datetime "date_time"
+    t.string "home_or_away"
+    t.integer "games"
+    t.integer "minutes"
+    t.integer "field_goals_made"
+    t.integer "field_goals_attempted"
+    t.decimal "field_goals_percentage"
+    t.integer "two_pointers_made"
+    t.integer "two_pointers_attempted"
+    t.decimal "two_pointers_percentage"
+    t.integer "three_pointers_made"
+    t.integer "three_pointers_attempted"
+    t.decimal "three_pointers_percentage"
+    t.integer "free_throws_made"
+    t.integer "free_throws_attempted"
+    t.integer "free_throws_percentage"
+    t.integer "offensive_rebounds"
+    t.integer "defensive_rebounds"
+    t.integer "rebounds"
+    t.integer "assists"
+    t.integer "steals"
+    t.integer "blocked_shots"
+    t.integer "turnovers"
+    t.integer "personal_fouls"
+    t.integer "points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "player_seasons", force: :cascade do |t|
