@@ -4,8 +4,19 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
+one: 
+  season: one
+  season_type: 1
+  year: 2019
+  name: 'Zach Stearman'
+  player: one
+  team_name: 'Sooners'
+  team: sooners
+  opponent_name: 'Jayhawks'
+  day: 2018-11-16
+  home_or_away: 'AWAY'
+  player_season: one
+  game: one
 #
 two: {}
 # column: value

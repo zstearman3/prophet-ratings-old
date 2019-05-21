@@ -7,6 +7,8 @@ class GamesController < ApplicationController
   def show
     @away_team_game = @game.team_games.find_by(home_or_away: 'AWAY')
     @home_team_game = @game.team_games.find_by(home_or_away: 'HOME')
+    @away_team = @away_team_game.team
+    @away_player_games = @game.player_games.where(team: @away_team)
   end
   
   private 

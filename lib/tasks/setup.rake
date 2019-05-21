@@ -29,6 +29,7 @@ namespace :setup do
         team.conference_wins = item['ConferenceWins']
         team.conference_losses = item['ConferenceLosses']
         team.short_display_name = item['ShortDisplayName']
+        team.team_logo_url = item['TeamLogoUrl']
         stadium = Stadium.find_or_create_by(id: item['Stadium']['StadiumID'])
         stadium.name = item['Stadium']['Name']
         stadium.city = item['Stadium']['City']
