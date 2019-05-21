@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190519031856) do
+ActiveRecord::Schema.define(version: 20190521153556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 20190519031856) do
     t.date "day"
     t.datetime "date_time"
     t.string "home_or_away"
-    t.integer "games"
+    t.integer "num_games"
     t.integer "minutes"
     t.integer "field_goals_made"
     t.integer "field_goals_attempted"
@@ -93,6 +93,18 @@ ActiveRecord::Schema.define(version: 20190519031856) do
     t.integer "points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "team_id"
+    t.bigint "player_id"
+    t.bigint "player_season_id"
+    t.bigint "season_id"
+    t.bigint "game_id"
+    t.bigint "opponent_id"
+    t.index ["game_id"], name: "index_player_games_on_game_id"
+    t.index ["opponent_id"], name: "index_player_games_on_opponent_id"
+    t.index ["player_id"], name: "index_player_games_on_player_id"
+    t.index ["player_season_id"], name: "index_player_games_on_player_season_id"
+    t.index ["season_id"], name: "index_player_games_on_season_id"
+    t.index ["team_id"], name: "index_player_games_on_team_id"
   end
 
   create_table "player_seasons", force: :cascade do |t|
@@ -322,6 +334,12 @@ ActiveRecord::Schema.define(version: 20190519031856) do
   add_foreign_key "games", "stadia"
   add_foreign_key "games", "teams", column: "away_team_id"
   add_foreign_key "games", "teams", column: "home_team_id"
+  add_foreign_key "player_games", "games"
+  add_foreign_key "player_games", "player_seasons"
+  add_foreign_key "player_games", "players"
+  add_foreign_key "player_games", "seasons"
+  add_foreign_key "player_games", "teams"
+  add_foreign_key "player_games", "teams", column: "opponent_id"
   add_foreign_key "player_seasons", "players"
   add_foreign_key "player_seasons", "seasons"
   add_foreign_key "player_seasons", "team_seasons"

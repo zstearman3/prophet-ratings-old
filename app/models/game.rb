@@ -4,6 +4,7 @@ class Game < ApplicationRecord
   belongs_to :season
   belongs_to :stadium, optional: true
   has_many :team_games
+  has_many :player_games
   validates :status, presence: true
   validates :day, presence: true
 end
