@@ -1,0 +1,25 @@
+/* show.html.erb */
+
+.box-score{
+  .team-logo{
+    img{
+      padding-top: 10px;
+      width: 80%;
+    }
+  }
+  .game-status{
+    margin-top: 20px;
+  }
+  .away-team-banner{
+    text-align: right;
+  }
+  .box-score-row{
+    font-size: 0.9em;
+    thead{
+      font-size: 0.85em;
+    }
+    .total-row{
+      font-weight: bold;
+    }
+  }
+}

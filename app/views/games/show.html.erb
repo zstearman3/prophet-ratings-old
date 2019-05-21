@@ -1,17 +1,175 @@
 <% provide(:title, 'Game Recap') %>
-<h1><%= @game.away_team_name + '@' + @game.home_team_name %></h1>
 
-<% unless @away_team_game.nil? %>
-    <%= image_tag(@away_team.team_logo_url) %>
-    <%= @away_team_game.team_name %>
-    <%= @away_team_game.points %>
-<% end %>
-
-<% unless @home_team_game.nil? %>
-    <%= @home_team_game.team_name %>
-    <%= @home_team_game.points %>
-<% end %>
-
-<% @away_player_games.each do |away_player_game| %>
- <%= away_player_game.name %>
-<% end %>
+<div class='box-score'>
+  <div class="score-banner row">
+    <div class="away-team-banner col-md-4 col-md-offset-1 col-xs-4">
+      <div class="team-info col-xs-8 col-sm-9">
+        <div class="box-score-team-title">
+          <h1><small><%= @away_team.ap_rank %></small><%= link_to @away_team.school, @away_team %></h1>
+        </div>
+        <p><%= @away_team.wins.to_s + "-" + @away_team.losses.to_s %></p>
+      </div>
+      <div class="team-logo col-xs-4 col-sm-3">
+        <%= image_tag @away_team.team_logo_url %>
+      </div>
+    </div>
+    <div class="banner-score-box col-xs-4 col-md-2">
+      <div class="away-score col-md-3 col-sm-6">
+        <h1><%= @game.away_team_score %></h1>
+      </div>
+      <div class="col-md-6 col-xs-hidden col-sm-hidden">
+        <h2 class="center game-status"><%= @game.status %></h2>
+      </div>
+      <div class="home-score col-md-3 col-sm-6">
+        <h1><%= @game.home_team_score %></h1>
+      </div>
+    </div>
+    <div class="home-team-banner col-xs-4">
+      <div class="team-logo col-xs-4 col-sm-3">
+        <%= image_tag @home_team.team_logo_url %>
+      </div>
+      <div class="team-info col-xs-8 col-sm-9">
+        <div class="box-score-team-title">
+          <h1><small><%= @home_team.ap_rank %></small><%= link_to @home_team.school, @home_team %></h1>
+        </div>
+        <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
+      </div>
+    </div>
+  </div>
+  <div class="box-score-row row">
+    <div class="away-box-score col-md-6">
+      <table class="box-score-table table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>MIN</th>
+            <th>FG</th>
+            <th>3PT</th>
+            <th>FT</th>
+            <th>OREB</th>
+            <th>DREB</th>
+            <th>REB</th>
+            <th>AST</th>
+            <th>STL</th>
+            <th>BLK</th>
+            <th>TO</th>
+            <th>PF</th>
+            <th>PTS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @away_player_games.each do |game| %>
+            <tr>
+              <% player = game.player %>
+              <td><%= player.jersey %></td>
+              <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
+              <td><%= game.minutes %></td>
+              <td><%= game.field_goals_made.to_s + "-" + game.field_goals_attempted.to_s %></td>
+              <td><%= game.three_pointers_made.to_s + "-" + game.three_pointers_attempted.to_s %></td>
+              <td><%= game.free_throws_made.to_s + "-" + game.free_throws_attempted.to_s %></td>
+              <td><%= game.offensive_rebounds %></td>
+              <td><%= game.defensive_rebounds %></td>
+              <td><%= game.rebounds %></td>
+              <td><%= game.assists %></td>
+              <td><%= game.steals %></td>
+              <td><%= game.blocked_shots %></td>
+              <td><%= game.turnovers %></td>
+              <td><%= game.personal_fouls %></td>
+              <td><%= game.points %></td>
+            </tr>
+          <% end %>
+          <tr class="total-row">
+            <td colspan="3">Total</td>
+            <td><%= @away_team_game.field_goals_made.to_s + "-" + @away_team_game.field_goals_attempted.to_s %></td>
+            <td><%= @away_team_game.three_pointers_made.to_s + + "-" + @away_team_game.three_pointers_attempted.to_s %></td>
+            <td><%= @away_team_game.free_throws_made.to_s + "-" + @away_team_game.free_throws_attempted.to_s %></td>
+            <td><%= @away_team_game.offensive_rebounds %></td>
+            <td><%= @away_team_game.defensive_rebounds %></td>
+            <td><%= @away_team_game.rebounds %></td>
+            <td><%= @away_team_game.assists %></td>
+            <td><%= @away_team_game.steals %></td>
+            <td><%= @away_team_game.blocked_shots %></td>
+            <td><%= @away_team_game.turnovers %></td>
+            <td><%= @away_team_game.personal_fouls %></td>
+            <td><%= @away_team_game.points %></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3"></td>
+            <td><%= @away_team_game.field_goals_percentage.to_s + "%" %></td>
+            <td><%= @away_team_game.three_pointers_percentage.to_s + "%" %></td>
+            <td><%= @away_team_game.free_throws_percentage.to_s + "%" %></td>
+            <td colspan="9"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="home-box-score col-md-6">
+      <table class="box-score-table table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>MIN</th>
+            <th>FG</th>
+            <th>3PT</th>
+            <th>FT</th>
+            <th>OREB</th>
+            <th>DREB</th>
+            <th>REB</th>
+            <th>AST</th>
+            <th>STL</th>
+            <th>BLK</th>
+            <th>TO</th>
+            <th>PF</th>
+            <th>PTS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @home_player_games.each do |game| %>
+            <tr>
+              <% player = game.player %>
+              <td><%= player.jersey %></td>
+              <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
+              <td><%= game.minutes %></td>
+              <td><%= game.field_goals_made.to_s + "-" + game.field_goals_attempted.to_s %></td>
+              <td><%= game.three_pointers_made.to_s + "-" + game.three_pointers_attempted.to_s %></td>
+              <td><%= game.free_throws_made.to_s + "-" + game.free_throws_attempted.to_s %></td>
+              <td><%= game.offensive_rebounds %></td>
+              <td><%= game.defensive_rebounds %></td>
+              <td><%= game.rebounds %></td>
+              <td><%= game.assists %></td>
+              <td><%= game.steals %></td>
+              <td><%= game.blocked_shots %></td>
+              <td><%= game.turnovers %></td>
+              <td><%= game.personal_fouls %></td>
+              <td><%= game.points %></td>
+            </tr>
+          <% end %>
+          <tr class="total-row">
+            <td colspan="3">Total</td>
+            <td><%= @home_team_game.field_goals_made.to_s + "-" + @home_team_game.field_goals_attempted.to_s %></td>
+            <td><%= @home_team_game.three_pointers_made.to_s + + "-" + @home_team_game.three_pointers_attempted.to_s %></td>
+            <td><%= @home_team_game.free_throws_made.to_s + "-" + @home_team_game.free_throws_attempted.to_s %></td>
+            <td><%= @home_team_game.offensive_rebounds %></td>
+            <td><%= @home_team_game.defensive_rebounds %></td>
+            <td><%= @home_team_game.rebounds %></td>
+            <td><%= @home_team_game.assists %></td>
+            <td><%= @home_team_game.steals %></td>
+            <td><%= @home_team_game.blocked_shots %></td>
+            <td><%= @home_team_game.turnovers %></td>
+            <td><%= @home_team_game.personal_fouls %></td>
+            <td><%= @home_team_game.points %></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3"></td>
+            <td><%= @home_team_game.field_goals_percentage.to_s + "%" %></td>
+            <td><%= @home_team_game.three_pointers_percentage.to_s + "%" %></td>
+            <td><%= @home_team_game.free_throws_percentage.to_s + "%" %></td>
+            <td colspan="9"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
