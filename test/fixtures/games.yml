@@ -15,6 +15,7 @@ one:
   home_team_score: 79
   away_team_score: 70
   day: <%= Date.today %>
+  date_time: <%= DateTime.now %>
   status: 'Final'
   
 #

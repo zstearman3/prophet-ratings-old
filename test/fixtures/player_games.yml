@@ -17,6 +17,28 @@ one:
   home_or_away: 'AWAY'
   player_season: one
   game: one
+  minutes: 200
+  field_goals_made: 5
+  field_goals_attempted: 5
+  field_goals_percentage: 100
+  two_pointers_made: 5
+  two_pointers_attempted: 5
+  two_pointers_percentage: 100
+  three_pointers_made: 5
+  three_pointers_made: 5
+  three_pointers_percentage: 100
+  free_throws_made: 5
+  free_throws_attempted: 5
+  free_throws_percentage: 100
+  offensive_rebounds: 5
+  defensive_rebounds: 5
+  rebounds: 5
+  assists: 5
+  steals: 5
+  blocked_shots: 5
+  turnovers: 5
+  personal_fouls: 5
+  points: 5
 #
 two: {}
 # column: value

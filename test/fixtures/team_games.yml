@@ -10,10 +10,20 @@ one:
   opponent: jayhawks
   year: 2019
   game: one
+  day: <%= Date.today %>
+  date_time: <%= DateTime.now %>
+  wins: 1
+  losses: 0
+  points: 33
   
 two:
- season: one
- team: jayhawks
- opponent: sooners
- year: 2019
- game: one
+  season: one
+  team: jayhawks
+  opponent: sooners
+  year: 2019
+  game: one
+  day: <%= Date.today %>
+  date_time: <%= DateTime.now %>
+  wins: 1
+  losses: 0
+  points: 33

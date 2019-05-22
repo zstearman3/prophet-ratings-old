@@ -8,7 +8,6 @@ sooners:
   losses: 11
   conference_wins: 10
   conference_losses: 6
-  team_logo_url: MyString
   conference: big_12
   
 jayhawks:
@@ -19,5 +18,4 @@ jayhawks:
   losses: 11
   conference_wins: 10
   conference_losses: 6
-  team_logo_url: MyString
   conference: big_12

@@ -1,7 +1,7 @@
 <% provide(:title, @team.school + " " + @team.name) %>
 <div class="team-banner row center">
   <div class="team-logo row">
-    <%= image_tag @team.team_logo_url %>
+    <%= image_tag @team.team_logo_url if @team.team_logo_url%> 
   </div>
   <h1><small><%= @team.ap_rank %></small><%= @team.school + " " + @team.name %></h1>
   <h4>

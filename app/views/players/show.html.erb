@@ -1,7 +1,7 @@
 <div class="player-header center row">
   <h1><%= "#" + @player.jersey.to_s + " " + @player.first_name + " " + @player.last_name %></h1>
   <h3><%= @player.team.school  + " " + @player.team.name %></h3>
-  <% height_string = (@player.height / 12).to_s + "'" + (@player.height % 12).to_s + '"' %>
+  <% height_string = (@player.height / 12).to_s + "'" + (@player.height % 12).to_s + '"' if @player.height %>
   <h4><%= @player.year %><span> • </span><%= @player.position  %><span> • </span>
       <%= height_string %><span> • </span><%= @player.weight.to_s + " lbs" %></h4>
 </div>
