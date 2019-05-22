@@ -1,5 +1,151 @@
-<h1><%= @player.first_name + " " + @player.last_name %></h1>
-<% @player.player_seasons.each do |season| %> 
- <%= season.team_name %>
- <%= season.games %>
-<% end %>
+<div class="player-header center row">
+  <h1><%= "#" + @player.jersey.to_s + " " + @player.first_name + " " + @player.last_name %></h1>
+  <h3><%= @player.team.school  + " " + @player.team.name %></h3>
+  <% height_string = (@player.height / 12).to_s + "'" + (@player.height % 12).to_s + '"' %>
+  <h4><%= @player.year %><span> • </span><%= @player.position  %><span> • </span>
+      <%= height_string %><span> • </span><%= @player.weight.to_s + " lbs" %></h4>
+</div>
+
+<div class="Stats-row row">
+  <h3>Player Statistics</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Team</th>
+        <th>Pos</th>
+        <th>G</th>
+        <th>MIN</th>
+        <th>FG</th>
+        <th>FGA</th>
+        <th>FG%</th>
+        <th>3P</th>
+        <th>3PA</th>
+        <th>3P%</th>
+        <th>2P</th>
+        <th>2PA</th>
+        <th>2P%</th>
+        <th>eFG%</th>
+        <th>FT</th>
+        <th>FTA</th>
+        <th>FT%</th>
+        <th>ORB</th>
+        <th>DRB</th>
+        <th>TRB</th>
+        <th>AST</th>
+        <th>STL</th>
+        <th>BLK</th>
+        <th>TO</th>
+        <th>PF</th>
+        <th>PTS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @player.player_seasons.each do |season| %> 
+        <tr>
+          <td><%= season.year %></td>
+          <td><%= link_to season.team_name, season.team %></td>
+          <td><%= season.position %></td>
+          <td><%= season.games %></td>
+          <td><%= (season.minutes.to_f / season.games).round(1) %></td>
+          <td><%= (season.field_goals_made.to_f / season.games).round(1) %></td>
+          <td><%= (season.field_goals_attempted.to_f / season.games).round(1) %></td>
+          <td><%= season.field_goals_percentage %></td>
+          <td><%= (season.three_pointers_made.to_f / season.games).round(1) %></td>
+          <td><%= (season.three_pointers_attempted.to_f / season.games).round(1) %></td>
+          <td><%= season.three_pointers_percentage %></td>
+          <td><%= (season.two_pointers_made.to_f / season.games).round(1) %></td>
+          <td><%= (season.two_pointers_attempted.to_f / season.games).round(1) %></td>
+          <td><%= season.two_pointers_percentage %></td>
+          <td><%= season.effective_field_goals_percentage %></td>
+          <td><%= (season.free_throws_made.to_f / season.games).round(1) %></td>
+          <td><%= (season.free_throws_attempted.to_f / season.games).round(1) %></td>
+          <td><%= season.free_throws_percentage %></td>
+          <td><%= (season.offensive_rebounds.to_f / season.games).round(1) %></td>
+          <td><%= (season.defensive_rebounds.to_f / season.games).round(1) %></td>
+          <td><%= (season.rebounds.to_f / season.games).round(1) %></td>
+          <td><%= (season.assists.to_f / season.games).round(1) %></td>
+          <td><%= (season.steals.to_f / season.games).round(1) %></td>
+          <td><%= (season.blocked_shots.to_f / season.games).round(1) %></td>
+          <td><%= (season.turnovers.to_f / season.games).round(1) %></td>
+          <td><%= (season.personal_fouls.to_f / season.games).round(1) %></td>
+          <td><%= (season.points.to_f / season.games).round(1) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="games-row row">
+  <h3>Game Logs</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>OPP</th>
+        <th>Score</th>
+        <th>MIN</th>
+        <th>FG</th>
+        <th>FGA</th>
+        <th>FG%</th>
+        <th>3P</th>
+        <th>3PA</th>
+        <th>3P%</th>
+        <th>FT</th>
+        <th>FTA</th>
+        <th>FT%</th>
+        <th>ORB</th>
+        <th>DRB</th>
+        <th>TRB</th>
+        <th>AST</th>
+        <th>STL</th>
+        <th>BLK</th>
+        <th>TO</th>
+        <th>PF</th>
+        <th>PTS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @player_games.each do |game| %>
+      <tr>
+        <td><%= game.day.strftime("%m/%d/%y") %></td>
+        <% home = true if game.home_or_away == "HOME" %>
+        <td><%= "@" unless home %><%= link_to game.opponent_name, game.opponent %></td>
+        <% if home %>
+          <% if game.game.home_team_score > game.game.away_team_score %>
+            <td><%= link_to("W " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+          <% else %>
+            <td><%= link_to("L " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+          <% end %>
+        <% else %>
+          <% if game.game.away_team_score > game.game.home_team_score %>
+            <td><%= link_to("W " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+          <% else %>
+           <td><%= link_to("L " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+          <% end %>
+        <% end %>
+        <td><%= game.minutes %></td>
+        <td><%= game.field_goals_made %></td>
+        <td><%= game.field_goals_attempted %></td>
+        <td><%= game.field_goals_percentage %></td>
+        <td><%= game.three_pointers_made %></td>
+        <td><%= game.three_pointers_attempted %></td>
+        <td><%= game.three_pointers_percentage %></td>
+        <td><%= game.free_throws_made %></td>
+        <td><%= game.free_throws_attempted %></td>
+        <td><%= game.free_throws_percentage %></td>
+        <td><%= game.offensive_rebounds %></td>
+        <td><%= game.defensive_rebounds %></td>
+        <td><%= game.rebounds %></td>
+        <td><%= game.assists %></td>
+        <td><%= game.steals %></td>
+        <td><%= game.blocked_shots %></td>
+        <td><%= game.turnovers %></td>
+        <td><%= game.personal_fouls %></td>
+        <td><%= game.points %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to "Show All", "#" %>
+</div>
