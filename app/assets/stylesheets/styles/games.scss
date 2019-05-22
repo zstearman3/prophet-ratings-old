@@ -5,6 +5,7 @@
     img{
       padding-top: 10px;
       width: 80%;
+      min-width: 30px;
     }
   }
   .game-status{
@@ -15,6 +16,16 @@
   }
   .game-details{
     font-weight: bold;
+  }
+  .banner-score-box{
+    padding: 0;
+    .away-score{
+      padding: 0;
+    }
+    .home-score{
+      padding: 0;
+      text-align: right;
+    }
   }
   .box-score-row{
     font-size: 0.9em;
