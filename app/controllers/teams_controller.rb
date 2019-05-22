@@ -8,6 +8,14 @@ class TeamsController < ApplicationController
   end
 
   def show
+    if params[:year]
+      @season = Season.find_by(year: params[:year])
+    else
+      @season = current_season
+    end
+    @player_seasons = @team.player_seasons.order(minutes: :desc)
+    @team_season = TeamSeason.find_by(team: @team, season: @season)
+    @team_games = TeamGame.where(team: @team, season: @season)
   end
 
   def new
