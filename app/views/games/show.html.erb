@@ -1,4 +1,4 @@
-<% provide(:title, 'Game Recap') %>
+<% provide(:title, 'Game Recap: ' + @away_team.school + " @ " + @home_team.school) %>
 
 <div class='box-score'>
   <div class="score-banner row">
@@ -34,6 +34,11 @@
         </div>
         <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
       </div>
+    </div>
+    <div class="game-details center col-xs-12">
+      <% if @game.date_time && @game.stadium %>
+        <%= @game.date_time.strftime("%B %d, %Y - %I:%M%p") + " - " + @game.stadium.name %>
+      <% end %>
     </div>
   </div>
   <div class="box-score-row row">
