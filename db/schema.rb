@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190521153556) do
+ActiveRecord::Schema.define(version: 20190523212633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,11 @@ ActiveRecord::Schema.define(version: 20190521153556) do
     t.bigint "stadium_id"
     t.bigint "home_team_id"
     t.bigint "away_team_id"
+    t.decimal "possessions"
+    t.decimal "home_offensive_efficiency"
+    t.decimal "away_offensive_efficiency"
+    t.decimal "pace"
+    t.boolean "is_completed"
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["season_id"], name: "index_games_on_season_id"
@@ -290,6 +295,22 @@ ActiveRecord::Schema.define(version: 20190521153556) do
     t.bigint "team_id"
     t.bigint "season_id"
     t.decimal "two_pointers_percentage"
+    t.decimal "adj_offensive_efficiency"
+    t.decimal "adj_defensive_efficiency"
+    t.decimal "adj_tempo"
+    t.decimal "offensive_efficiency"
+    t.decimal "defensive_efficiency"
+    t.decimal "effective_field_goals_percentage_allowed"
+    t.decimal "turnovers_percentage_allowed"
+    t.decimal "free_throws_rate"
+    t.decimal "free_throws_rate_allowed"
+    t.decimal "blocks_percentage_allowed"
+    t.decimal "steals_percentage_allowed"
+    t.decimal "three_pointers_rate"
+    t.decimal "three_pointers_rate_allowed"
+    t.decimal "assists_percentage_allowed"
+    t.decimal "defensive_fingerprint"
+    t.decimal "true_shooting_percentage_allowed"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end

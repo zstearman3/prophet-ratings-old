@@ -15,6 +15,10 @@
       <th>Over/Under</th>
       <th>Away Score</th>
       <th>Home Score</th>
+      <th>Possessions</th>
+      <th>Away OEff</th>
+      <th>Home OEff</th>
+      <th>Pace</th>
     </tr>
   </thead>
   <tbody>
@@ -40,6 +44,10 @@
         <td><%= game.over_under %></td>
         <td><%= game.away_team_score %></td>
         <td><%= game.home_team_score %></td>
+        <td><%= game.possessions %></td>
+        <td><%= game.away_offensive_efficiency %></td>
+        <td><%= game.home_offensive_efficiency %></td>
+        <td><%= game.pace %></td>
       </tr>
     <% end %>
   </tbody>
