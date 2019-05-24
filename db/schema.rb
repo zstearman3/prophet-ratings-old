@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190523212633) do
+ActiveRecord::Schema.define(version: 20190524200522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,21 @@ ActiveRecord::Schema.define(version: 20190523212633) do
     t.date "regular_season_end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "adj_offensive_efficiency"
+    t.decimal "adj_defensive_efficiency"
+    t.decimal "adj_tempo"
+    t.decimal "offensive_efficiency"
+    t.decimal "defensive_efficiency"
+    t.decimal "effective_field_goals_percentage"
+    t.decimal "turnovers_percentage"
+    t.decimal "free_throws_rate"
+    t.decimal "offensive_rebounds_percentage"
+    t.decimal "defensive_rebounds_percentage"
+    t.decimal "blocks_percentage"
+    t.decimal "steals_percentage"
+    t.decimal "three_pointers_rate"
+    t.decimal "assists_percentage"
+    t.decimal "true_shooting_percentage"
     t.index ["season"], name: "index_seasons_on_season", unique: true
   end
 
@@ -311,6 +326,7 @@ ActiveRecord::Schema.define(version: 20190523212633) do
     t.decimal "assists_percentage_allowed"
     t.decimal "defensive_fingerprint"
     t.decimal "true_shooting_percentage_allowed"
+    t.decimal "adj_efficiency_margin"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end

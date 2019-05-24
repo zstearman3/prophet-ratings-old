@@ -14,7 +14,10 @@
       <th>EFG%</th>
       <th>TS%</th>
       <th>OEff</th>
-      <th>TO%</th>
+      <th>aEM</th>
+      <th>aOEff</th>
+      <th>aDEff</th>
+      <th>aTEM</th>
     </tr>
   </thead>
   <tbody>
@@ -29,7 +32,10 @@
         <td><%= season.effective_field_goals_percentage %></td>
         <td><%= season.true_shooting_percentage %></td>
         <td><%= season.offensive_efficiency %></td>
-        <td><%= season.assists_percentage_allowed %></td>
+        <td><%= season.adj_efficiency_margin %></td>
+        <td><%= season.adj_offensive_efficiency %></td>
+        <td><%= season.adj_defensive_efficiency %></td>
+        <td><%= season.adj_tempo %></td>
       </tr>
     <% end %>
   </tbody>
