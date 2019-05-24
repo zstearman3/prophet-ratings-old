@@ -25,4 +25,37 @@ namespace :calcs do
       end
     end
   end
+  
+  task season_stats: :environment do
+    current_season = Season.find_by(season: 2019)
+    team_seasons = TeamSeason.where(season: current_season)
+    team_seasons.each do |season|
+      season_efficiency_total = 0
+      season_games_total = 0
+      season_efficiency_allowed = 0
+      season_games_allowed = 0
+      season_field_goals_allowed = 0
+      season_field_goals_attempted_allowed = 0
+      season_three_pointers_allowed = 0
+      team_games = TeamGame.where(season: current_season, team: season.team)
+      team_games.each do |game|
+        if game.game.is_completed && game.game.possessions
+          opponent_game = game.game.team_games.find_by(team: game.opponent)
+          season_efficiency_total += (100 * game.points.to_f / game.game.possessions)
+          season_games_total += 1
+          if opponent_game
+            season_efficiency_allowed += (100 * opponent_game.points.to_f / game.game.possessions)
+            season_field_goals_allowed += opponent_game.field_goals_made
+            season_three_pointers_allowed += opponent_game.three_pointers_made
+            season_field_goals_attempted_allowed += opponent_game.field_goals_attempted
+            season_games_allowed += 1
+          end
+        end
+      end
+      season.offensive_efficiency = (season_efficiency_total / season_games_total).round(1)
+      season.defensive_efficiency = (season_efficiency_allowed / season_games_allowed).round(1)
+      season.effective_field_goals_percentage_allowed = (100 * (season_field_goals_allowed + (0.5 * season_three_pointers_allowed)) / season_field_goals_attempted_allowed.to_f).round(1)
+      season.save
+    end
+  end
 end
