@@ -164,7 +164,8 @@ namespace :calcs do
       current_season.reload
     end
     error_count = 0
-    5.times do
+    oeff_error = 1000000
+    while oeff_error > 100000
       oeff_error = 0
       team_seasons.each do |season|
         team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
@@ -176,19 +177,40 @@ namespace :calcs do
         game_count = 0
         team_games.each do |game|
           if game.game.is_completed
-            weight = 1 + (x * 0.3)
+            competitiveness = 0
             opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
             opponent_game = game.game.team_games.find_by(team: game.opponent)
+            if season.adj_efficiency_margin && opponent_season.adj_efficiency_margin
+              competitiveness = (2 / (1 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
+            end
+            weight = 1 + (x * 0.3) + competitiveness
             if opponent_season && opponent_game
               game_count += 1 
               expected_ortg = (season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (opponent_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
               expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
               expected_tempo = (season.adj_tempo - current_season.adj_tempo) + (opponent_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
+              if game.game.stadium == game.team.stadium
+                expected_ortg += 2
+                expected_drtg += -2
+              elsif game.game.stadium == opponent_game.team.stadium
+                expected_ortg += -2
+                expected_drtg += 2
+              end
               actual_ortg = 100 * game.points.to_f / game.game.possessions
               actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
               begin
                 if game.minutes > 0
                   actual_tempo = (200.0 / game.minutes) * game.game.possessions
+                  ## Margin of Victory capped at 30 points per 100 possessions
+                  if actual_ortg - actual_drtg > 30
+                    actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) + 15
+                    actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) - 15
+                  end
+                  ## Margin of Defeat capped at 30 points per 100 possessions
+                  if actual_drtg - actual_ortg > 30
+                    actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) - 15
+                    actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) + 15
+                  end
                   adj_ortg_error += weight * (actual_ortg - expected_ortg)
                   adj_drtg_error += weight * (actual_drtg - expected_drtg)
                   adj_tempo_error += weight * (actual_tempo - expected_tempo)
