@@ -5,6 +5,7 @@
 <table class="table table-sm">
   <thead>
     <tr>
+      <th>Rank</th>
       <th>Team</th>
       <th>Record</th>
       <th>FG%</th>
@@ -14,15 +15,13 @@
       <th>EFG%</th>
       <th>TS%</th>
       <th>OEff</th>
-      <th>aEM</th>
-      <th>aOEff</th>
-      <th>aDEff</th>
-      <th>aTEM</th>
     </tr>
   </thead>
   <tbody>
+    <% x = 1 %>
     <% @team_seasons.each do |season| %>
       <tr>
+        <td><%= x %></td>
         <td><%= season.team.school %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
         <td><%= season.field_goals_percentage %></td>
@@ -32,11 +31,22 @@
         <td><%= season.effective_field_goals_percentage %></td>
         <td><%= season.true_shooting_percentage %></td>
         <td><%= season.offensive_efficiency %></td>
-        <td><%= season.adj_efficiency_margin %></td>
-        <td><%= season.adj_offensive_efficiency %></td>
-        <td><%= season.adj_defensive_efficiency %></td>
-        <td><%= season.adj_tempo %></td>
       </tr>
+      <% if x % 20 == 0 %>
+        <tr>
+          <th>Rank</th>
+          <th>Team</th>
+          <th>Record</th>
+          <th>FG%</th>
+          <th>2P%</th>
+          <th>3P%</th>
+          <th>FT%</th>
+          <th>EFG%</th>
+          <th>TS%</th>
+          <th>OEff</th>
+        </tr>
+      <% end %>
+      <% x += 1 %>
     <% end %>
   </tbody>
 </table>

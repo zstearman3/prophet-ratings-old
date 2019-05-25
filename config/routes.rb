@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/login',     to: 'sessions#new'
   post '/login',    to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+  get '/rankings',  to: 'team_seasons#rankings', as: :rankings
   get '/team_shooting',   to: 'team_seasons#shooting', as: :team_shooting
   get '/player_shooting', to: 'player_seasons#shooting', as: :player_shooting
   resources :conferences

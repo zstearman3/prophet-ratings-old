@@ -1,0 +1,44 @@
+<% provide(:title, 'Rankings') %>
+<% year = params[:season].to_i %>
+<% year = @team_seasons.first.year if year == 0 %>
+<%= link_to 'Previous Season', rankings_path(season: year - 1) %>
+<%= link_to 'Next Season', rankings_path(season: year + 1), class: 'align-right' %>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Team</th>
+      <th>Record</th>
+      <th>AdjEM</th>
+      <th>AdjO</th>
+      <th>AdjD</th>
+      <th>AdjT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% x = 1 %>
+    <% @team_seasons.each do |season| %>
+      <tr>
+        <td><%= x %></td>
+        <td><%= season.team.school %></td>
+        <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+        <td><%= season.adj_efficiency_margin %></td>
+        <td><%= season.adj_offensive_efficiency %></td>
+        <td><%= season.adj_defensive_efficiency %></td>
+        <td><%= season.adj_tempo %></td>
+      </tr>
+      <% if x % 20 == 0 %>
+        <tr>
+          <th>Rank</th>
+          <th>Team</th>
+          <th>Record</th>
+          <th>AdjEM</th>
+          <th>AdjO</th>
+          <th>AdjD</th>
+          <th>AdjT</th>
+        </tr>
+      <% end %>
+      <% x += 1 %>
+    <% end %>
+  </tbody>
+</table>
