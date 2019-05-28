@@ -3,7 +3,7 @@
   <div class="team-logo row">
     <%= image_tag @team.team_logo_url if @team.team_logo_url%> 
   </div>
-  <h1><small><%= @team.ap_rank %></small><%= @team.school + " " + @team.name %></h1>
+  <h1><small><%= @team_season.adjem_rank %></small><%= @team.school + " " + @team.name %></h1>
   <h4>
     <%= @team.wins.to_s + "-" + @team.losses.to_s + " (" + @team.conference_wins.to_s + "-" + @team.conference_losses.to_s + ")" %>
     <span>•</span>
@@ -99,8 +99,12 @@
         <td class="center"><%= @team_season.three_pointers_rate %> <small><%= TeamSeason.order(three_pointers_rate: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
         <td class="center"><%= @team_season.three_pointers_rate_allowed %> <small><%= TeamSeason.order(three_pointers_rate_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
+        <th>D Aggression</th>
+        <td class="center" colspan="2"><%= @team_season.defensive_aggression %> <small><%= TeamSeason.order(defensive_aggression: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      </tr>
         <th>D Style</th>
-        <td class="center" colspan="2"><%= @team_season.defensive_fingerprint %> <small><%= TeamSeason.order(defensive_fingerprint: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center" colspan="2"><%=  @team_season.defensive_fingerprint %></td>
       </tr>
       <th colspan='3' class="center">Miscellaneous</th></tr>
       <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
@@ -113,7 +117,7 @@
         <td class="center"><%= @team_season.steals_percentage %> <small><%= TeamSeason.order(steals_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
         <th>HomeAdv</th>
-        <td class="center" colspan="2"><%= @team_season.effective_field_goals_percentage_allowed %> <small><%= TeamSeason.order(effective_field_goals_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center" colspan="2"><%= @team_season.home_advantage %> <small><%= TeamSeason.order(home_advantage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
     </table>
   </div>
@@ -154,3 +158,11 @@
     <% end %>
   </tbody>
 </table>
+
+<div class=col-xs-4>
+  <%= scatter_chart @team_games.pluck(:defensive_style_advantage, :performance), xtitle: "Defensive Aggression", ytitle: "Performance" %>
+  <%= scatter_chart @team_games.pluck(:three_pointers_advantage, :performance), xtitle: "Three Pointers", ytitle: "Performance" %>
+  <%= scatter_chart @team_games.pluck(:assists_advantage, :performance), xtitle: "Assists", ytitle: "Performance" %>
+  <%= scatter_chart @team_games.pluck(:pace_advantage, :performance), xtitle: "Pace", ytitle: "Performance" %>
+  <%= scatter_chart @team_games.pluck(:home_away_neutral, :performance), xtitle: "Home/Away", ytitle: "Performance" %>
+</div>

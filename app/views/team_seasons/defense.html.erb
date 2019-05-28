@@ -12,7 +12,7 @@
       <th>Steals%</th>
       <th>Blocks%</th>
       <th>OppTS%</th>
-      <th>DStyle</th>
+      <th>Aggression</th>
       <th>DScheme</th>
     </tr>
   </thead>
@@ -27,20 +27,8 @@
         <td><%= season.steals_percentage %></td>
         <td><%= season.blocks_percentage %></td>
         <td><%= season.true_shooting_percentage_allowed %></td>
-        <td><%= season.defensive_fingerprint.round(1) %></td>
-        <% style = "unknown" %>
-        <% if season.defensive_fingerprint < -40 %>
-          <% style = "Aggressive Man" %>
-        <% elsif season.defensive_fingerprint < -20 %>
-          <% style = "Mostly Man" %>
-        <% elsif season.defensive_fingerprint < 20 %>
-          <% style = "Balanced" %>
-        <% elsif season.defensive_fingerprint < 40 %>
-          <% style = "Some Zone" %>
-        <% else %>
-          <% style = "Mostly Zone" %>
-        <% end %>
-        <td><%= style %></td>
+        <td><%= season.defensive_aggression %></td>
+        <td><%= season.defensive_fingerprint %></td>
       </tr>
       <% if x % 20 == 0 %>
         <tr>

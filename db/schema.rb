@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190524200522) do
+ActiveRecord::Schema.define(version: 20190528211131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,6 +257,12 @@ ActiveRecord::Schema.define(version: 20190524200522) do
     t.bigint "season_id"
     t.bigint "game_id"
     t.bigint "opponent_id"
+    t.decimal "performance"
+    t.string "home_away_neutral"
+    t.decimal "defensive_style_advantage"
+    t.decimal "three_pointers_advantage"
+    t.decimal "pace_advantage"
+    t.decimal "assists_advantage"
     t.index ["game_id"], name: "index_team_games_on_game_id"
     t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
     t.index ["season_id"], name: "index_team_games_on_season_id"
@@ -324,9 +330,16 @@ ActiveRecord::Schema.define(version: 20190524200522) do
     t.decimal "three_pointers_rate"
     t.decimal "three_pointers_rate_allowed"
     t.decimal "assists_percentage_allowed"
-    t.decimal "defensive_fingerprint"
+    t.decimal "defensive_aggression"
     t.decimal "true_shooting_percentage_allowed"
     t.decimal "adj_efficiency_margin"
+    t.integer "adjem_rank"
+    t.string "defensive_fingerprint"
+    t.decimal "home_advantage"
+    t.decimal "defensive_style_advantage"
+    t.decimal "three_pointers_advantage"
+    t.decimal "pace_advantage"
+    t.decimal "assists_advantage"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end
