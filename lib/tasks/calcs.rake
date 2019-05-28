@@ -277,8 +277,8 @@ namespace :calcs do
             end
                   ## Performance capped at 10 over 30 points per 100 possessions
             if actual_drtg - actual_ortg > 30
-              if performance < 10
-                performance = 10
+              if performance < -10
+                performance = -10
               end
             end
             if game.game.stadium == game.team.stadium
