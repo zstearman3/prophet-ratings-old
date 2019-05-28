@@ -1,0 +1,49 @@
+<% provide(:title, 'Team Rebounding Stats') %>
+<% year = params[:season].to_i %>
+<%= link_to 'Previous Season', team_rebounding_path(season: year - 1) %>
+<%= link_to 'Next Season', team_rebounding_path(season: year + 1), class: 'align-right' %>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Team</th>
+      <th>Record</th>
+      <th>ORB%</th>
+      <th>DRB%</th>
+      <th>TRB%</th>
+      <th>OREB</th>
+      <th>DREB</th>
+      <th>REB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% x = 1 %>
+    <% @team_seasons.each do |season| %>
+      <tr>
+        <td><%= x %></td>
+        <td><%= link_to season.team.school, season.team %></td>
+        <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+        <td><%= season.offensive_rebounds_percentage %></td>
+        <td><%= season.defensive_rebounds_percentage %></td>
+        <td><%= season.total_rebounds_percentage %></td>
+        <td><%= (season.offensive_rebounds.to_f / season.games).round(1) %></td>
+        <td><%= (season.defensive_rebounds.to_f / season.games).round(1) %></td>
+        <td><%= (season.rebounds.to_f / season.games).round(1) %></td>
+      </tr>
+      <% if x % 20 == 0 %>
+        <tr>
+          <th>Rank</th>
+          <th>Team</th>
+          <th>Record</th>
+          <th>ORB%</th>
+          <th>DRB%</th>
+          <th>TRB%</th>
+          <th>OREB</th>
+          <th>DREB</th>
+          <th>REB</th>
+        </tr>
+      <% end %>
+      <% x += 1 %>
+    <% end %>
+  </tbody>
+</table>

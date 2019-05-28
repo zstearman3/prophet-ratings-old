@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @team_games.each do |game| %>
+        <% @team_games.where(year: current_year).each do |game| %>
           <% if game.home_or_away == "AWAY" %>
             <% opponent_game = game.game.team_games.find_by(home_or_away: "HOME") %>
             <% opponent_score = game.game.home_team_score %>
@@ -49,9 +49,77 @@
       </tbody>
     </table>
   </div>
+  <div class="col-md-6 team-stats">
+    <h3>Team Stats</h3>
+    <table class="table table-striped">
+      <tr><th colspan='3' class="center">Efficiency</th></tr>
+      <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
+      <tr>
+        <th>AdjEff</th>
+        <td class="center"><%= @team_season.adj_offensive_efficiency %> <small><%= TeamSeason.order(adj_offensive_efficiency: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.adj_defensive_efficiency %> <small><%= TeamSeason.order(adj_defensive_efficiency: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <tr>
+        <th>Eff +/-</th>
+        <td colspan="2" class="center"><%= @team_season.adj_efficiency_margin %> <small><%= TeamSeason.order(adj_efficiency_margin: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <tr>
+        <th>AdjT</th>
+        <td colspan="2" class="center"><%= @team_season.adj_tempo %> <small><%= TeamSeason.order(adj_tempo: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <th colspan='3' class="center">Four Factors</th></tr>
+      <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
+      <tr>
+        <th>EffFG%</th>
+        <td class="center"><%= @team_season.effective_field_goals_percentage %> <small><%= TeamSeason.order(effective_field_goals_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.effective_field_goals_percentage_allowed %> <small><%= TeamSeason.order(effective_field_goals_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <tr>
+        <th>TO%</th>
+        <td class="center"><%= @team_season.turnovers_percentage %> <small><%= TeamSeason.order(turnovers_percentage: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.turnovers_percentage_allowed %> <small><%= TeamSeason.order(turnovers_percentage_allowed: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <tr>
+        <th>OREB%</th>
+        <td class="center"><%= @team_season.offensive_rebounds_percentage %> <small><%= TeamSeason.order(offensive_rebounds_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= 100.0 - @team_season.defensive_rebounds_percentage %> <small><%= TeamSeason.order(defensive_rebounds_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <tr>
+        <th>FTA/FGA</th>
+        <td class="center"><%= @team_season.free_throws_rate %> <small><%= TeamSeason.order(free_throws_rate: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.free_throws_rate_allowed %> <small><%= TeamSeason.order(free_throws_rate_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <th colspan='3' class="center">Style</th></tr>
+      <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
+      <th>AST%</th>
+        <td class="center"><%= @team_season.assists_percentage %> <small><%= TeamSeason.order(assists_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.assists_percentage_allowed %> <small><%= TeamSeason.order(assists_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <th>3PT Rate</th>
+        <td class="center"><%= @team_season.three_pointers_rate %> <small><%= TeamSeason.order(three_pointers_rate: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.three_pointers_rate_allowed %> <small><%= TeamSeason.order(three_pointers_rate_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+        <th>D Style</th>
+        <td class="center" colspan="2"><%= @team_season.defensive_fingerprint %> <small><%= TeamSeason.order(defensive_fingerprint: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <th colspan='3' class="center">Miscellaneous</th></tr>
+      <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
+      <th>Blocks%</th>
+        <td class="center"><%= @team_season.blocks_percentage_allowed %> <small><%= TeamSeason.order(blocks_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.blocks_percentage %> <small><%= TeamSeason.order(blocks_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+      <th>Steal%</th>
+        <td class="center"><%= @team_season.steals_percentage_allowed %> <small><%= TeamSeason.order(steals_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.steals_percentage %> <small><%= TeamSeason.order(steals_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+        <th>HomeAdv</th>
+        <td class="center" colspan="2"><%= @team_season.effective_field_goals_percentage_allowed %> <small><%= TeamSeason.order(effective_field_goals_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
+    </table>
+  </div>
 </div>
 
-<h2>Player Stats</h2>
+<h3>Player Stats</h3>
 <table class="table">
   <thead>
     <tr>
