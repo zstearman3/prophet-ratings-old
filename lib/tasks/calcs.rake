@@ -319,6 +319,12 @@ namespace :calcs do
       sum_product_threes = 0
       sum_threes_squared = 0
       sum_threes = 0
+      sum_product_pace = 0
+      sum_pace_squared = 0
+      sum_pace = 0
+      sum_product_assists = 0
+      sum_assists_squared = 0
+      sum_assists = 0
       games_array.each do |game|
         sum_product_defense += (game["defense"] * game["performance"])
         sum_defense_squared += (game["defense"]) ** 2
@@ -326,18 +332,29 @@ namespace :calcs do
         sum_product_threes += (game["three_pointers"] * game["performance"])
         sum_threes_squared += (game["three_pointers"]) ** 2
         sum_threes += game["three_pointers"]
+        sum_product_pace += (game["pace"] * game["performance"])
+        sum_pace_squared += (game["pace"]) ** 2
+        sum_pace += game["pace"]
+        sum_product_assists += (game["assists"] * game["performance"])
+        sum_assists_squared += (game["assists"]) ** 2
+        sum_assists += game["assists"]
       end
             
-      # Home Advantage Calc
+      # Home Advantage Calcs
       home_advantage = home_games.sum { |game| game["performance"] } / home_games.size.to_f
       away_advantage = away_games.sum { |game| game["performance"] } / away_games.size.to_f
       
-      # Defensive Style Advantage Calc
+      # Style Advantage Calcs
       defensive_style_advantage = ((game_count * sum_product_defense) - (sum_defense * sum_performance.to_f)) / ((game_count * sum_defense_squared.to_f) - (sum_defense) ** 2)
       three_pointers_advantage = ((game_count * sum_product_threes) - (sum_threes * sum_performance.to_f)) / ((game_count * sum_threes_squared.to_f) - (sum_threes) ** 2)
+      pace_advantage = ((game_count * sum_product_pace) - (sum_pace * sum_performance.to_f)) / ((game_count * sum_pace_squared.to_f) - (sum_pace) ** 2)
+      assists_advantage = ((game_count * sum_product_assists) - (sum_assists * sum_performance.to_f)) / ((game_count * sum_assists_squared.to_f) - (sum_assists) ** 2)
+      
       season.home_advantage = ((home_advantage - away_advantage)/2).round(1)
       season.defensive_style_advantage = defensive_style_advantage.round(2)
       season.three_pointers_advantage = three_pointers_advantage.round(2)
+      season.pace_advantage = pace_advantage.round(2)
+      season.assists_advantage = assists_advantage.round(2)
       season.save
     end
   end
