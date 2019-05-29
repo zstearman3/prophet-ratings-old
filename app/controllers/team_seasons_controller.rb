@@ -12,7 +12,7 @@ class TeamSeasonsController < ApplicationController
   end
   
   def miscellaneous
-    @team_seasons = TeamSeason.where(year: params[:season]).order(assists_advantage: :desc)
+    @team_seasons = TeamSeason.where(year: params[:season]).order(r_three_pointers: :desc)
   end
   
   def rankings

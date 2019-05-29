@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190528211131) do
+ActiveRecord::Schema.define(version: 20190529160536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,6 +340,10 @@ ActiveRecord::Schema.define(version: 20190528211131) do
     t.decimal "three_pointers_advantage"
     t.decimal "pace_advantage"
     t.decimal "assists_advantage"
+    t.decimal "r_defensive_style"
+    t.decimal "r_three_pointers"
+    t.decimal "r_assists"
+    t.decimal "r_pace"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end

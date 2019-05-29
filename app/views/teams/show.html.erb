@@ -12,7 +12,7 @@
   <h4><%= @team.stadium.name if @team.stadium %></h4>
 </div>
 <div class="middle-team-row row">
-  <div class="col-md-6 team-schedule">
+  <div class="col-md-3 team-schedule">
     <h3>Schedule</h3>
     <table class="table table-striped table-sm">
       <thead>
@@ -49,7 +49,26 @@
       </tbody>
     </table>
   </div>
-  <div class="col-md-6 team-stats">
+  <div class="charts-container col-md-6">
+    <h3>Style/Performance Relationships</h3>
+    <div class="col-xs-6 style-charts">
+      <%= scatter_chart @team_games.pluck(:defensive_style_advantage, :performance), xtitle: "Defensive Aggression", ytitle: "Performance" %>
+      <p>Slope: <%= @team_season.defensive_style_advantage %></p>
+      <p>Correlation: <%= @team_season.r_defensive_style %></p>
+      <%= scatter_chart @team_games.pluck(:three_pointers_advantage, :performance), xtitle: "Three Pointers", ytitle: "Performance" %>
+      <p>Slope: <%= @team_season.three_pointers_advantage %></p>
+      <p>Correlation: <%= @team_season.r_three_pointers %></p></p>
+    </div>
+    <div class="col-xs-6 style-charts">
+      <%= scatter_chart @team_games.pluck(:assists_advantage, :performance), xtitle: "Assists", ytitle: "Performance" %>
+      <p>Slope: <%= @team_season.assists_advantage %></p>
+      <p>Correlation: <%= @team_season.r_assists %></p></p>
+      <%= scatter_chart @team_games.pluck(:pace_advantage, :performance), xtitle: "Pace", ytitle: "Performance" %>
+      <p>Slope: <%= @team_season.pace_advantage %></p>
+      <p>Correlation: <%= @team_season.r_pace %></p></p>
+    </div> 
+  </div>
+  <div class="col-md-3 team-stats">
     <h3>Team Stats</h3>
     <table class="table table-striped">
       <tr><th colspan='3' class="center">Efficiency</th></tr>
@@ -158,11 +177,3 @@
     <% end %>
   </tbody>
 </table>
-
-<div class=col-xs-4>
-  <%= scatter_chart @team_games.pluck(:defensive_style_advantage, :performance), xtitle: "Defensive Aggression", ytitle: "Performance" %>
-  <%= scatter_chart @team_games.pluck(:three_pointers_advantage, :performance), xtitle: "Three Pointers", ytitle: "Performance" %>
-  <%= scatter_chart @team_games.pluck(:assists_advantage, :performance), xtitle: "Assists", ytitle: "Performance" %>
-  <%= scatter_chart @team_games.pluck(:pace_advantage, :performance), xtitle: "Pace", ytitle: "Performance" %>
-  <%= scatter_chart @team_games.pluck(:home_away_neutral, :performance), xtitle: "Home/Away", ytitle: "Performance" %>
-</div>

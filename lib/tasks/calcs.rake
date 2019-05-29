@@ -319,12 +319,16 @@ namespace :calcs do
       sum_product_threes = 0
       sum_threes_squared = 0
       sum_threes = 0
-      sum_product_pace = 0
-      sum_pace_squared = 0
-      sum_pace = 0
       sum_product_assists = 0
       sum_assists_squared = 0
       sum_assists = 0
+      sum_product_pace = 0
+      sum_pace_squared = 0
+      sum_pace = 0
+      b_defensive_style = 0
+      b_three_pointers = 0
+      b_assists = 0
+      b_pace = 0
       games_array.each do |game|
         sum_product_defense += (game["defense"] * game["performance"])
         sum_defense_squared += (game["defense"]) ** 2
@@ -332,29 +336,60 @@ namespace :calcs do
         sum_product_threes += (game["three_pointers"] * game["performance"])
         sum_threes_squared += (game["three_pointers"]) ** 2
         sum_threes += game["three_pointers"]
-        sum_product_pace += (game["pace"] * game["performance"])
-        sum_pace_squared += (game["pace"]) ** 2
-        sum_pace += game["pace"]
         sum_product_assists += (game["assists"] * game["performance"])
         sum_assists_squared += (game["assists"]) ** 2
         sum_assists += game["assists"]
+        sum_product_pace += (game["pace"] * game["performance"])
+        sum_pace_squared += (game["pace"]) ** 2
+        sum_pace += game["pace"]
       end
             
-      # Home Advantage Calcs
+      # Home Advantage Calc
       home_advantage = home_games.sum { |game| game["performance"] } / home_games.size.to_f
       away_advantage = away_games.sum { |game| game["performance"] } / away_games.size.to_f
       
-      # Style Advantage Calcs
+      # Defensive Style Advantage Calc
       defensive_style_advantage = ((game_count * sum_product_defense) - (sum_defense * sum_performance.to_f)) / ((game_count * sum_defense_squared.to_f) - (sum_defense) ** 2)
-      three_pointers_advantage = ((game_count * sum_product_threes) - (sum_threes * sum_performance.to_f)) / ((game_count * sum_threes_squared.to_f) - (sum_threes) ** 2)
-      pace_advantage = ((game_count * sum_product_pace) - (sum_pace * sum_performance.to_f)) / ((game_count * sum_pace_squared.to_f) - (sum_pace) ** 2)
-      assists_advantage = ((game_count * sum_product_assists) - (sum_assists * sum_performance.to_f)) / ((game_count * sum_assists_squared.to_f) - (sum_assists) ** 2)
+      b_defensive_style = (sum_performance / game_count ) - (defensive_style_advantage * (games_array.sum { |game| game["defense"]}) / game_count)
       
+      three_pointers_advantage = ((game_count * sum_product_threes) - (sum_threes * sum_performance.to_f)) / ((game_count * sum_threes_squared.to_f) - (sum_threes) ** 2)
+      b_three_pointers = (sum_performance / game_count ) - (three_pointers_advantage * (games_array.sum { |game| game["three_pointers"]}) / game_count)
+      
+      assists_advantage = ((game_count * sum_product_assists) - (sum_assists * sum_performance.to_f)) / ((game_count * sum_assists_squared.to_f) - (sum_assists) ** 2)
+      b_assists = (sum_performance / game_count ) - (assists_advantage * (games_array.sum { |game| game["assists"]}) / game_count)
+      
+      pace_advantage = ((game_count * sum_product_pace) - (sum_pace * sum_performance.to_f)) / ((game_count * sum_pace_squared.to_f) - (sum_pace) ** 2)
+      b_pace = (sum_performance / game_count ) - (pace_advantage * (games_array.sum { |game| game["pace"]}) / game_count)
+      
+      ssr_defensive_style = 0
+      ssr_three_pointers = 0
+      ssr_assists = 0
+      ssr_pace = 0
+      ssto = 0
+      r_defensive_style = 0
+      r_three_pointers = 0
+      r_assists = 0
+      r_pace = 0
+      games_array.each do |game|
+        ssr_defensive_style += (((defensive_style_advantage * game["defense"]) + b_defensive_style) - (sum_performance.to_f / game_count)) ** 2
+        ssr_three_pointers += (((three_pointers_advantage * game["three_pointers"]) + b_three_pointers) - (sum_performance.to_f / game_count)) ** 2
+        ssr_assists += (((assists_advantage * game["assists"]) + b_assists) - (sum_performance.to_f / game_count)) ** 2
+        ssr_pace += (((pace_advantage * game["pace"]) + b_pace) - (sum_performance.to_f / game_count)) ** 2
+        ssto += (game["performance"] - (sum_performance.to_f / game_count)) ** 2
+      end
+      r_defensive_style = (ssr_defensive_style.to_f / ssto).round(3)
+      r_three_pointers = (ssr_three_pointers.to_f / ssto).round(3)
+      r_assists = (ssr_assists.to_f / ssto).round(3)
+      r_pace = (ssr_pace.to_f / ssto).round(3)
+      season.r_defensive_style = r_defensive_style
+      season.r_three_pointers = r_three_pointers
+      season.r_assists = r_assists
+      season.r_pace = r_pace
       season.home_advantage = ((home_advantage - away_advantage)/2).round(1)
       season.defensive_style_advantage = defensive_style_advantage.round(2)
       season.three_pointers_advantage = three_pointers_advantage.round(2)
-      season.pace_advantage = pace_advantage.round(2)
       season.assists_advantage = assists_advantage.round(2)
+      season.pace_advantage = pace_advantage.round(2)
       season.save
     end
   end

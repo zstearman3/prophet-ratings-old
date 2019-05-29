@@ -63,6 +63,7 @@ namespace :setup do
   end
   
   task get_players: :environment do
+    Player.update_all(active: false)
     url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/Players?key=' + api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
