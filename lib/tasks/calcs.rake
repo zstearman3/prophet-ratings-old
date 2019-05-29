@@ -153,106 +153,106 @@ namespace :calcs do
   task rating_calc: :environment do
     current_season = Season.find_by(season: 2019)
     team_seasons = TeamSeason.where(season: current_season)
-    # team_seasons.each do |season|
-    #   season.adj_offensive_efficiency = season.offensive_efficiency
-    #   season.adj_defensive_efficiency = season.defensive_efficiency
-    #   season_tempo = 0
-    #   team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
-    #   game_count = 0
-    #   team_games.each do |game|
-    #     if game.game.is_completed
-    #       season_tempo += game.game.possessions
-    #       game_count += 1
-    #     end
-    #   end
-    #   season.adj_tempo = season_tempo.to_f / game_count
-    #   season.save
-    #   team_seasons.reload
-    #   current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
-    #   current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
-    #   current_season.adj_tempo = team_seasons.average(:adj_tempo)
-    #   current_season.save
-    #   current_season.reload
-    # end
-    # error_count = 0
-    # oeff_error = 1000000
-    # while oeff_error > 100000
-    #   oeff_error = 0
-    #   team_seasons.each do |season|
-    #     team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
-    #     adj_ortg_error = 0
-    #     adj_drtg_error = 0
-    #     adj_tempo_error = 0
-    #     divisor = 0
-    #     x = 0
-    #     game_count = 0
-    #     team_games.each do |game|
-    #       if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0
-    #         competitiveness = 0
-    #         opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
-    #         opponent_game = game.game.team_games.find_by(team: game.opponent)
-    #         if season.adj_efficiency_margin && opponent_season.adj_efficiency_margin
-    #           competitiveness = (2 / (1 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
-    #         end
-    #         weight = 1 + (x * 0.3) + competitiveness
-    #         if opponent_season && opponent_game && opponent_game.wins + opponent_game.losses > 0
-    #           game_count += 1 
-    #           expected_ortg = (season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (opponent_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
-    #           expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
-    #           expected_tempo = (season.adj_tempo - current_season.adj_tempo) + (opponent_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
-    #           if game.game.stadium == game.team.stadium
-    #             expected_ortg += 2
-    #             expected_drtg += -2
-    #           elsif game.game.stadium == opponent_game.team.stadium
-    #             expected_ortg += -2
-    #             expected_drtg += 2
-    #           end
-    #           actual_ortg = 100 * game.points.to_f / game.game.possessions
-    #           actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
-    #           begin
-    #             if game.minutes > 0
-    #               actual_tempo = (200.0 / game.minutes) * game.game.possessions
-    #               ## Margin of Victory capped at 30 points per 100 possessions
-    #               if actual_ortg - actual_drtg > 30
-    #                 actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) + 15
-    #                 actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) - 15
-    #               end
-    #               ## Margin of Defeat capped at 30 points per 100 possessions
-    #               if actual_drtg - actual_ortg > 30
-    #                 actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) - 15
-    #                 actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) + 15
-    #               end
-    #               adj_ortg_error += weight * (actual_ortg - expected_ortg)
-    #               adj_drtg_error += weight * (actual_drtg - expected_drtg)
-    #               adj_tempo_error += weight * (actual_tempo - expected_tempo)
-    #               x += 1
-    #               divisor += weight
-    #             end
-    #           rescue
-    #             error_count += 1
-    #             puts error_count
-    #           end
-    #         end
-    #       end
-    #     end
-    #     if game_count < 11
-    #       divisor += 10 / (game_count + 1)
-    #     end
-    #     season.adj_offensive_efficiency = (season.adj_offensive_efficiency + (adj_ortg_error / divisor)).round(1)
-    #     season.adj_defensive_efficiency = (season.adj_defensive_efficiency + (adj_drtg_error / divisor)).round(1)
-    #     season.adj_tempo = (season.adj_tempo + (adj_tempo_error / divisor)).round(1)
-    #     season.adj_efficiency_margin = ((season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (current_season.adj_defensive_efficiency - season.adj_defensive_efficiency)).round(1)
-    #     season.save
-    #     oeff_error += (adj_ortg_error ** 2).round(1)
-    #   end
-    #   team_seasons.reload
-    #   current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
-    #   current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
-    #   current_season.adj_tempo = team_seasons.average(:adj_tempo)
-    #   current_season.save
-    #   current_season.reload
-    #   puts oeff_error
-    # end
+    team_seasons.each do |season|
+      season.adj_offensive_efficiency = season.offensive_efficiency
+      season.adj_defensive_efficiency = season.defensive_efficiency
+      season_tempo = 0
+      team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
+      game_count = 0
+      team_games.each do |game|
+        if game.game.is_completed
+          season_tempo += game.game.possessions
+          game_count += 1
+        end
+      end
+      season.adj_tempo = season_tempo.to_f / game_count
+      season.save
+      team_seasons.reload
+      current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
+      current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
+      current_season.adj_tempo = team_seasons.average(:adj_tempo)
+      current_season.save
+      current_season.reload
+    end
+    error_count = 0
+    oeff_error = 1000000
+    while oeff_error > 100000
+      oeff_error = 0
+      team_seasons.each do |season|
+        team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
+        adj_ortg_error = 0
+        adj_drtg_error = 0
+        adj_tempo_error = 0
+        divisor = 0
+        x = 0
+        game_count = 0
+        team_games.each do |game|
+          if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0
+            competitiveness = 0
+            opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
+            opponent_game = game.game.team_games.find_by(team: game.opponent)
+            if season.adj_efficiency_margin && opponent_season.adj_efficiency_margin
+              competitiveness = (2 / (1 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
+            end
+            weight = 1 + (x * 0.3) + competitiveness
+            if opponent_season && opponent_game && opponent_game.wins + opponent_game.losses > 0
+              game_count += 1 
+              expected_ortg = (season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (opponent_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
+              expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
+              expected_tempo = (season.adj_tempo - current_season.adj_tempo) + (opponent_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
+              if game.game.stadium == game.team.stadium
+                expected_ortg += 2
+                expected_drtg += -2
+              elsif game.game.stadium == opponent_game.team.stadium
+                expected_ortg += -2
+                expected_drtg += 2
+              end
+              actual_ortg = 100 * game.points.to_f / game.game.possessions
+              actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
+              begin
+                if game.minutes > 0
+                  actual_tempo = (200.0 / game.minutes) * game.game.possessions
+                  ## Margin of Victory capped at 30 points per 100 possessions
+                  if actual_ortg - actual_drtg > 30
+                    actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) + 15
+                    actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) - 15
+                  end
+                  ## Margin of Defeat capped at 30 points per 100 possessions
+                  if actual_drtg - actual_ortg > 30
+                    actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) - 15
+                    actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) + 15
+                  end
+                  adj_ortg_error += weight * (actual_ortg - expected_ortg)
+                  adj_drtg_error += weight * (actual_drtg - expected_drtg)
+                  adj_tempo_error += weight * (actual_tempo - expected_tempo)
+                  x += 1
+                  divisor += weight
+                end
+              rescue
+                error_count += 1
+                puts error_count
+              end
+            end
+          end
+        end
+        if game_count < 11
+          divisor += 10 / (game_count + 1)
+        end
+        season.adj_offensive_efficiency = (season.adj_offensive_efficiency + (adj_ortg_error / divisor)).round(1)
+        season.adj_defensive_efficiency = (season.adj_defensive_efficiency + (adj_drtg_error / divisor)).round(1)
+        season.adj_tempo = (season.adj_tempo + (adj_tempo_error / divisor)).round(1)
+        season.adj_efficiency_margin = ((season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (current_season.adj_defensive_efficiency - season.adj_defensive_efficiency)).round(1)
+        season.save
+        oeff_error += (adj_ortg_error ** 2).round(1)
+      end
+      team_seasons.reload
+      current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
+      current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
+      current_season.adj_tempo = team_seasons.average(:adj_tempo)
+      current_season.save
+      current_season.reload
+      puts oeff_error
+    end
     team_seasons.each do |season|
       games_array = []
       season.adjem_rank = TeamSeason.order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
