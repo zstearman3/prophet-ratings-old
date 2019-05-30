@@ -54,11 +54,13 @@ namespace :calcs do
       season_two_pointers_attempted_allowed = 0
       season_steals = 0
       season_steals_allowed = 0
+      season_three_pointers = 0
       season_three_pointers_attempted = 0
       season_three_pointers_attempted_allowed = 0
       season_assists = 0
       season_assists_allowed = 0
       season_field_goals = 0
+      season_points = 0
       season_points_allowed = 0
       team_games = TeamGame.where(season: current_season, team: season.team)
       team_games.each do |game|
@@ -70,9 +72,11 @@ namespace :calcs do
           season_games_total += 1
           season_free_throws_attempted += game.free_throws_attempted
           season_field_goals_attempted += game.field_goals_attempted
+          season_three_pointers += game.three_pointers
           season_three_pointers_attempted += game.three_pointers_attempted
           season_field_goals += game.field_goals_made
           season_assists += game.assists
+          season_points += game.points
           if opponent_game
             season_efficiency_allowed += (100 * opponent_game.points.to_f / game.game.possessions)
             season_field_goals_allowed += opponent_game.field_goals_made
@@ -100,6 +104,7 @@ namespace :calcs do
       end
       season.offensive_efficiency = (season_efficiency_total / season_games_total).round(1)
       season.defensive_efficiency = (season_efficiency_allowed / season_games_allowed).round(1)
+      season.effective_field_goals_percentage = (100 * (season_field_goals + (0.5 * season_three_pointers)) / season.field_goals_attempted.to_f).round(1)
       season.effective_field_goals_percentage_allowed = (100 * (season_field_goals_allowed + (0.5 * season_three_pointers_allowed)) / season_field_goals_attempted_allowed.to_f).round(1)
       season.turnovers_percentage = (100 * season_turnovers.to_f / season_possessions).round(1)
       season.turnovers_percentage_allowed = (100 * season_turnovers_allowed.to_f / season_possessions_allowed).round(1)
@@ -116,6 +121,7 @@ namespace :calcs do
       season.three_pointers_rate_allowed = (100 * season_three_pointers_attempted_allowed.to_f / season_field_goals_attempted_allowed).round(1)
       season.assists_percentage = (100 * season_assists.to_f / season_field_goals).round(1)
       season.assists_percentage_allowed = (100 * season_assists_allowed.to_f / season_field_goals_allowed).round(1)
+      season.true_shooting_percentage = (100 * season_points / (2 * (season_field_goals_attempted + (0.44 * season_free_throws_attempted)))).round(1)
       season.true_shooting_percentage_allowed = (100 * season_points_allowed / (2 * (season_field_goals_attempted_allowed + (0.44 * season_free_throws_attempted_allowed)))).round(1)
       season.save
     end

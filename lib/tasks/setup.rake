@@ -110,14 +110,11 @@ namespace :setup do
       team_season.losses = item['Losses']
       team_season.conference_wins = item['ConferenceWins']
       team_season.conference_losses = item['ConferenceLosses']
-      team_season.possessions = item['Possessions']
-      team_season.updated = item['Updated']
       team_season.games = item['Games']
       team_season.minutes = item['Minutes']
       team_season.field_goals_made = item['FieldGoalsMade']
       team_season.field_goals_attempted = item['FieldGoalsAttempted']
       team_season.field_goals_percentage = item['FieldGoalsPercentage']
-      team_season.effective_field_goals_percentage = item['EffectiveFieldGoalsPercentage']
       team_season.two_pointers_made = item['TwoPointersMade']
       team_season.two_pointers_attempted = item['TwoPointersAttempted']
       team_season.two_pointers_percentage = item['TwoPointersPercentage']
@@ -139,11 +136,6 @@ namespace :setup do
       team_season.turnovers = item['Turnovers']
       team_season.personal_fouls = item['PersonalFouls']
       team_season.points = item['Points']
-      team_season.true_shooting_percentage = item['TrueShootingPercentage']
-      team_season.assists_percentage = item['AssistsPercentage']
-      team_season.steals_percentage = item['StealsPercentage']
-      team_season.blocks_percentage = item['BlocksPercentage']
-      team_season.turnovers_percentage = item['TurnoversPercentage']
       team_season.save
     end
   end
@@ -237,10 +229,13 @@ namespace :setup do
         ##########################
         # This code does not currently save games if the away team id, home team id, or stadium id doesn't exist.
         ##########################
-        game.stadium_id = item['Stadium']['StadiumID'] unless item['Stadium'].nil?
+        stadium = Stadium.find_by(id: item['Stadium']['StadiumID']) unless item['Stadium'].nil?
+        away_team = Team.find_by(id: item['AwayTeamID'])
+        home_team = Team.find_by(id: item['HomeTeamID'])
         game.season = Season.find_by(season: item['Season'])
-        game.away_team_id = item['AwayTeamID']
-        game.home_team_id = item['HomeTeamID']
+        game.stadium = stadium
+        game.away_team = away_team
+        game.home_team = home_team
         begin
           game.save
         rescue Exception => e

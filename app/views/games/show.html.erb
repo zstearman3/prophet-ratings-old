@@ -1,18 +1,24 @@
-<% provide(:title, 'Game Recap: ' + @away_team.school + " @ " + @home_team.school) %>
+<% provide(:title, 'Game Recap: ' + @away_team.school + " @ " + @home_team.school) if @away_team && @home_team %>
 
 <div class='box-score'>
   <div class="score-banner row">
-    <div class="away-team-banner col-md-4 col-md-offset-1 col-xs-4">
-      <div class="team-info col-xs-8 col-sm-9">
-        <div class="box-score-team-title">
-          <h1><small><%= @away_team.adjem_rank %></small><%= link_to @away_team.school, @away_team %></h1>
+    <% if @away_team %>
+      <div class="away-team-banner col-md-4 col-md-offset-1 col-xs-4">
+        <div class="team-info col-xs-8 col-sm-9">
+          <div class="box-score-team-title">
+            <h1><small><%= @away_team.adjem_rank %></small><%= link_to @away_team.school, @away_team %></h1>
+          </div>
+          <p><%= @away_team.wins.to_s + "-" + @away_team.losses.to_s %></p>
         </div>
-        <p><%= @away_team.wins.to_s + "-" + @away_team.losses.to_s %></p>
+        <div class="team-logo col-xs-4 col-sm-3">
+          <%= image_tag @away_team.team_logo_url %>
+        </div>
       </div>
-      <div class="team-logo col-xs-4 col-sm-3">
-        <%= image_tag @away_team.team_logo_url %>
+    <% else %>
+      <div class="away-team-banner col-md-4 col-md-offset-1 col-xs-4">
+        <h1><%= @game.away_team_name %></h1>
       </div>
-    </div>
+    <% end %>
     <div class="banner-score-box col-xs-4 col-md-2">
       <div class="away-score col-md-3 col-sm-6">
         <h1><%= @game.away_team_score %></h1>
@@ -24,17 +30,19 @@
         <h1><%= @game.home_team_score %></h1>
       </div>
     </div>
-    <div class="home-team-banner col-xs-4">
-      <div class="team-logo col-xs-4 col-sm-3">
-        <%= image_tag @home_team.team_logo_url %>
-      </div>
-      <div class="team-info col-xs-8 col-sm-9">
-        <div class="box-score-team-title">
-          <h1><small><%= @home_team.adjem_rank %></small><%= link_to @home_team.school, @home_team %></h1>
+    <% if @home_team %>
+      <div class="home-team-banner col-xs-4">
+        <div class="team-logo col-xs-4 col-sm-3">
+          <%= image_tag @home_team.team_logo_url %>
         </div>
-        <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
+        <div class="team-info col-xs-8 col-sm-9">
+          <div class="box-score-team-title">
+            <h1><small><%= @home_team.adjem_rank %></small><%= link_to @home_team.school, @home_team %></h1>
+          </div>
+          <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
+        </div>
       </div>
-    </div>
+    <% end %>
     <div class="game-details center col-xs-12">
       <% if @game.date_time && @game.stadium %>
         <%= @game.date_time.strftime("%B %d, %Y - %I:%M%p") + " - " + @game.stadium.name %>
