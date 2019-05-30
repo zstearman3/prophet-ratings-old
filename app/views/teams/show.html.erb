@@ -21,6 +21,7 @@
           <td>Game</td>
           <td>Result</td>
           <td>Pos</td>
+          <td>EM +/-</td>
         </tr>
       </thead>
       <tbody>
@@ -44,6 +45,7 @@
               <td><%= game.game.status %></td>
             <% end %>
             <td><%= game.game.possessions %></td>
+            <td><%= game.performance.round(1) if game.performance %></td>
           </tr>
         <% end %>
       </tbody>

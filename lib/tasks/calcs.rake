@@ -293,7 +293,7 @@ namespace :calcs do
             game_hash = { "performance" => performance, "home" => home, "defense" => defensive_style, 
                           "three_pointers" => three_pointers_advantage, "pace" => pace_advantage, "assists" => assists_advantage}
             games_array.push(game_hash)
-            game.performance = performance
+            game.performance = performance.round(1)
             if home == true
               game.home_away_neutral = "home"
             elsif home == false
@@ -391,6 +391,13 @@ namespace :calcs do
       season.assists_advantage = assists_advantage.round(2)
       season.pace_advantage = pace_advantage.round(2)
       season.save
+      team = season.team
+      team.adj_offensive_efficiency = season.adj_offensive_efficiency
+      team.adj_defensive_efficiency = season.adj_defensive_efficiency
+      team.adj_efficiency_margin = season.adj_efficiency_margin
+      team.adj_tempo = season.adj_tempo
+      team.adjem_rank = season.adjem_rank
+      team.save
     end
   end
 end

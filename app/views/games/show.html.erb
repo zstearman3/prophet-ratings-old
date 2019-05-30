@@ -5,7 +5,7 @@
     <div class="away-team-banner col-md-4 col-md-offset-1 col-xs-4">
       <div class="team-info col-xs-8 col-sm-9">
         <div class="box-score-team-title">
-          <h1><small><%= @away_team.ap_rank %></small><%= link_to @away_team.school, @away_team %></h1>
+          <h1><small><%= @away_team.adjem_rank %></small><%= link_to @away_team.school, @away_team %></h1>
         </div>
         <p><%= @away_team.wins.to_s + "-" + @away_team.losses.to_s %></p>
       </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="team-info col-xs-8 col-sm-9">
         <div class="box-score-team-title">
-          <h1><small><%= @home_team.ap_rank %></small><%= link_to @home_team.school, @home_team %></h1>
+          <h1><small><%= @home_team.adjem_rank %></small><%= link_to @home_team.school, @home_team %></h1>
         </div>
         <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
       </div>
