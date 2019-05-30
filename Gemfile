@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',           '5.1.6'
+gem 'rails',           '5.1.7'
 gem 'bcrypt',          '3.1.12'
 gem 'bootstrap-sass',  '3.4.1'
 gem 'puma',            '3.9.1'
@@ -12,7 +12,7 @@ gem 'turbolinks',      '5.0.1'
 gem 'jbuilder',        '2.7.0'
 gem 'pg',              '0.20.0'
 gem 'chartkick'
-gem 'actionview',      '5.1.6.2'
+gem 'actionview',      '>= 5.1.7'
 
 group :development do
   gem 'web-console',           '3.5.1'
