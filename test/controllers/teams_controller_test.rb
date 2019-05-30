@@ -4,6 +4,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:one)
     @team = teams(:sooners)
+    @team_season = team_seasons(:one)
   end
 
   test "should get index" do

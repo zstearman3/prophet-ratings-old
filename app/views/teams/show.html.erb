@@ -101,7 +101,7 @@
       <tr>
         <th>OREB%</th>
         <td class="center"><%= @team_season.offensive_rebounds_percentage %> <small><%= TeamSeason.order(offensive_rebounds_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
-        <td class="center"><%= 100.0 - @team_season.defensive_rebounds_percentage %> <small><%= TeamSeason.order(defensive_rebounds_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= 100.0 - @team_season.defensive_rebounds_percentage if @team_season.defensive_rebounds_percentage %> <small><%= TeamSeason.order(defensive_rebounds_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
       <tr>
         <th>FTA/FGA</th>
