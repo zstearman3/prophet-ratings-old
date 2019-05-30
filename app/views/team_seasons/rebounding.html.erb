@@ -5,15 +5,15 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th>Rank</th>
-      <th>Team</th>
-      <th>Record</th>
-      <th>ORB%</th>
-      <th>DRB%</th>
-      <th>TRB%</th>
-      <th>OREB</th>
-      <th>DREB</th>
-      <th>REB</th>
+      <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+      <th><%= sort_link "name", "Team", "asc", year %></th>
+      <th><%= sort_link "wins", "Record", "desc", year %></th>
+      <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year %></th>
+      <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year %></th>
+      <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year %></th>
+      <th><%= sort_link "offensive_rebounds", "OREB", "desc", year %></th>
+      <th><%= sort_link "defensive_rebounds", "DREB", "desc", year %></th>
+      <th><%= sort_link "rebounds", "REB", "desc", year %></th>
     </tr>
   </thead>
   <tbody>
@@ -32,15 +32,15 @@
       </tr>
       <% if x % 20 == 0 %>
         <tr>
-          <th>Rank</th>
-          <th>Team</th>
-          <th>Record</th>
-          <th>ORB%</th>
-          <th>DRB%</th>
-          <th>TRB%</th>
-          <th>OREB</th>
-          <th>DREB</th>
-          <th>REB</th>
+          <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+          <th><%= sort_link "name", "Team", "asc", year %></th>
+          <th><%= sort_link "wins", "Record", "desc", year %></th>
+          <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year %></th>
+          <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year %></th>
+          <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year %></th>
+          <th><%= sort_link "offensive_rebounds", "OREB", "desc", year %></th>
+          <th><%= sort_link "defensive_rebounds", "DREB", "desc", year %></th>
+          <th><%= sort_link "rebounds", "REB", "desc", year %></th>
         </tr>
       <% end %>
       <% x += 1 %>

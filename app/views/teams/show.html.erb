@@ -116,7 +116,7 @@
         <td class="center"><%= @team_season.assists_percentage %> <small><%= TeamSeason.order(assists_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
         <td class="center"><%= @team_season.assists_percentage_allowed %> <small><%= TeamSeason.order(assists_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
-      <th>3PT Rate</th>
+      <th>3PA/FGA</th>
         <td class="center"><%= @team_season.three_pointers_rate %> <small><%= TeamSeason.order(three_pointers_rate: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
         <td class="center"><%= @team_season.three_pointers_rate_allowed %> <small><%= TeamSeason.order(three_pointers_rate_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>

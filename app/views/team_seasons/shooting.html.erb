@@ -5,16 +5,17 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th>Rank</th>
-      <th>Team</th>
-      <th>Record</th>
-      <th>FG%</th>
-      <th>2P%</th>
-      <th>3P%</th>
-      <th>FT%</th>
-      <th>EFG%</th>
-      <th>TS%</th>
-      <th>OEff</th>
+      <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+      <th><%= sort_link "name", "Team", "asc", year %></th>
+      <th><%= sort_link "wins", "Record", "desc", year %></th>
+      <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
+      <th><%= sort_link "offensive_efficiency", "OEff", "desc", year %></th>
+      <th><%= sort_link "field_goals_percentage", "FG%", "desc", year %></th>
+      <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year %></th>
+      <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year %></th>
+      <th><%= sort_link "free_throws_percentage", "FT%", "desc", year %></th>
+      <th><%= sort_link "effective_field_goals_percentage", "EFG%", "desc", year %></th>
+      <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
     </tr>
   </thead>
   <tbody>
@@ -22,28 +23,30 @@
     <% @team_seasons.each do |season| %>
       <tr>
         <td><%= x %></td>
-        <td><%= season.team.school %></td>
+        <td><%= link_to season.team.school, season.team %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+        <td><%= season.offensive_efficiency %></td>
+        <td><%= season.adj_offensive_efficiency %></td>
         <td><%= season.field_goals_percentage %></td>
         <td><%= season.two_pointers_percentage %></td>
         <td><%= season.three_pointers_percentage %></td>
         <td><%= season.free_throws_percentage %></td>
         <td><%= season.effective_field_goals_percentage %></td>
         <td><%= season.true_shooting_percentage %></td>
-        <td><%= season.offensive_efficiency %></td>
       </tr>
       <% if x % 20 == 0 %>
         <tr>
-          <th>Rank</th>
-          <th>Team</th>
-          <th>Record</th>
-          <th>FG%</th>
-          <th>2P%</th>
-          <th>3P%</th>
-          <th>FT%</th>
-          <th>EFG%</th>
-          <th>TS%</th>
-          <th>OEff</th>
+          <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+          <th><%= sort_link "name", "Team", "asc", year %></th>
+          <th><%= sort_link "wins", "Record", "desc", year %></th>
+          <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
+          <th><%= sort_link "offensive_efficiency", "OEff", "desc", year %></th>
+          <th><%= sort_link "field_goals_percentage", "FG%", "desc", year %></th>
+          <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year %></th>
+          <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year %></th>
+          <th><%= sort_link "free_throws_percentage", "FT%", "desc", year %></th>
+          <th><%= sort_link "effective_field_goals_percentage", "EFG%", "desc", year %></th>
+          <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
         </tr>
       <% end %>
       <% x += 1 %>

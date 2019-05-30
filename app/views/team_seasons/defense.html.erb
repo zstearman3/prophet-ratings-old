@@ -5,15 +5,16 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th>Rank</th>
-      <th>Team</th>
-      <th>Record</th>
-      <th>AdjD</th>
-      <th>Steals%</th>
-      <th>Blocks%</th>
-      <th>OppTS%</th>
-      <th>Aggression</th>
-      <th>DScheme</th>
+      <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+      <th><%= sort_link "name", "Team", "asc", year %></th>
+      <th><%= sort_link "wins", "Record", "desc", year %></th>
+      <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year %></th>
+      <th><%= sort_link "defensive_efficiency", "DEff", "asc", year %></th>
+      <th><%= sort_link "steals_percentage", "Steals%", "desc", year %></th>
+      <th><%= sort_link "blocks_percentage", "Blocks%", "desc", year %></th>
+      <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", year %></th>
+      <th><%= sort_link "defensive_aggression", "Aggression", "desc", year %></th>
+      <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", year %></th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,7 @@
         <td><%= link_to season.team.school, season.team %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
         <td><%= season.adj_defensive_efficiency %></td>
+        <td><%= season.defensive_efficiency %></td>
         <td><%= season.steals_percentage %></td>
         <td><%= season.blocks_percentage %></td>
         <td><%= season.true_shooting_percentage_allowed %></td>
@@ -32,15 +34,16 @@
       </tr>
       <% if x % 20 == 0 %>
         <tr>
-          <th>Rank</th>
-          <th>Team</th>
-          <th>Record</th>
-          <th>AdjD</th>
-          <th>Steals%</th>
-          <th>Blocks%</th>
-          <th>OppTS%</th>
-          <th>DStyle</th>
-          <th>DScheme</th>
+          <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
+          <th><%= sort_link "name", "Team", "asc", year %></th>
+          <th><%= sort_link "wins", "Record", "desc", year %></th>
+          <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year %></th>
+          <th><%= sort_link "defensive_efficiency", "DEff", "asc", year %></th>
+          <th><%= sort_link "steals_percentage", "Steals%", "desc", year %></th>
+          <th><%= sort_link "blocks_percentage", "Blocks%", "desc", year %></th>
+          <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", year %></th>
+          <th><%= sort_link "defensive_aggression", "Aggression", "desc", year %></th>
+          <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", year %></th>
         </tr>
       <% end %>
       <% x += 1 %>

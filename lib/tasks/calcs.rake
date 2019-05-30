@@ -105,6 +105,7 @@ namespace :calcs do
       season.turnovers_percentage_allowed = (100 * season_turnovers_allowed.to_f / season_possessions_allowed).round(1)
       season.offensive_rebounds_percentage = (100 * season_offensive_rebounds.to_f / (season_offensive_rebounds + season_defensive_rebounds_allowed)).round(1)
       season.defensive_rebounds_percentage = (100 * season_defensive_rebounds.to_f / (season_defensive_rebounds + season_offensive_rebounds_allowed)).round(1)
+      season.total_rebounds_percentage = (100 * (season_offensive_rebounds.to_f + season_defensive_rebounds) / (season_offensive_rebounds + season_defensive_rebounds + season_offensive_rebounds_allowed + season_defensive_rebounds_allowed)).round(1)
       season.free_throws_rate = (100 * season_free_throws_attempted.to_f / season_field_goals_attempted).round(1)
       season.free_throws_rate_allowed = (100 * season_free_throws_attempted_allowed / season_field_goals_attempted_allowed).round(1)
       season.blocks_percentage = (100 * season_blocked_shots.to_f / season_two_pointers_attempted_allowed).round(1)
