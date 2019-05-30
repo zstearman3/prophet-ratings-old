@@ -3,6 +3,9 @@ class StaticPagesController < ApplicationController
   before_action :admin_user, only: :admin
   
   def home
+    if logged_in?
+      redirect_to rankings_path
+    end
   end
 
   def help
