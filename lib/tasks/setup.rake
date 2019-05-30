@@ -14,6 +14,7 @@ namespace :setup do
     json_res =  res.body
     
     # Parse data and import conferences, teams, and stadiums
+    Team.update_all(active: false)
     obj = JSON.parse(json_res)
     obj.each do |conf|
       conference = Conference.find_or_create_by(id: conf['ConferenceID'])
@@ -30,6 +31,7 @@ namespace :setup do
         team.conference_losses = item['ConferenceLosses']
         team.short_display_name = item['ShortDisplayName']
         team.team_logo_url = item['TeamLogoUrl']
+        team.active = item['Active']
         stadium = Stadium.find_or_create_by(id: item['Stadium']['StadiumID'])
         stadium.name = item['Stadium']['Name']
         stadium.city = item['Stadium']['City']
@@ -90,7 +92,7 @@ namespace :setup do
   end
   
   task team_seasons: :environment do
-    url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/TeamSeasonStats/2019?key='+ sd_api_key)
+    url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamSeasonStats/2018?key='+ api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -141,7 +143,7 @@ namespace :setup do
   end
 
   task player_seasons: :environment do
-    url = URI.parse('https://api.sportsdata.io/v3/cbb/stats/json/PlayerSeasonStats/2019?key='+ sd_api_key)
+    url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/PlayerSeasonStats/2018?key='+ api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -153,7 +155,7 @@ namespace :setup do
       player_season = PlayerSeason.find_or_create_by(id: item['StatID'])
       player_season.player_id = item['PlayerID']
       player_season.team_season = TeamSeason.find_by(year: item['Season'], team_id: item['TeamID'])
-      player_season.team_id = item['TeamID']
+      player_season.team = Team.find_by(id: item['TeamID'])
       player_season.season_id = Season.find_by(season: item['Season']).id
       player_season.year = item['Season']
       player_season.season_type = item['SeasonType']
@@ -200,10 +202,10 @@ namespace :setup do
   end
   
   task get_games: :environment do
-    season = Season.find_by(season: 2019)
-    (season.regular_season_start_date..season.regular_season_end_date).each do |date|
+    season = Season.find_by(season: 2018)
+    (season.regular_season_start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
-      url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/GamesByDate/' + str_date + '?key='+ sd_api_key)
+      url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/GamesByDate/' + str_date + '?key='+ api_key)
       puts url
       req = Net::HTTP::Get.new(url.to_s)
       res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -246,10 +248,10 @@ namespace :setup do
   end
   
   task get_team_games: :environment do
-    season = Season.find_by(season: 2019)
-    (season.regular_season_start_date..season.regular_season_end_date).each do |date|
+    season = Season.find_by(season: 2018)
+    (season.regular_season_start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
-      url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/TeamGameStatsByDate/' + str_date + '?key='+ sd_api_key)
+      url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamGameStatsByDate/' + str_date + '?key='+ api_key)
       puts url
       req = Net::HTTP::Get.new(url.to_s)
       res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -302,10 +304,10 @@ namespace :setup do
   end
   
   task get_player_games: :environment do
-    season = Season.find_by(season: 2019)
-    (season.regular_season_start_date..season.regular_season_end_date).each do |date|
+    season = Season.find_by(season: 2018)
+    (season.regular_season_start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
-      url = URI.parse('https://api.sportsdata.io/v3/cbb/stats/json/PlayerGameStatsByDate/' + str_date + '?key='+ sd_api_key)
+      url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/PlayerGameStatsByDate/' + str_date + '?key='+ api_key)
       puts url
       req = Net::HTTP::Get.new(url.to_s)
       res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|

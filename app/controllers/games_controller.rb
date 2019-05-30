@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show]
   def index
-    @games = Game.where(day: params[:date])
+    @games = Game.where(day: params[:date]).order(date_time: :asc)
   end
   
   def show

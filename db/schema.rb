@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190530140343) do
+ActiveRecord::Schema.define(version: 20190530203436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 20190530140343) do
     t.decimal "three_pointers_rate"
     t.decimal "assists_percentage"
     t.decimal "true_shooting_percentage"
+    t.date "post_season_end_date"
     t.index ["season"], name: "index_seasons_on_season", unique: true
   end
 
@@ -367,6 +368,7 @@ ActiveRecord::Schema.define(version: 20190530140343) do
     t.decimal "adj_defensive_efficiency"
     t.decimal "adj_tempo"
     t.integer "adjem_rank"
+    t.boolean "active"
     t.index ["conference_id"], name: "index_teams_on_conference_id"
     t.index ["school"], name: "index_teams_on_school", unique: true
     t.index ["stadium_id"], name: "index_teams_on_stadium_id"
