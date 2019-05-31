@@ -20,7 +20,7 @@
     <% @team_seasons.each do |season| %>
       <tr>
         <td><%= x %></td>
-        <td><%= link_to season.team.school, season.team %></td>
+        <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
         <td><%= season.adj_efficiency_margin %></td>
         <td><%= season.adj_offensive_efficiency %></td>

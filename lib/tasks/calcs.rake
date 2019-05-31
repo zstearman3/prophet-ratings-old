@@ -158,7 +158,7 @@ namespace :calcs do
   end
   
   task rating_calc: :environment do
-    current_season = Season.find_by(season: 2019)
+    current_season = Season.find_by(season: 2018)
     team_seasons = TeamSeason.where(season: current_season)
     team_seasons.each do |season|
       season.adj_offensive_efficiency = season.offensive_efficiency
