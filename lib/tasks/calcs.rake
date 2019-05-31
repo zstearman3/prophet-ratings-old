@@ -2,7 +2,7 @@ require 'net/http'
 
 namespace :calcs do
   task game_stats: :environment do
-    current_season = Season.find_by(season: 2019)
+    current_season = Season.find_by(season: 2018)
     games = Game.where(season: current_season)
     games.each do |game|
       if game.status == "Final" || game.status == "F/OT"
@@ -27,7 +27,7 @@ namespace :calcs do
   end
   
   task season_stats: :environment do
-    current_season = Season.find_by(season: 2019)
+    current_season = Season.find_by(season: 2018)
     team_seasons = TeamSeason.where(season: current_season)
     team_seasons.each do |season|
       season_efficiency_total = 0
@@ -72,7 +72,7 @@ namespace :calcs do
           season_games_total += 1
           season_free_throws_attempted += game.free_throws_attempted
           season_field_goals_attempted += game.field_goals_attempted
-          season_three_pointers += game.three_pointers
+          season_three_pointers += game.three_pointers_made
           season_three_pointers_attempted += game.three_pointers_attempted
           season_field_goals += game.field_goals_made
           season_assists += game.assists
@@ -198,7 +198,7 @@ namespace :calcs do
             competitiveness = 0
             opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
             opponent_game = game.game.team_games.find_by(team: game.opponent)
-            if season.adj_efficiency_margin && opponent_season.adj_efficiency_margin
+            if season.adj_efficiency_margin && opponent_season && opponent_season.adj_efficiency_margin
               competitiveness = (2 / (1 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
             end
             weight = 1 + (x * 0.3) + competitiveness
@@ -262,7 +262,7 @@ namespace :calcs do
     end
     team_seasons.each do |season|
       games_array = []
-      season.adjem_rank = TeamSeason.order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
+      season.adjem_rank = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
 
       #### Game by Game advantage calculations ####
       TeamGame.where(team: season.team, season: current_season).each do |game|
