@@ -5,7 +5,7 @@
   </div>
   <h1><small><%= @team_season.adjem_rank %></small><%= @team.school + " " + @team.name %></h1>
   <h4>
-    <%= @team.wins.to_s + "-" + @team.losses.to_s + " (" + @team.conference_wins.to_s + "-" + @team.conference_losses.to_s + ")" %>
+    <%= @team_season.wins.to_s + "-" + @team_season.losses.to_s + " (" + @team_season.conference_wins.to_s + "-" + @team_season.conference_losses.to_s + ")" %>
     <span>•</span>
     <%= @team.conference.name %>
   </h4>
