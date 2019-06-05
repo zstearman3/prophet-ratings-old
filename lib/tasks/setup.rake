@@ -202,8 +202,21 @@ namespace :setup do
   end
   
   task get_games: :environment do
-    season = Season.find_by(season: 2018)
-    (season.regular_season_start_date..season.post_season_end_date).each do |date|
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    season = Season.find_by(season: year_input)
+    puts("Number of Days (Leave Blank if All):")
+    days = STDIN.gets.chomp.to_i
+    if days.nil?
+      start_date = season.regular_season_start_date
+    else
+      if Date.today > season.post_season_end_date
+        start_date = season.post_season_end_date - days.days
+      else
+        start_date = Date.today - days.days
+      end
+    end
+    (start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
       url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/GamesByDate/' + str_date + '?key='+ api_key)
       puts url
@@ -248,8 +261,21 @@ namespace :setup do
   end
   
   task get_team_games: :environment do
-    season = Season.find_by(season: 2018)
-    (season.regular_season_start_date..season.post_season_end_date).each do |date|
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    season = Season.find_by(season: year_input)
+    puts("Number of Days (Leave Blank if All):")
+    days = STDIN.gets.chomp.to_i
+    if days.nil?
+      start_date = season.regular_season_start_date
+    else
+      if Date.today > season.post_season_end_date
+        start_date = season.post_season_end_date - days.days
+      else
+        start_date = Date.today - days.days
+      end
+    end
+    (start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
       url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamGameStatsByDate/' + str_date + '?key='+ api_key)
       puts url
@@ -304,8 +330,21 @@ namespace :setup do
   end
   
   task get_player_games: :environment do
-    season = Season.find_by(season: 2018)
-    (season.regular_season_start_date..season.post_season_end_date).each do |date|
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    season = Season.find_by(season: year_input)
+    puts("Number of Days (Leave Blank if All):")
+    days = STDIN.gets.chomp.to_i
+    if days.nil?
+      start_date = season.regular_season_start_date
+    else
+      if Date.today > season.post_season_end_date
+        start_date = season.post_season_end_date - days.days
+      else
+        start_date = Date.today - days.days
+      end
+    end
+    (start_date..season.post_season_end_date).each do |date|
       str_date = date.strftime('%Y-%^b-%d')
       url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/PlayerGameStatsByDate/' + str_date + '?key='+ api_key)
       puts url

@@ -2,7 +2,9 @@ require 'net/http'
 
 namespace :calcs do
   task game_stats: :environment do
-    current_season = Season.find_by(season: 2018)
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    current_season = Season.find_by(season: year_input)
     games = Game.where(season: current_season)
     games.each do |game|
       if game.status == "Final" || game.status == "F/OT"
@@ -27,7 +29,9 @@ namespace :calcs do
   end
   
   task season_stats: :environment do
-    current_season = Season.find_by(season: 2018)
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    current_season = Season.find_by(season: year_input)
     team_seasons = TeamSeason.where(season: current_season)
     team_seasons.each do |season|
       season_efficiency_total = 0
@@ -158,28 +162,34 @@ namespace :calcs do
   end
   
   task rating_calc: :environment do
-    current_season = Season.find_by(season: 2018)
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    current_season = Season.find_by(season: year_input)
     team_seasons = TeamSeason.where(season: current_season)
-    team_seasons.each do |season|
-      season.adj_offensive_efficiency = season.offensive_efficiency
-      season.adj_defensive_efficiency = season.defensive_efficiency
-      season_tempo = 0
-      team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
-      game_count = 0
-      team_games.each do |game|
-        if game.game.is_completed
-          season_tempo += game.game.possessions
-          game_count += 1
+    puts("Initial Run? (y/n)")
+    initial_input = STDIN.gets.chomp
+    if initial_input == "y"
+      team_seasons.each do |season|
+        season.adj_offensive_efficiency = season.offensive_efficiency
+        season.adj_defensive_efficiency = season.defensive_efficiency
+        season_tempo = 0
+        team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
+        game_count = 0
+        team_games.each do |game|
+          if game.game.is_completed
+            season_tempo += game.game.possessions
+            game_count += 1
+          end
         end
+        season.adj_tempo = season_tempo.to_f / game_count
+        season.save
+        team_seasons.reload
+        current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
+        current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
+        current_season.adj_tempo = team_seasons.average(:adj_tempo)
+        current_season.save
+        current_season.reload
       end
-      season.adj_tempo = season_tempo.to_f / game_count
-      season.save
-      team_seasons.reload
-      current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
-      current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
-      current_season.adj_tempo = team_seasons.average(:adj_tempo)
-      current_season.save
-      current_season.reload
     end
     error_count = 0
     oeff_error = 1000000
