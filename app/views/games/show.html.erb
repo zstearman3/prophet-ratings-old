@@ -29,7 +29,6 @@
       <div class="home-score col-md-3 col-sm-6">
         <h1><%= @game.home_team_score %></h1>
       </div>
-      <p class="center"><%= link_to @game.date_time.strftime("%A, %B %d, %Y "), games_path(date: @game.date_time.strftime("%Y%m%d")) %><span>•</span><%= @game.date_time.strftime(" %I:%M %p") %></p>
     </div>
     <% if @home_team && @home_team_season %>
       <div class="home-team-banner col-xs-4">
@@ -46,7 +45,7 @@
     <% end %>
     <div class="game-details center col-xs-12">
       <% if @game.date_time && @game.stadium %>
-        <%= @game.date_time.strftime("%B %d, %Y - %I:%M%p") + " - " + @game.stadium.name %>
+        <%= link_to(@game.date_time.strftime("%A, %B %d, %Y "), games_path(date: @game.date_time.strftime("%Y%m%d"))) %><span>• </span><%= @game.date_time.strftime("%I:%M %p ") %><span>• </span><%= @game.stadium.name %>
       <% end %>
     </div>
   </div>
