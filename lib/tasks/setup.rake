@@ -5,6 +5,25 @@ namespace :setup do
   api_key = 'ead8f64bde6e4b6cab0bbbf95c6d98db'
   sd_api_key = '8b5aef100e21492e869155a34e58e245'
   task hierarchy: :environment do
+    # Gets all stadiums
+    url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/Stadiums?key=' + api_key)
+    puts url
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
+      http.request(req)
+    end
+    json_res =  res.body
+    obj = JSON.parse(json_res)
+    obj.each do |item|
+      stadium = Stadium.find_or_create_by(id: item['StadiumID'])
+      stadium.name = item['Name']
+      stadium.city = item['City']
+      stadium.state = item['State']
+      stadium.country = item['Country']
+      stadium.capacity = item['Capacity']
+      stadium.save
+    end
+    
     url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/LeagueHierarchy?key=' + api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
@@ -32,35 +51,11 @@ namespace :setup do
         team.short_display_name = item['ShortDisplayName']
         team.team_logo_url = item['TeamLogoUrl']
         team.active = item['Active']
-        stadium = Stadium.find_or_create_by(id: item['Stadium']['StadiumID'])
-        stadium.name = item['Stadium']['Name']
-        stadium.city = item['Stadium']['City']
-        stadium.state = item['Stadium']['State']
-        stadium.country = item['Stadium']['Country']
-        stadium.capacity = item['Stadium']['Capacity']
-        stadium.save
+        stadium = Stadium.find_by(id: item['Stadium']['StadiumID'])
         team.conference = conference
         team.stadium = stadium
         team.save
       end
-    end
-    
-    url = URI.parse('https://api.sportsdata.io/v3/cbb/scores/json/Stadiums?key=' + sd_api_key)
-    puts url
-    req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
-      http.request(req)
-    end
-    json_res =  res.body
-    obj = JSON.parse(json_res)
-    obj.each do |item|
-      stadium = Stadium.find_or_create_by(id: item['StadiumID'])
-      stadium.name = item['Name']
-      stadium.city = item['City']
-      stadium.state = item['State']
-      stadium.country = item['Country']
-      stadium.capacity = item['Capacity']
-      stadium.save
     end
   end
   
@@ -91,8 +86,10 @@ namespace :setup do
     end
   end
   
-  task team_seasons: :environment do
-    url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamSeasonStats/2018?key='+ api_key)
+  task get_team_seasons: :environment do
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamSeasonStats/' + year_input.to_s + '?key='+ api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -142,8 +139,10 @@ namespace :setup do
     end
   end
 
-  task player_seasons: :environment do
-    url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/PlayerSeasonStats/2018?key='+ api_key)
+  task get_player_seasons: :environment do
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    url = URI.parse('https://api.fantasydata.net/api/cbb/fantasy/json/PlayerSeasonStats/' + year_input.to_s + '?key='+ api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme = 'https') do |http|
@@ -153,9 +152,19 @@ namespace :setup do
     obj = JSON.parse(json_res)
     obj.each do |item|
       player_season = PlayerSeason.find_or_create_by(id: item['StatID'])
-      player_season.player_id = item['PlayerID']
-      player_season.team_season = TeamSeason.find_by(year: item['Season'], team_id: item['TeamID'])
       player_season.team = Team.find_by(id: item['TeamID'])
+      player = Player.find_or_create_by(id: item['PlayerID'])
+      if player.last_name.nil?
+        player.last_name = item['Name'].split[1..-1].join(' ')
+        player.first_name = item['Name'].split.first
+        player.active = false
+        player.team = player_season.team
+        if !player.save
+          player = nil
+        end
+      end
+      player_season.player = player
+      player_season.team_season = TeamSeason.find_by(year: item['Season'], team_id: item['TeamID'])
       player_season.season_id = Season.find_by(season: item['Season']).id
       player_season.year = item['Season']
       player_season.season_type = item['SeasonType']

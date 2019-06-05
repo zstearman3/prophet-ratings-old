@@ -111,18 +111,22 @@
         <td><%= game.day.strftime("%m/%d/%y") %></td>
         <% home = true if game.home_or_away == "HOME" %>
         <td><%= "@" unless home %><%= link_to game.opponent_name, game.opponent %></td>
-        <% if home %>
-          <% if game.game.home_team_score > game.game.away_team_score %>
-            <td><%= link_to("W " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+        <% if game.game && game.game.home_team_score && game.game.away_team_score %>
+          <% if home %>
+            <% if game.game.home_team_score > game.game.away_team_score %>
+              <td><%= link_to("W " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+            <% else %>
+              <td><%= link_to("L " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+            <% end %>
           <% else %>
-            <td><%= link_to("L " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+            <% if game.game.away_team_score > game.game.home_team_score %>
+              <td><%= link_to("W " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+            <% else %>
+             <td><%= link_to("L " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+            <% end %>
           <% end %>
         <% else %>
-          <% if game.game.away_team_score > game.game.home_team_score %>
-            <td><%= link_to("W " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
-          <% else %>
-           <td><%= link_to("L " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
-          <% end %>
+          <td><%= link_to "err", game.game %></td>
         <% end %>
         <td><%= game.minutes %></td>
         <td><%= game.field_goals_made %></td>

@@ -44,8 +44,11 @@
       </div>
     <% end %>
     <div class="game-details center col-xs-12">
-      <% if @game.date_time && @game.stadium %>
-        <%= link_to(@game.date_time.strftime("%A, %B %d, %Y "), games_path(date: @game.date_time.strftime("%Y%m%d"))) %><span>• </span><%= @game.date_time.strftime("%I:%M %p ") %><span>• </span><%= @game.stadium.name %>
+      <% if @game.date_time %>
+        <%= link_to(@game.date_time.strftime("%A, %B %d, %Y "), games_path(date: @game.date_time.strftime("%Y%m%d"))) %>
+        <% if @game.stadium %>
+          <span>• </span><%= @game.date_time.strftime("%I:%M %p ") %><span>• </span><%= @game.stadium.name %>
+        <% end %>
       <% end %>
     </div>
   </div>
