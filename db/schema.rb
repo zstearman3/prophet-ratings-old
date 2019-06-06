@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190606151219) do
+ActiveRecord::Schema.define(version: 20190606201850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,21 @@ ActiveRecord::Schema.define(version: 20190606151219) do
     t.bigint "season_id"
     t.bigint "game_id"
     t.bigint "opponent_id"
+    t.decimal "bpm"
+    t.decimal "offensive_bpm"
+    t.decimal "defensive_bpm"
+    t.decimal "game_score"
+    t.decimal "per"
+    t.decimal "offensive_rebounds_percentage"
+    t.decimal "defensive_rebounds_percentage"
+    t.decimal "rebounds_percentage"
+    t.decimal "steals_percentage"
+    t.decimal "blocks_percentage"
+    t.decimal "assists_percentage"
+    t.decimal "usage_rate"
+    t.decimal "turnovers_percentage"
+    t.decimal "true_shooting_percentage"
+    t.decimal "effective_field_goals_percentage"
     t.index ["game_id"], name: "index_player_games_on_game_id"
     t.index ["opponent_id"], name: "index_player_games_on_opponent_id"
     t.index ["player_id"], name: "index_player_games_on_player_id"

@@ -435,4 +435,27 @@ namespace :calcs do
       team.save
     end
   end
+  
+  task advanced_player_stats: :environment do
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    current_season = Season.find_by(season: year_input)
+    player_games = PlayerGame.where(season: current_season)
+    player_games.first(5).each do |game|
+      team_game = game.game.team_games.find_by(team: game.team)
+      opponent_game = game.game.team_games.find_by(team: team_game.opponent)
+      if team_game && opponent_game
+        team_season = TeamSeason.find_by(team: team_game.team, season: current_season)
+        opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
+        if team_season && opponent_season
+          if game.minutes > 0 && team_game.minutes > 0
+            game.assists_percentage = (100 * game.assists / (((game.minutes * 5.0) / team_game.minutes) * (team_game.field_goals_made - game.field_goals_made))).round(1)
+            game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
+            game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
+            game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
+          end
+        end
+      end
+    end
+  end
 end
