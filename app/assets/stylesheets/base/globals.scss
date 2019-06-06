@@ -88,7 +88,20 @@ form{
   td {
     padding: 4px !important;
   }
+  th {
+    padding: 4px !important;
+  }
 }
+
+.table-xs {
+  td {
+    padding: 1px !important;
+  }
+  th {
+    padding: 1px !important;
+  }
+}
+
 
 /* debugger */
 

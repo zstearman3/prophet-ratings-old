@@ -8,7 +8,7 @@
           <div class="box-score-team-title">
             <h1><small><%= @away_team_season.adjem_rank %></small><%= link_to @away_team.school, team_path(@away_team, year: @season.season) %></h1>
           </div>
-          <p><%= @away_team.wins.to_s + "-" + @away_team.losses.to_s %></p>
+          <p><%= @away_team_season.wins.to_s + "-" + @away_team_season.losses.to_s %></p>
         </div>
         <div class="team-logo col-xs-4 col-sm-3">
           <%= image_tag @away_team.team_logo_url %>
@@ -39,7 +39,7 @@
           <div class="box-score-team-title">
             <h1><small><%= @home_team_season.adjem_rank %></small><%= link_to @home_team.school, team_path(@home_team, year: @season.season) %></h1>
           </div>
-          <p><%= @home_team.wins.to_s + "-" + @home_team.losses.to_s %></p>
+          <p><%= @home_team_season.wins.to_s + "-" + @home_team_season.losses.to_s %></p>
         </div>
       </div>
     <% end %>
@@ -119,6 +119,76 @@
           </tr>
         </tbody>
       </table>
+      <div class="advanced-stats away-advanced-stats">
+        <div class="col-md-4 left-column">
+                    <table class="table table-striped table-sm">
+            <tr>
+              <th>EFG%</th>
+              <td><%= @away_team_game.effective_field_goals_percentage %></td>
+            </tr>
+            <tr>
+              <th>TS%</th>
+              <td><%= @away_team_game.true_shooting_percentage %></td>
+            </tr>
+            <tr>
+              <th>2P%</th>
+              <td><%= @away_team_game.two_pointers_percentage %></td>
+            </tr>
+            <tr>
+              <th>FTM/FGA</th>
+              <td><%= @away_team_game.free_throws_rate %></td>
+            </tr>
+            <tr>
+              <th>TO%</th>
+              <td><%= @away_team_game.turnovers_percentage %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-4 middle-column">
+          <table class="table table-striped table-sm">
+            <tr>
+              <th>AST%</th>
+              <td><%= @away_team_game.assists_percentage %></td>
+            </tr>
+            <tr>
+              <th>STL%</th>
+              <td><%= @away_team_game.steals_percentage %></td>
+            </tr>
+            <tr>
+              <th>BLK%</th>
+              <td><%= @away_team_game.blocks_percentage %></td>
+            </tr>
+            <tr>
+              <th>OREB%</th>
+              <td><%= @away_team_game.offensive_rebounds_percentage %></td>
+            </tr>
+            <tr>
+              <th>DREB%</th>
+              <td><%= @away_team_game.defensive_rebounds_percentage %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-4 right-column">
+          <table class="table table-striped table-sm">
+            <tr>
+              <th>Pace</th>
+              <td><%= @away_team_game.pace %></td>
+            </tr>
+            <tr>
+              <th>ORTG</th>
+              <td><%= @away_team_game.offensive_efficiency %></td>
+            </tr>
+            <tr>
+              <th>DRTG</th>
+              <td><%= @away_team_game.defensive_efficiency %></td>
+            </tr>
+            <tr>
+              <th>Performance</th>
+              <td><%= @away_team_game.performance %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
     <div class="home-box-score col-lg-6">
       <table class="box-score-table table table-striped">
@@ -186,6 +256,76 @@
           </tr>
         </tbody>
       </table>
+      <div class="advanced-stats home-advanced-stats">
+        <div class="col-md-4 left-column">
+          <table class="table table-striped table-sm">
+            <tr>
+              <th>EFG%</th>
+              <td><%= @home_team_game.effective_field_goals_percentage %></td>
+            </tr>
+            <tr>
+              <th>TS%</th>
+              <td><%= @home_team_game.true_shooting_percentage %></td>
+            </tr>
+            <tr>
+              <th>2P%</th>
+              <td><%= @home_team_game.two_pointers_percentage %></td>
+            </tr>
+            <tr>
+              <th>FTM/FGA</th>
+              <td><%= @home_team_game.free_throws_rate %></td>
+            </tr>
+            <tr>
+              <th>TO%</th>
+              <td><%= @home_team_game.turnovers_percentage %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-4 middle-column">
+          <table class="table table-striped table-sm">
+            <tr>
+              <th>AST%</th>
+              <td><%= @home_team_game.assists_percentage %></td>
+            </tr>
+            <tr>
+              <th>STL%</th>
+              <td><%= @home_team_game.steals_percentage %></td>
+            </tr>
+            <tr>
+              <th>BLK%</th>
+              <td><%= @home_team_game.blocks_percentage %></td>
+            </tr>
+            <tr>
+              <th>OREB%</th>
+              <td><%= @home_team_game.offensive_rebounds_percentage %></td>
+            </tr>
+            <tr>
+              <th>DREB%</th>
+              <td><%= @home_team_game.defensive_rebounds_percentage %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-4 right-column">
+          <table class="table table-striped table-sm">
+            <tr>
+              <th>Pace</th>
+              <td><%= @home_team_game.pace %></td>
+            </tr>
+            <tr>
+              <th>ORTG</th>
+              <td><%= @home_team_game.offensive_efficiency %></td>
+            </tr>
+            <tr>
+              <th>DRTG</th>
+              <td><%= @home_team_game.defensive_efficiency %></td>
+            </tr>
+            <tr>
+              <th>Performance</th>
+              <td><%= @home_team_game.performance %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

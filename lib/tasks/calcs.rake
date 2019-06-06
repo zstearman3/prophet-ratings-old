@@ -50,6 +50,8 @@ namespace :calcs do
       season_offensive_rebounds_allowed = 0
       season_defensive_rebounds_allowed = 0
       season_free_throws_attempted = 0
+      season_free_throws_made = 0
+      season_free_throws_made_allowed = 0
       season_field_goals_attempted = 0
       season_free_throws_attempted_allowed = 0
       season_blocked_shots = 0
@@ -75,6 +77,7 @@ namespace :calcs do
           season_possessions += game.game.possessions
           season_games_total += 1
           season_free_throws_attempted += game.free_throws_attempted
+          season_free_throws_made += game.free_throws_made
           season_field_goals_attempted += game.field_goals_attempted
           season_three_pointers += game.three_pointers_made
           season_three_pointers_attempted += game.three_pointers_attempted
@@ -94,6 +97,7 @@ namespace :calcs do
             season_offensive_rebounds_allowed += opponent_game.offensive_rebounds
             season_defensive_rebounds_allowed += opponent_game.defensive_rebounds
             season_free_throws_attempted_allowed += opponent_game.free_throws_attempted
+            season_free_throws_made_allowed += opponent_game.free_throws_made
             season_blocked_shots += game.blocked_shots
             season_two_pointers_attempted_allowed += opponent_game.two_pointers_attempted
             season_blocked_shots_allowed += opponent_game.blocked_shots
@@ -115,8 +119,8 @@ namespace :calcs do
       season.offensive_rebounds_percentage = (100 * season_offensive_rebounds.to_f / (season_offensive_rebounds + season_defensive_rebounds_allowed)).round(1)
       season.defensive_rebounds_percentage = (100 * season_defensive_rebounds.to_f / (season_defensive_rebounds + season_offensive_rebounds_allowed)).round(1)
       season.total_rebounds_percentage = (100 * (season_offensive_rebounds.to_f + season_defensive_rebounds) / (season_offensive_rebounds + season_defensive_rebounds + season_offensive_rebounds_allowed + season_defensive_rebounds_allowed)).round(1)
-      season.free_throws_rate = (100 * season_free_throws_attempted.to_f / season_field_goals_attempted).round(1)
-      season.free_throws_rate_allowed = (100 * season_free_throws_attempted_allowed / season_field_goals_attempted_allowed).round(1)
+      season.free_throws_rate = (100 * season_free_throws_made.to_f / season_field_goals_attempted).round(1)
+      season.free_throws_rate_allowed = (100 * season_free_throws_made_allowed / season_field_goals_attempted_allowed).round(1)
       season.blocks_percentage = (100 * season_blocked_shots.to_f / season_two_pointers_attempted_allowed).round(1)
       season.blocks_percentage_allowed = (100 * season_blocked_shots_allowed.to_f / season_two_pointers_attempted).round(1)
       season.steals_percentage = (100 * season_steals.to_f / season_possessions_allowed).round(1)
@@ -322,6 +326,20 @@ namespace :calcs do
             game.three_pointers_advantage = three_pointers_advantage
             game.pace_advantage = pace_advantage
             game.assists_advantage = assists_advantage
+            game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted.to_f).round(1)
+            game.true_shooting_percentage = (100 * game.points / ( 2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
+            game.free_throws_rate = (100 * game.free_throws_made.to_f / game.field_goals_attempted).round(1)
+            game.pace = pace.round(1)
+            game.blocks_percentage = ((100 * game.blocked_shots.to_f) / (opponent_game.field_goals_attempted - game.three_pointers_attempted)).round(1)
+            game.steals_percentage = ((100 * game.steals) / game.game.possessions).round(1)
+            game.assists_percentage = ((100 * game.assists.to_f) / game.field_goals_made).round(1)
+            game.turnovers_percentage = ((100 * game.turnovers) / game.game.possessions).round(1)
+            game.offensive_efficiency = actual_ortg.round(1)
+            game.defensive_efficiency = actual_drtg.round(1)
+            game.expected_ortg = expected_ortg.round(1)
+            game.expected_drtg = expected_drtg.round(1)
+            game.offensive_rebounds_percentage = ((100 * game.offensive_rebounds.to_f) / (game.offensive_rebounds + opponent_game.defensive_rebounds)).round(1)
+            game.defensive_rebounds_percentage = ((100 * game.defensive_rebounds.to_f) / (game.defensive_rebounds + opponent_game.offensive_rebounds)).round(1)
             game.save
           end
         end

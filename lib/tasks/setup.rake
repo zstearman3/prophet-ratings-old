@@ -157,6 +157,7 @@ namespace :setup do
       if player.last_name.nil?
         player.last_name = item['Name'].split[1..-1].join(' ')
         player.first_name = item['Name'].split.first
+        player.position = item['Position']
         player.active = false
         player.team = player_season.team
         if !player.save
