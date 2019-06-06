@@ -17,6 +17,10 @@ class ActiveSupport::TestCase
   def log_in_as(user)
     session[:user_id] = user.id
   end
+  
+  def current_season
+    @current_season = Season.find_by(season: 2019)
+  end
 end
 
 class ActionDispatch::IntegrationTest

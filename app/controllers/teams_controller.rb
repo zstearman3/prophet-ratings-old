@@ -13,7 +13,6 @@ class TeamsController < ApplicationController
     else
       @season = current_season
     end
-    puts @season.inspect
     @player_seasons = @team.player_seasons.where(season: @season).order(minutes: :desc)
     @team_season = TeamSeason.find_by(team: @team, season: @season)
     @team_games = TeamGame.where(team: @team, season: @season).order(day: :asc)
