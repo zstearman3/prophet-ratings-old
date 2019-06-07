@@ -189,6 +189,54 @@
           </table>
         </div>
       </div>
+      <div class="advanced-player-stats">
+        <h3>Advanced Player Stats</h3>
+        <table class="box-score-table table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>MIN</th>
+              <th>USG</th>
+              <th>eFG%</th>
+              <th>TS%</th>
+              <th>AST%</th>
+              <th>TO%</th>
+              <th>ORB%</th>
+              <th>DRB%</th>
+              <th>TRB%</th>
+              <th>STL%</th>
+              <th>BLK%</th>
+              <th>Box +/-</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @away_player_games.each do |game| %>
+              <tr>
+                <% player = game.player %>
+                <td><%= player.jersey %></td>
+                <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
+                <% if game.minutes > 0 %>
+                  <td><%= game.minutes %></td>
+                  <td><%= game.usage_rate %></td>
+                  <td><%= game.effective_field_goals_percentage %></td>
+                  <td><%= game.true_shooting_percentage %></td>
+                  <td><%= game.assists_percentage %></td>
+                  <td><%= game.turnovers_percentage %></td>
+                  <td><%= game.offensive_rebounds_percentage %></td>
+                  <td><%= game.defensive_rebounds_percentage %></td>
+                  <td><%= game.rebounds_percentage %></td>
+                  <td><%= game.steals_percentage %></td>
+                  <td><%= game.blocks_percentage %></td>
+                  <td><%= game.bpm %></td>
+                <% else %>
+                  <td colspan="12" class="center">Did Not Play</td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="home-box-score col-lg-6">
       <table class="box-score-table table table-striped">
@@ -325,6 +373,54 @@
             </tr>
           </table>
         </div>
+      </div>
+      <div class="advanced-player-stats">
+        <h3>Advanced Player Stats</h3>
+        <table class="box-score-table table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>MIN</th>
+              <th>USG</th>
+              <th>eFG%</th>
+              <th>TS%</th>
+              <th>AST%</th>
+              <th>TO%</th>
+              <th>ORB%</th>
+              <th>DRB%</th>
+              <th>TRB%</th>
+              <th>STL%</th>
+              <th>BLK%</th>
+              <th>Box +/-</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @home_player_games.each do |game| %>
+              <tr>
+                <% player = game.player %>
+                <td><%= player.jersey %></td>
+                <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
+                <% if game.minutes > 0 %>
+                  <td><%= game.minutes %></td>
+                  <td><%= game.usage_rate %></td>
+                  <td><%= game.effective_field_goals_percentage %></td>
+                  <td><%= game.true_shooting_percentage %></td>
+                  <td><%= game.assists_percentage %></td>
+                  <td><%= game.turnovers_percentage %></td>
+                  <td><%= game.offensive_rebounds_percentage %></td>
+                  <td><%= game.defensive_rebounds_percentage %></td>
+                  <td><%= game.rebounds_percentage %></td>
+                  <td><%= game.steals_percentage %></td>
+                  <td><%= game.blocks_percentage %></td>
+                  <td><%= game.bpm %></td>
+                <% else %>
+                  <td colspan="12" class="center">Did Not Play</td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
