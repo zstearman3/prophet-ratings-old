@@ -13,12 +13,15 @@
       <th>FT%</th>
       <th>EFG%</th>
       <th>TS%</th>
+      <th>PER</th>
+      <th>BPM</th>
+      <th>pRATE</th>
     </tr>
   </thead>
   <tbody>
     <% @player_seasons.each do |season| %>
       <tr>
-        <td><%= season.name %></td>
+        <td><%= link_to season.name, season.player %></td>
         <td><%= season.team.school %></td>
         <td><%= season.field_goals_percentage %></td>
         <td><%= season.two_pointers_percentage %></td>
@@ -26,6 +29,9 @@
         <td><%= season.free_throws_percentage %></td>
         <td><%= season.effective_field_goals_percentage %></td>
         <td><%= season.true_shooting_percentage %></td>
+        <td><%= season.player_efficiency_rating %></td>
+        <td><%= season.bpm %></td>
+        <td><%= season.prophet_rating %></td>
       </tr>
     <% end %>
   </tbody>

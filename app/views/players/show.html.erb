@@ -76,6 +76,58 @@
   </table>
 </div>
 
+<div class="Stats-row row">
+  <h3>Advanced Player Statistics</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Team</th>
+        <th>Pos</th>
+        <th>G</th>
+        <th>MIN</th>
+        <th>eFG%</th>
+        <th>TS%</th>
+        <th>AST%</th>
+        <th>TO%</th>
+        <th>ORB%</th>
+        <th>DRB%</th>
+        <th>TRB%</th>
+        <th>STL%</th>
+        <th>BLK%</th>
+        <th>USG</th>
+        <th>Box +/-</th>
+        <th>PER</th>
+        <th>pRATE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @player.player_seasons.each do |season| %> 
+        <tr>
+          <td><%= season.year %></td>
+          <td><%= link_to season.team_name, season.team %></td>
+          <td><%= season.position %></td>
+          <td><%= season.games %></td>
+          <td><%= (season.minutes.to_f / season.games).round(1) %></td>
+          <td><%= season.effective_field_goals_percentage %></td>
+          <td><%= season.true_shooting_percentage %></td>
+          <td><%= season.assists_percentage %></td>
+          <td><%= season.turnovers_percentage %></td>
+          <td><%= season.offensive_rebounds_percentage %></td>
+          <td><%= season.defensive_rebounds_percentage %></td>
+          <td><%= season.total_rebounds_percentage %></td>
+          <td><%= season.steals_percentage %></td>
+          <td><%= season.blocks_percentage %></td>
+          <td><%= season.usage_rate %></td>
+          <td><%= season.bpm %></td>
+          <td><%= season.player_efficiency_rating %></td>
+          <td><%= season.prophet_rating %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
 <div class="games-row row">
   <h3>Game Logs</h3>
   <table class="table table-striped">

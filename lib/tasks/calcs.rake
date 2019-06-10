@@ -213,7 +213,7 @@ namespace :calcs do
             opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
             opponent_game = game.game.team_games.find_by(team: game.opponent)
             if season.adj_efficiency_margin && opponent_season && opponent_season.adj_efficiency_margin
-              competitiveness = (2 / (1 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
+              competitiveness = (4 / (2 + (season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
             end
             weight = 1 + (x * 0.3) + competitiveness
             if opponent_season && opponent_game && opponent_game.wins + opponent_game.losses > 0
@@ -486,7 +486,8 @@ namespace :calcs do
     player_seasons = PlayerSeason.where(season: current_season)
     seasons_count = player_seasons.count
     i = 0
-    player_seasons.first(5).each do |season|
+    player_seasons.each do |season|
+      team_season = TeamSeason.find_by(team: season.team, season: current_season)
       offensive_rebounds = 0
       defensive_rebounds = 0
       rebounds = 0
@@ -501,15 +502,32 @@ namespace :calcs do
       two_pointers_attempted_allowed = 0
       field_goals_attempted_allowed = 0
       three_pointers_attempted_allowed = 0
+      three_pointers_attempted = 0
+      team_field_goals_made = 0
+      field_goals_made = 0
+      three_pointers_made = 0
+      free_throws_attempted = 0
+      field_goals_attempted = 0
+      free_throws_made = 0
+      points = 0
+      turnovers = 0
+      assists = 0
       minutes = 0
+      game_count = 0
       team_minutes = 0
       possessions = 0
+      prophet_rating = 0
+      fouls = 0
+      vop = 1.1
+      bpm = 0
+      drbp = (season.season.defensive_rebounds_percentage / 100.0)
+      factor = 0.60
+      total_weight = 0
       games = PlayerGame.where(player: season.player, season: current_season)
       games.each do |game|
         team_game = game.game.team_games.find_by(team: game.team)
         opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
         if team_game && opponent_game
-          team_season = TeamSeason.find_by(team: team_game.team, season: current_season)
           opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
           if team_season && opponent_season
             if game.minutes > 0 && team_game.minutes > 0
@@ -523,15 +541,41 @@ namespace :calcs do
               blocked_shots += game.blocked_shots
               field_goals_attempted_allowed += opponent_game.field_goals_attempted
               three_pointers_attempted_allowed += opponent_game.three_pointers_attempted
+              field_goals_made += game.field_goals_made
+              three_pointers_made += game.three_pointers_made
+              three_pointers_attempted += game.three_pointers_attempted
+              team_field_goals_made += team_game.field_goals_made
+              assists += game.assists
+              free_throws_attempted += game.free_throws_attempted
+              free_throws_made += game.free_throws_made
+              field_goals_attempted += game.field_goals_attempted
+              turnovers += game.turnovers
+              points += game.points
               minutes += game.minutes
               team_minutes += team_game.minutes
               possessions += game.game.possessions
+              fouls += game.personal_fouls
+              competitiveness = competitiveness = (4 / (2 + (team_season.adj_efficiency_margin - opponent_season.adj_defensive_efficiency) ** 2))
+              if game.minutes < 25
+                minutes_multiplier = (game.minutes / 25)
+              else
+                minutes_multiplier = 1
+              end
+              weight =  (1 + competitiveness)
+              total_weight += weight
+              if game.bpm.finite?
+                bpm += game.bpm
+                total_weight += weight
+                prophet_rating += (minutes_multiplier * weight * game.bpm)
+              end
+              game_count += 1
             end
           end
         end
       end
       minutes_percentage = minutes / (team_minutes / 5.0)
-      if minutes_percentage > 0.05
+      game_percentage = game_count / team_season.games
+      if minutes_percentage > 0.05 
         rebounds = offensive_rebounds + defensive_rebounds
         team_rebounds = team_offensive_rebounds + team_defensive_rebounds
         rebounds_allowed = offensive_rebounds_allowed + defensive_rebounds_allowed
@@ -541,12 +585,44 @@ namespace :calcs do
         season.total_rebounds_percentage = ((100.0 * rebounds) / (minutes_percentage * (team_rebounds + rebounds_allowed))).round(1)
         season.steals_percentage = ((100.0 * steals) / (minutes_percentage * possessions)).round(1)
         season.blocks_percentage = ((100.0 * blocked_shots) / (minutes_percentage * two_pointers_attempted_allowed)).round(1)
+        season.assists_percentage = ((100.0 * assists) / ((minutes_percentage * team_field_goals_made) - field_goals_made)).round(1)
+        season.turnovers_percentage = ((100.0 * turnovers) / (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers)).round(1)
+        season.effective_field_goals_percentage = ((100.0 * (field_goals_made + (0.5 * three_pointers_made))) / field_goals_attempted).round(1)
+        season.true_shooting_percentage = (100.0 * points / (2 * (field_goals_attempted + (0.44 * free_throws_attempted)))).round(1)
+        season.usage_rate = (100 * (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers) / (minutes_percentage * possessions)).round(1)
+        uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * 0.4) * field_goals_made) + 
+               ((free_throws_made * 0.5) * (1 + (1 - 0.4) + (0.6666 * 0.4))) - (vop * turnovers) - (vop * drbp * (field_goals_attempted - field_goals_made)) -
+               (vop * 0.44 * (0.44 + (0.56 * drbp)) * (free_throws_attempted - free_throws_made)) + (vop * (1 - drbp) * defensive_rebounds) +
+               (vop * drbp * offensive_rebounds) + (vop * steals) + (vop * drbp * blocked_shots) - (fouls * (0.8 - (0.44 * vop))))
+        season.aper = (current_season.adj_tempo / team_season.adj_tempo) * uper
+        season.bpm = ((0.148 * (minutes.to_f / game_count)) + (0.1196 * season.offensive_rebounds_percentage) + (-0.1513 * season.defensive_rebounds_percentage) + (1.2556 * season.steals_percentage) + (0.5318 * season.blocks_percentage) +
+                  (-0.3059 * season.assists_percentage) - (0.9213 * season.usage_rate * (season.turnovers_percentage / 100.0)) + ((0.7112 * season.usage_rate * (1 - (season.turnovers_percentage / 100.0))) * (2 * ((season.true_shooting_percentage / 100.0) - (team_season.true_shooting_percentage / 100.0))) +
+                  (0.0170 * season.assists_percentage) + (0.2976 * (((three_pointers_attempted - field_goals_attempted) / 100.0) - (current_season.three_pointers_rate / 100.0))) - 0.2135) + (0.7259 * (Math.sqrt(season.assists_percentage * season.total_rebounds_percentage)))).round(1)
+        if season.usage_rate < 22
+          season.prophet_rating = (((season.usage_rate / 22.0) * prophet_rating) / total_weight).round(1)
+        else
+          season.prophet_rating = (prophet_rating / total_weight).round(1)
+        end
+        season.save
+      else
+        season.prophet_rating = 0
+        season.aper = nil
+        season.player_efficiency_rating = nil
+        season.bpm = nil
         season.save
       end
       i += 1
-      puts season.blocks_percentage
       if i % 100 == 0
         puts i.to_s + " of " + seasons_count.to_s + " seasons completed."
+      end
+    end
+    player_seasons.reload
+    current_season.aper = player_seasons.average(:aper)
+    current_season.save
+    player_seasons.each do |season|
+      if season.aper
+        season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
+        season.save
       end
     end
   end
