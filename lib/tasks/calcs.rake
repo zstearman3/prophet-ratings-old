@@ -440,12 +440,72 @@ namespace :calcs do
     puts("Please Input Year:")
     year_input = STDIN.gets.chomp.to_i
     current_season = Season.find_by(season: year_input)
-    player_games = PlayerGame.where(season: current_season, bpm: nil)
-    count = player_games.count
-    x = 0
-    player_games.each do |game|
+    # player_games = PlayerGame.where(season: current_season, bpm: nil)
+    # count = player_games.count
+    # x = 0
+    # player_games.each do |game|
 
-      if game.bpm.nil?
+    #   if game.bpm.nil?
+    #     team_game = game.game.team_games.find_by(team: game.team)
+    #     opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
+    #     if team_game && opponent_game
+    #       team_season = TeamSeason.find_by(team: team_game.team, season: current_season)
+    #       opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
+    #       if team_season && opponent_season
+    #         if game.minutes > 0 && team_game.minutes > 0
+    #           begin
+    #             game.assists_percentage = (100 * game.assists / (((game.minutes * 5.0) / team_game.minutes) * (team_game.field_goals_made - game.field_goals_made))).round(1)
+    #             game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
+    #             game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
+    #             game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
+    #             game.steals_percentage = (100 * game.steals / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
+    #             game.blocks_percentage = (100 * game.blocked_shots / ((( game.minutes * 5.0 ) / team_game.minutes) * (opponent_game.field_goals_attempted - opponent_game.three_pointers_attempted))).round(1)
+    #             if !game.blocks_percentage.finite?
+    #               game.blocks_percentage = 0
+    #             end
+    #             game.turnovers_percentage = (100 * game.turnovers / ( game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers)).round(1)
+    #             game.true_shooting_percentage = (100 * game.points.to_f / (2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
+    #             game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted).round(1)
+    #             game.usage_rate = (100 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers) / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
+    #             game.bpm = ((0.148 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
+    #                       (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0))) +
+    #                       (0.0170 * game.assists_percentage) + (0.2976 * (((game.three_pointers_attempted - game.field_goals_attempted) / 100.0) - (game.season.three_pointers_rate / 100.0))) - 0.2135) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
+    #             game.save
+    #           rescue
+    #             puts game.inspect
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    #   x += 1
+    #   if x % 1000 == 0
+    #     puts x.to_s + " of " + count.to_s + " games completed."
+    #   end
+    # end
+    player_seasons = PlayerSeason.where(season: current_season)
+    seasons_count = player_seasons.count
+    i = 0
+    player_seasons.first(5).each do |season|
+      offensive_rebounds = 0
+      defensive_rebounds = 0
+      rebounds = 0
+      offensive_rebounds_allowed = 0
+      defensive_rebounds_allowed = 0
+      rebounds_allowed = 0
+      team_offensive_rebounds = 0
+      team_defensive_rebounds = 0
+      team_rebounds = 0
+      steals = 0
+      blocked_shots = 0
+      two_pointers_attempted_allowed = 0
+      field_goals_attempted_allowed = 0
+      three_pointers_attempted_allowed = 0
+      minutes = 0
+      team_minutes = 0
+      possessions = 0
+      games = PlayerGame.where(player: season.player, season: current_season)
+      games.each do |game|
         team_game = game.game.team_games.find_by(team: game.team)
         opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
         if team_game && opponent_game
@@ -453,34 +513,40 @@ namespace :calcs do
           opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
           if team_season && opponent_season
             if game.minutes > 0 && team_game.minutes > 0
-              begin
-                game.assists_percentage = (100 * game.assists / (((game.minutes * 5.0) / team_game.minutes) * (team_game.field_goals_made - game.field_goals_made))).round(1)
-                game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
-                game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
-                game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
-                game.steals_percentage = (100 * game.steals / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
-                game.blocks_percentage = (100 * game.blocked_shots / ((( game.minutes * 5.0 ) / team_game.minutes) * (opponent_game.field_goals_attempted - opponent_game.three_pointers_attempted))).round(1)
-                if !game.blocks_percentage.finite?
-                  game.blocks_percentage = 0
-                end
-                game.turnovers_percentage = (100 * game.turnovers / ( game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers)).round(1)
-                game.true_shooting_percentage = (100 * game.points.to_f / (2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
-                game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted).round(1)
-                game.usage_rate = (100 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers) / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
-                game.bpm = ((0.148 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
-                          (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0))) +
-                          (0.0170 * game.assists_percentage) + (0.2976 * (((game.three_pointers_attempted - game.field_goals_attempted) / 100.0) - (game.season.three_pointers_rate / 100.0))) - 0.2135) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
-                game.save
-              rescue
-                puts game.inspect
-              end
+              offensive_rebounds += game.offensive_rebounds
+              defensive_rebounds += game.defensive_rebounds
+              offensive_rebounds_allowed += opponent_game.offensive_rebounds
+              defensive_rebounds_allowed += opponent_game.defensive_rebounds
+              team_offensive_rebounds += team_game.offensive_rebounds
+              team_defensive_rebounds += team_game.defensive_rebounds
+              steals += game.steals
+              blocked_shots += game.blocked_shots
+              field_goals_attempted_allowed += opponent_game.field_goals_attempted
+              three_pointers_attempted_allowed += opponent_game.three_pointers_attempted
+              minutes += game.minutes
+              team_minutes += team_game.minutes
+              possessions += game.game.possessions
             end
           end
         end
       end
-      x += 1
-      if x % 1000 == 0
-        puts x.to_s + " of " + count.to_s + " games completed."
+      minutes_percentage = minutes / (team_minutes / 5.0)
+      if minutes_percentage > 0.05
+        rebounds = offensive_rebounds + defensive_rebounds
+        team_rebounds = team_offensive_rebounds + team_defensive_rebounds
+        rebounds_allowed = offensive_rebounds_allowed + defensive_rebounds_allowed
+        two_pointers_attempted_allowed = field_goals_attempted_allowed - three_pointers_attempted_allowed
+        season.offensive_rebounds_percentage = ((100.0 * offensive_rebounds) / (minutes_percentage * (team_offensive_rebounds + defensive_rebounds_allowed))).round(1) 
+        season.defensive_rebounds_percentage = ((100.0 * defensive_rebounds) / (minutes_percentage * (team_defensive_rebounds + offensive_rebounds_allowed))).round(1)
+        season.total_rebounds_percentage = ((100.0 * rebounds) / (minutes_percentage * (team_rebounds + rebounds_allowed))).round(1)
+        season.steals_percentage = ((100.0 * steals) / (minutes_percentage * possessions)).round(1)
+        season.blocks_percentage = ((100.0 * blocked_shots) / (minutes_percentage * two_pointers_attempted_allowed)).round(1)
+        season.save
+      end
+      i += 1
+      puts season.blocks_percentage
+      if i % 100 == 0
+        puts i.to_s + " of " + seasons_count.to_s + " seasons completed."
       end
     end
   end
