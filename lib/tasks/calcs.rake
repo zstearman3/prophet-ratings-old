@@ -473,7 +473,7 @@ namespace :calcs do
               game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted).round(1)
               game.usage_rate = (100 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers) / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
               if game.minutes > 7
-                game.bpm = ((0.148 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
+                game.bpm = ((0.138 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
                             (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0)) +
                             (0.0170 * game.assists_percentage) + (0.2976 * ((game.three_pointers_attempted / ( game.field_goals_attempted * 100.0)) - (game.season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
               else
@@ -570,7 +570,7 @@ namespace :calcs do
                 minutes_multiplier = 1
               end
               weight =  (1 + competitiveness)
-              if game.bpm.finite?
+              if game.bpm && game.bpm.finite?
                 bpm += game.bpm
                 total_weight += weight
                 competition = (opponent_season.adj_efficiency_margin / 6.5) + ((opponent_season.adj_efficiency_margin - team_season.adj_efficiency_margin) / 20.0 )
