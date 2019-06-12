@@ -570,13 +570,15 @@ namespace :calcs do
                 minutes_multiplier = 1
               end
               weight =  (1 + competitiveness)
-              if game.bpm && game.bpm.finite?
-                bpm += game.bpm
-                total_weight += weight
-                competition = (opponent_season.adj_efficiency_margin / 6.5) + ((opponent_season.adj_efficiency_margin - team_season.adj_efficiency_margin) / 20.0 )
-                raw_prating = game.bpm + competition
-                adj_prating = minutes_multiplier * weight * raw_prating
-                prophet_rating += adj_prating
+              if game.bpm
+                if game.bpm.finite?
+                  bpm += game.bpm
+                  total_weight += weight
+                  competition = (opponent_season.adj_efficiency_margin / 6.5) + ((opponent_season.adj_efficiency_margin - team_season.adj_efficiency_margin) / 20.0 )
+                  raw_prating = game.bpm + competition
+                  adj_prating = minutes_multiplier * weight * raw_prating
+                  prophet_rating += adj_prating
+                end
               end
               game_count += 1
             end
