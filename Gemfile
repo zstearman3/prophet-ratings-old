@@ -13,6 +13,8 @@ gem 'jbuilder',        '2.7.0'
 gem 'pg',              '0.20.0'
 gem 'chartkick'
 gem 'actionview',      '>= 5.1.7'
+gem 'will_paginate',           '3.1.6'
+gem 'bootstrap-will_paginate', '1.0.0'
 
 group :development do
   gem 'web-console',           '3.5.1'

@@ -2,9 +2,13 @@
 <% year = params[:season].to_i %>
 <%= link_to 'Previous Season', player_shooting_path(season: year - 1) %>
 <%= link_to 'Next Season', player_shooting_path(season: year + 1), class: 'align-right' %>
+<div class="row pagination-div">
+  <%= will_paginate %>
+</div>
 <table class="table table-sm">
   <thead>
     <tr>
+      <th><%= sort_link "prophet_rating", "Rank", "desc", year %></th>
       <th>Player</th>
       <th>Team</th>
       <th>FG%</th>
@@ -19,8 +23,15 @@
     </tr>
   </thead>
   <tbody>
+    <% if params[:page] %>
+      <% x = (params[:page].to_i - 1) * 100 %>
+    <% else %>
+      <% x = 0 %>
+    <% end %>
     <% @player_seasons.each do |season| %>
+    <% x += 1 %>
       <tr>
+        <td><%= x %></td>
         <td><%= link_to season.name, season.player %></td>
         <td><%= season.team.school %></td>
         <td><%= season.field_goals_percentage %></td>
@@ -36,3 +47,7 @@
     <% end %>
   </tbody>
 </table>
+<div class="row pagination-div">
+  <%= will_paginate %>
+</div>
+  
