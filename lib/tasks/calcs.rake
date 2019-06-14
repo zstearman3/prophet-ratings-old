@@ -494,7 +494,7 @@ namespace :calcs do
         end
       end
     end
-    player_seasons = PlayerSeason.where(player_id: 60008971, season: current_season)
+    player_seasons = PlayerSeason.where(season: current_season)
     if redo_input == "r"
       player_seasons = player_seasons.where("updated_at < ?", 5.days.ago)
     end
