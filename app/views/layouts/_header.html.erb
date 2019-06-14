@@ -22,9 +22,8 @@
               Player Stats <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><%= link_to "Advanced", team_rebounding_path(season: current_year) %></li>
+              <li><%= link_to "Advanced", player_advanced_path(season: current_year) %></li>
               <li><%= link_to "Shooting", player_shooting_path(season: current_year) %></li>
-              <li><%= link_to "Miscellaneous", team_misc_path(season: current_year) %></li>
             </ul>
           </li>
           <% if current_user.admin? %>

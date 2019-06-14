@@ -1,0 +1,75 @@
+<% provide(:title, 'Advanced Player Stats') %>
+<% year = params[:season].to_i %>
+<%= link_to 'Previous Season', player_advanced_path(season: year - 1) %>
+<%= link_to 'Next Season', player_advanced_path(season: year + 1), class: 'align-right' %>
+<div class="row pagination-div">
+  <%= will_paginate %>
+</div>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th><%= sort_link "prophet_rating", "Rank", "desc", year %></th>
+      <th>Player</th>
+      <th>Team</th>
+      <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
+      <th><%= sort_link "assists_percentage", "AST%", "desc", year %></th>
+      <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year %></th>
+      <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year %></th>
+      <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year %></th>
+      <th><%= sort_link "steals_percentage", "STL%", "desc", year %></th>
+      <th><%= sort_link "blocks_percentage", "BLK%", "desc", year %></th>
+      <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
+      <th><%= sort_link "usage_rate", "USG%", "desc", year %></th>
+      <th><%= sort_link "player_efficiency_rating", "PER", "desc", year %></th>
+      <th><%= sort_link "prophet_rating", "PRate", "desc", year %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if params[:page] %>
+      <% x = (params[:page].to_i - 1) * 100 %>
+    <% else %>
+      <% x = 0 %>
+    <% end %>
+    <% @player_seasons.each do |season| %>
+    <% x += 1 %>
+      <tr>
+        <td><%= x %></td>
+        <td><%= link_to season.name, season.player %></td>
+        <td><%= season.team.school %></td>
+        <td><%= season.true_shooting_percentage %></td>
+        <td><%= season.assists_percentage %></td>
+        <td><%= season.offensive_rebounds_percentage %></td>
+        <td><%= season.defensive_rebounds_percentage %></td>
+        <td><%= season.total_rebounds_percentage %></td>
+        <td><%= season.steals_percentage %></td>
+        <td><%= season.blocks_percentage %></td>
+        <td><%= season.turnovers_percentage %></td>
+        <td><%= season.usage_rate %></td>
+        <td><%= season.player_efficiency_rating %></td>
+        <td><%= season.prophet_rating %></td>
+      </tr>
+      <% if x % 20 == 0 && x % 100 != 0 %>
+        <tr>
+          <th><%= sort_link "prophet_rating", "Rank", "desc", year %></th>
+          <th>Player</th>
+          <th>Team</th>
+          <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
+          <th><%= sort_link "assists_percentage", "AST%", "desc", year %></th>
+          <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year %></th>
+          <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year %></th>
+          <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year %></th>
+          <th><%= sort_link "steals_percentage", "STL%", "desc", year %></th>
+          <th><%= sort_link "blocks_percentage", "BLK%", "desc", year %></th>
+          <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
+          <th><%= sort_link "usage_rate", "USG%", "desc", year %></th>
+          <th><%= sort_link "player_efficiency_rating", "PER", "desc", year %></th>
+          <th><%= sort_link "prophet_rating", "PRate", "desc", year %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<div class="row pagination-div">
+  <%= will_paginate %>
+</div>
+  

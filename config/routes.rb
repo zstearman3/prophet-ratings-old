@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   get '/team_defense',    to: 'team_seasons#defense',       as: :team_defense
   get '/team_rebounding', to: 'team_seasons#rebounding',    as: :team_rebounding
   get '/team_misc',       to: 'team_seasons#miscellaneous', as: :team_misc
-  get '/player_shooting', to: 'player_seasons#shooting', as: :player_shooting
+  get '/player_shooting', to: 'player_seasons#shooting',      as: :player_shooting
+  get '/player_advanced', to: 'player_seasons#advanced',      as: :player_advanced
+  get '/player_misc',     to: 'player_seasons#miscellaneous', as: :player_misc
   resources :conferences
   resources :users
   resources :account_activations, only: [:edit]

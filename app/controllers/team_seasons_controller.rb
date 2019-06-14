@@ -33,7 +33,7 @@ class TeamSeasonsController < ApplicationController
        'home_advantage', 'two_pointers_percentage', 'true_shooting_percentage', 'offensive_efficiency', 'free_throws_percentage',
        'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'offensive_rebounds', 'defensive_rebounds',
        'rebounds', 'defensive_efficiency', 'steals_percentage', 'blocks_percentage', 'true_shooting_percentage_allowed', 'defensive_aggression',
-       'defensive_fingerprint']
+       'defensive_fingerprint', 'adj_efficiency_margin']
     end
     
     def sort_column
