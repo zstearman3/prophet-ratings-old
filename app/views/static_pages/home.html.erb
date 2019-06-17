@@ -1,8 +1,13 @@
 <% provide :title, "Home" %>
 <div class="row home-body">
-  <h1>ProphetRatings</h1>
-  <p>Thank you for visiting my application. Please look around.</p>
-  <%= link_to "Sign up now!", signup_path, class: 'btn btn-standard btn-lg' %>
+  <div id="signup-banner">
+    <div class="banner-text">
+      <h1>Advanced NCAA Basketball Stats & Analytics</h1>
+      <p>ProphetRatings is meant to predict the outcome of college basketball games by using advanced, matchup based metrics.</p>
+      <p>Use these ratings to get an edge against the sportsbook, or win your office tourney pool.</p>
+      <%= link_to "Sign up now!", signup_path, class: 'btn btn-standard btn-lg' %>
+    </div>
+  </div>
 </div>
 
 

@@ -1,5 +1,34 @@
+@import "base/variables.scss"; 
+
 /* Home Page */
 
 .home-body {
-  text-align: center;
+  margin: 0px -12%;
+  #signup-banner{
+    position: relative;
+    background-color: $prophet-light-grey;
+    background-repeat: no-repeat;
+    background-position: center;
+    max-width: 1600px;
+    margin: -10px auto;
+    height: 500px;
+    padding-top: 50px;
+    .banner-text{
+      margin: auto;
+      max-width: 650px;
+      text-align: center;
+      height: 625px;
+      h1 {
+        color: $prophet-blue;
+        font-size: 3.0em;
+      }
+      p{
+        color: $prophet-blue;
+        font-size: 1.25em;
+      }
+      .btn{
+        margin-top: 50px;
+      }
+    }
+  }
 }
