@@ -203,7 +203,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to "Show All", "#" %>
+  <%= link_to "Show All", player_games_path(player: @player.id) %>
 </div>
 
 <div class="games-row row">
@@ -266,5 +266,5 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to "Show All", "#" %>
+  <%= link_to "Show All", player_games_path(player: @player.id) %>
 </div>
