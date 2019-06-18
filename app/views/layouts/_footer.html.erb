@@ -1,11 +1,19 @@
 <footer class="footer">
-  <small>
-    <%= "\u00A9" + " ProphetRatings " + Time.now.year.to_s %>
-  </small>
-  <nav>
-    <ul>
-      <li><%= link_to "Contact", '#' %></li>
-      <li><%= link_to "News",    '#' %></li>
-    </ul>
-  </nav>
+  <div class="col-xs-4">
+    <small>
+      <%= "\u00A9" + " ProphetRatings " + Time.now.year.to_s %>
+    </small>
+  </div>
+
+  <div class="col-xs-4 social-icons">
+    <a href="https://twitter.com/prophetcbb"><i class="fab fa-twitter" ></i></a>
+  </div>
+  <div class="col-xs-4">
+    <nav>
+      <ul>
+        <li><%= link_to "Contact", '#' %></li>
+        <li><%= link_to "News",    '#' %></li>
+      </ul>
+    </nav>
+  </div>
 </footer>
