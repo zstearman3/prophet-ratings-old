@@ -6,21 +6,39 @@
   margin: 0px -12%;
   #signup-banner{
     position: relative;
-    background-color: $prophet-light-grey;
+    background-image: linear-gradient(90deg, rgba(225,225,225,0.65), 10%, rgba(250,250,250,1));
+    background-color: $prophet-blue;
     background-repeat: no-repeat;
     background-position: center;
     max-width: 1600px;
     margin: -10px auto;
-    height: 500px;
+    height: 750px;
+    @media (min-width: 992px) {
+      height: 500px;
+    }
     padding-top: 50px;
+    .banner-art{
+      text-align: center;
+      @media (min-width: 992px) {
+        padding-top: 50px;
+      }
+      img{
+        max-width: 100%;
+      }
+    }
     .banner-text{
       margin: auto;
-      max-width: 650px;
       text-align: center;
+      @media (min-width: 992px) {
+        text-align: right;
+      }
+      padding: 10px 50px;
       height: 625px;
       h1 {
         color: $prophet-blue;
         font-size: 3.0em;
+        font-weight: bold;
+        margin-bottom: 50px;
       }
       p{
         color: $prophet-blue;
