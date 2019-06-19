@@ -796,7 +796,7 @@ namespace :calcs do
             prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
           end
         end
-        if prediction.home_team_score > 0 && prediction.away_team_score > 0
+        if prediction.home_team_prediction > 0 && prediction.away_team_prediction > 0
           prediction.save
         end
       end

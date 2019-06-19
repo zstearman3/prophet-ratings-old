@@ -15,13 +15,14 @@ Rails.application.routes.draw do
   post '/login',    to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get '/rankings',  to: 'team_seasons#rankings', as: :rankings
-  get '/team_shooting',   to: 'team_seasons#shooting',      as: :team_shooting
-  get '/team_defense',    to: 'team_seasons#defense',       as: :team_defense
-  get '/team_rebounding', to: 'team_seasons#rebounding',    as: :team_rebounding
-  get '/team_misc',       to: 'team_seasons#miscellaneous', as: :team_misc
-  get '/player_shooting', to: 'player_seasons#shooting',      as: :player_shooting
-  get '/player_advanced', to: 'player_seasons#advanced',      as: :player_advanced
-  get '/player_misc',     to: 'player_seasons#miscellaneous', as: :player_misc
+  get '/team_shooting',      to: 'team_seasons#shooting',        as: :team_shooting
+  get '/team_defense',       to: 'team_seasons#defense',         as: :team_defense
+  get '/team_rebounding',    to: 'team_seasons#rebounding',      as: :team_rebounding
+  get '/team_misc',          to: 'team_seasons#miscellaneous',   as: :team_misc
+  get '/player_shooting',    to: 'player_seasons#shooting',      as: :player_shooting
+  get '/player_advanced',    to: 'player_seasons#advanced',      as: :player_advanced
+  get '/player_misc',        to: 'player_seasons#miscellaneous', as: :player_misc
+  get '/season_predictions', to: 'predictions#statistics',       as: :predictions_statistics
   resources :conferences
   resources :users
   resources :account_activations, only: [:edit]
@@ -33,5 +34,5 @@ Rails.application.routes.draw do
   resources :team_seasons,        only: [:index]
   resources :player_games,        only: [:index]
   resources :games,               only: [:index, :show]
-  resources :predictions,               only: [:index, :show]
+  resources :predictions,         only: [:index, :show]
 end

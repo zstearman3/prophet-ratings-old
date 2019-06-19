@@ -1,7 +1,12 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show]
   def index
-    @games = Game.where(day: params[:date]).order(date_time: :asc)
+    if params[:date]
+      @date = Date.parse(params[:date])
+    else
+      @date = Date.today
+    end
+    @games = Game.where(day: @date).order(date_time: :asc)
     @predictions = Prediction.where(day: params[:date])
   end
   

@@ -15,6 +15,7 @@
         <th colspan="3" class="center">Vegas Lines</th>
         <th colspan="3" class="center">Prophet Lines</th>
         <th colspan="3" class="center">Bet Outcomes</th>
+        <th></th>
       </tr>
       <tr>
         <th>Game</th>
@@ -27,6 +28,7 @@
         <th>Spread</th>
         <th>O/U</th>
         <th>ML</th>
+        <th>Details</th>
       </tr>
     </thead>
     <tbody>
@@ -71,14 +73,16 @@
                 N/A
               <% end %>
             </td>
+            <td><%= link_to "Details", prediction %></td>
           <% end %>
         </tr>
       <% end %>
       <tr class="total-row">
-        <td colspan="7"></td>
+        <th colspan="7">Totals</th>
         <th><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
         <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
         <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
+        <td></td>
       </tr>
     </tbody>
   </table>
