@@ -1,4 +1,6 @@
 require 'net/http'
+require "#{Rails.root}/app/helpers/gaussian"
+include Gaussian
 
 namespace :calcs do
   task game_stats: :environment do
@@ -681,6 +683,13 @@ namespace :calcs do
         predicted_tempo = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
         predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
         predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
+        
+        # Matchup Specific Modifiers
+        if game.home_team.stadium == game.stadium
+          predicted_home_efficiency += 2.0
+          predicted_away_efficiency += -2.0
+        end
+        
         predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
         predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
         prediction.home_team_prediction = predicted_home_score.round
@@ -746,10 +755,55 @@ namespace :calcs do
             prediction.win_over_under = nil
           end
         end
+        
+        ### MONELINE OUTCOME ###
+        if prediction.home_team_prediction && prediction.away_team_prediction && game.home_team_score && game.away_team_score
+          if prediction.home_team_prediction > (prediction.away_team_prediction + 1)
+            if game.home_team_score > game.away_team_score
+              prediction.win_moneyline = true
+            else
+              prediction.win_moneyline = false
+            end
+          elsif prediction.home_team_prediction < (prediction.away_team_prediction - 1)
+            if game.away_team_score > game.home_team_score
+              prediction.win_moneyline = true
+            else
+              prediction.win_moneyline = false
+            end
+          else
+            prediction.win_moneyline = nil
+          end
+        end
+        
+        ##### MONEYLINE CALCS ######
+        mean = predicted_home_efficiency - predicted_away_efficiency
+        std_dev = 12.0
+        home_win_z_score = (0.0 - mean) / std_dev
+        home_win_probability = getProbability(home_win_z_score)
+        prediction.home_win_probability = (home_win_probability * 100.0).round(1)
+        if home_win_probability > 0.5
+          predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
+          if predicted_moneyline < -10000
+            prediction.predicted_moneyline = nil
+          else
+            prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+          end
+        else
+          predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
+          if predicted_moneyline > 10000
+            prediction.predicted_moneyline = nil
+          else
+            prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+          end
+        end
         if prediction.home_team_score > 0 && prediction.away_team_score > 0
           prediction.save
         end
       end
     end
+  end
+  
+  task gaussian_test: :environment do
+    puts getProbability(-1.76)
   end
 end

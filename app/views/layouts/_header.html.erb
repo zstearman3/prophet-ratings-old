@@ -11,6 +11,7 @@
             <% gamesdate = current_season.post_season_end_date.strftime("%Y%m%d") %>
           <% end %>
           <li><%= link_to "Schedule", games_path(date: gamesdate) %></li>
+          <li><%= link_to "Predictions", predictions_path(date: gamesdate) %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Team Stats <b class="caret"></b>

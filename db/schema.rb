@@ -239,7 +239,8 @@ ActiveRecord::Schema.define(version: 20190619031928) do
     t.decimal "winnings_moneyline"
     t.decimal "predicted_point_spread"
     t.decimal "predicted_over_under"
-    t.integer "predicted_moneline"
+    t.integer "predicted_moneyline"
+    t.decimal "home_win_probability"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
   end

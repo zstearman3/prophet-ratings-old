@@ -12,6 +12,7 @@ class AddResultsToPredictions < ActiveRecord::Migration[5.1]
     add_column :predictions, :winnings_moneyline, :decimal
     add_column :predictions, :predicted_point_spread, :decimal
     add_column :predictions, :predicted_over_under, :decimal
-    add_column :predictions, :predicted_moneline, :integer
+    add_column :predictions, :predicted_moneyline, :integer
+    add_column :predictions, :home_win_probability, :decimal
   end
 end

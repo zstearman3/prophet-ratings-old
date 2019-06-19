@@ -33,4 +33,5 @@ Rails.application.routes.draw do
   resources :team_seasons,        only: [:index]
   resources :player_games,        only: [:index]
   resources :games,               only: [:index, :show]
+  resources :predictions,               only: [:index, :show]
 end
