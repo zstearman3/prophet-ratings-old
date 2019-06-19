@@ -2,57 +2,78 @@
 
 <h1>Games</h1>
 
-<% previous_day = (Date.parse(params[:date]) - 1.day).strftime('%Y%m%d') %>
-<% next_day = (Date.parse(params[:date]) + 1.day).strftime('%Y%m%d') %>
+<% todays_date = Date.parse(params[:date]) %>
+<% previous_day = (todays_date - 1.day).strftime('%Y%m%d') %>
+<% next_day = (todays_date + 1.day).strftime('%Y%m%d') %>
 <%= link_to "Previous Day", games_path(date: previous_day) %>
 <%= link_to "Next Day", games_path(date: next_day), class: 'align-right' %>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th>Matchup</th>
-      <th>Time</th>
-      <th>Point Spread</th>
-      <th>Prophet Line</th>
-      <th>Over/Under</th>
-      <th>Prophet O/U</th>
-      <th>Away Score</th>
-      <th>Home Score</th>
-      <th>Possessions</th>
-      <th>Away OEff</th>
-      <th>Home OEff</th>
-      <th>Pace</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @games.each do |game| %>
+<% if todays_date < Date.today %>
+  <table class="table table-sm">
+    <thead>
       <tr>
-        <td>
-        <!--Away Team Link-->
-        <% if game.away_team %>
-          <%= link_to game.away_team_name, game.away_team %>
-        <% else %>
-          <%= game.away_team_name %>
-        <% end %>
-         @ 
-        <!--Home Team Link-->
-        <% if game.home_team %>
-          <%= link_to game.home_team_name, game.home_team %>
-        <% else %>
-          <%= game.home_team_name %>
-        <% end %>  
-        </td>
-        <td><%= link_to game.date_time.strftime("%I:%M%p"), game unless game.date_time.nil? %></td>
-        <td><%= game.point_spread %></td>
-        <td><%= game.prediction.predicted_point_spread if game.prediction %></td>
-        <td><%= game.over_under %></td>
-        <td><%= game.prediction.predicted_over_under if game.prediction %></td>
-        <td><%= game.away_team_score %></td>
-        <td><%= game.home_team_score %></td>
-        <td><%= game.possessions %></td>
-        <td><%= game.away_offensive_efficiency %></td>
-        <td><%= game.home_offensive_efficiency %></td>
-        <td><%= game.pace %></td>
+        <th></th>
+        <th colspan="3" class="center">Vegas Lines</th>
+        <th colspan="3" class="center">Prophet Lines</th>
+        <th colspan="3" class="center">Bet Outcomes</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tr>
+        <th>Game</th>
+        <th>Spread</th>
+        <th>O/U</th>
+        <th>ML</th>
+        <th>Spread</th>
+        <th>O/U</th>
+        <th>ML</th>
+        <th>Spread</th>
+        <th>O/U</th>
+        <th>ML</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @games.each do |game| %>
+        <% prediction = game.prediction %>
+        <tr>
+          <td>
+            <% description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
+            <%= link_to description, game %>
+          </td>
+          <td><%= game.point_spread %></td>
+          <td><%= game.over_under %></td>
+          <td><%= game.home_team_money_line %></td>
+          <% if prediction %>
+            <td><%= prediction.predicted_point_spread %></td>
+            <td><%= prediction.predicted_over_under %></td>
+            <td><%= prediction.predicted_moneline %></td>
+            <td>
+              <% if prediction.win_point_spread == true %>
+                WIN
+              <% elsif prediction.win_point_spread == false %>
+                LOSS
+              <% else %>
+                N/A
+              <% end %>
+            </td>
+            <td>
+              <% if prediction.win_over_under == true %>
+                WIN
+              <% elsif prediction.win_over_under == false %>
+                LOSS
+              <% else %>
+                N/A
+              <% end %>
+            </td>
+            <td><%= prediction.win_moneyline %></td>
+          <% end %>
+        </tr>
+      <% end %>
+      <tr class="total-row">
+        <td colspan="7"></td>
+        <th><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
+        <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
+        <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
+      </tr>
+    </tbody>
+  </table>
+<% else %>
+
+<% end %>

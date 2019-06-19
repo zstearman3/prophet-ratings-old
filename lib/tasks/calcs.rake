@@ -674,6 +674,10 @@ namespace :calcs do
       if home_team_season && away_team_season
         prediction = Prediction.find_or_create_by(game: game)
         prediction.season = current_season
+        prediction.day = game.day
+        prediction.point_spread = game.point_spread
+        prediction.over_under = game.over_under
+        prediction.moneyline = game.home_team_money_line
         predicted_tempo = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
         predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
         predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
@@ -683,6 +687,65 @@ namespace :calcs do
         prediction.away_team_prediction = predicted_away_score.round
         prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
         prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
+        if game.home_team_score && game.away_team_score && prediction.point_spread && prediction.predicted_point_spread
+          
+          ### POINT SPREAD OUTCOME ####
+          if prediction.predicted_point_spread < (prediction.point_spread - 1)
+            # home team bet
+            if (game.away_team_score - game.home_team_score) < prediction.point_spread
+              # winning bet
+              prediction.win_point_spread = true
+            elsif (game.away_team_score - game.home_team_score) > prediction.point_spread
+              # losing bet
+              prediction.win_point_spread = false
+            else
+              prediction.win_point_spread = nil
+            end
+          elsif prediction.predicted_point_spread > prediction.point_spread + 1
+            if (game.away_team_score - game.home_team_score) > prediction.point_spread
+              # winning bet
+              prediction.win_point_spread = true
+            elsif (game.away_team_score - game.home_team_score) < prediction.point_spread
+              # losing bet
+              prediction.win_point_spread = false
+            else
+              prediction.win_point_spread = nil
+            end
+          else
+            # no bet
+            prediction.win_point_spread = nil
+          end
+        end
+        
+        if game.home_team_score && game.away_team_score && prediction.over_under && prediction.predicted_over_under
+          ### OVER/UNDER OUTCOME ###
+          if prediction.predicted_over_under > (prediction.over_under + 1)
+            # over bet
+            if (game.away_team_score + game.home_team_score) < prediction.over_under
+              # winning bet
+              prediction.win_over_under = true
+            elsif (game.away_team_score + game.home_team_score) < prediction.over_under
+              # losing bet
+              prediction.win_over_under = false
+            else
+              prediction.win_over_under = nil
+            end
+          elsif prediction.predicted_over_under < (prediction.over_under - 1)
+          # under bet
+            if (game.away_team_score + game.home_team_score) < prediction.over_under
+              # winning bet
+              prediction.win_over_under = true
+            elsif (game.away_team_score + game.home_team_score) > prediction.over_under
+              # losing bet
+              prediction.win_over_under = false
+            else
+              prediction.win_over_under = nil
+            end
+          else
+            # no bet
+            prediction.win_over_under = nil
+          end
+        end
         if prediction.home_team_score > 0 && prediction.away_team_score > 0
           prediction.save
         end
