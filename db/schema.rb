@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190613184404) do
+ActiveRecord::Schema.define(version: 20190619031928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,6 +204,44 @@ ActiveRecord::Schema.define(version: 20190613184404) do
     t.bigint "team_id"
     t.boolean "active"
     t.index ["team_id"], name: "index_players_on_team_id"
+  end
+
+  create_table "predictions", force: :cascade do |t|
+    t.date "day"
+    t.integer "home_team_prediction"
+    t.integer "away_team_prediction"
+    t.integer "home_team_score"
+    t.integer "away_team_score"
+    t.decimal "point_spread"
+    t.decimal "over_under"
+    t.decimal "prediction_difference_point_spread"
+    t.decimal "prediction_difference_over_under"
+    t.decimal "confidence_point_spread"
+    t.decimal "confidence_over_under"
+    t.decimal "expected_value_point_spread"
+    t.decimal "expected_value_over_under"
+    t.boolean "home_favorite"
+    t.boolean "favorite_favorite"
+    t.boolean "pace_favorite"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "game_id"
+    t.bigint "season_id"
+    t.integer "moneyline"
+    t.decimal "prediction_difference_moneyline"
+    t.decimal "confidence_moneyline"
+    t.decimal "expected_value_moneyline"
+    t.boolean "win_point_spread"
+    t.boolean "win_over_under"
+    t.boolean "win_moneyline"
+    t.decimal "winnings_point_spread"
+    t.decimal "winnings_over_under"
+    t.decimal "winnings_moneyline"
+    t.decimal "predicted_point_spread"
+    t.decimal "predicted_over_under"
+    t.integer "predicted_moneline"
+    t.index ["game_id"], name: "index_predictions_on_game_id"
+    t.index ["season_id"], name: "index_predictions_on_season_id"
   end
 
   create_table "seasons", force: :cascade do |t|
@@ -447,6 +485,8 @@ ActiveRecord::Schema.define(version: 20190613184404) do
   add_foreign_key "player_seasons", "team_seasons"
   add_foreign_key "player_seasons", "teams"
   add_foreign_key "players", "teams"
+  add_foreign_key "predictions", "games"
+  add_foreign_key "predictions", "seasons"
   add_foreign_key "team_games", "games"
   add_foreign_key "team_games", "seasons"
   add_foreign_key "team_games", "teams"

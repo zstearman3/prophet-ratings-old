@@ -661,4 +661,32 @@ namespace :calcs do
       end
     end
   end
+  
+    
+  task full_predictions: :environment do
+    puts("Please Input Year:")
+    year_input = STDIN.gets.chomp.to_i
+    current_season = Season.find_by(season: year_input)
+    season_games = Game.where(season: current_season)
+    season_games.each do |game|
+      home_team_season = TeamSeason.find_by(season: current_season, team: game.home_team)
+      away_team_season = TeamSeason.find_by(season: current_season, team: game.away_team)
+      if home_team_season && away_team_season
+        prediction = Prediction.find_or_create_by(game: game)
+        prediction.season = current_season
+        predicted_tempo = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
+        predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
+        predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
+        predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
+        predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
+        prediction.home_team_prediction = predicted_home_score.round
+        prediction.away_team_prediction = predicted_away_score.round
+        prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
+        prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
+        if prediction.home_team_score > 0 && prediction.away_team_score > 0
+          prediction.save
+        end
+      end
+    end
+  end
 end

@@ -12,7 +12,7 @@
     background-position: center;
     max-width: 1600px;
     margin: -10px auto;
-    height: 750px;
+    height: 900px;
     @media (min-width: 992px) {
       height: 500px;
     }
@@ -20,10 +20,10 @@
     .banner-art{
       text-align: center;
       @media (min-width: 992px) {
-        padding-top: 50px;
+        padding-top: 25px;
       }
       img{
-        max-width: 100%;
+        max-width: 350px;
       }
     }
     .banner-text{
@@ -33,7 +33,7 @@
         text-align: right;
       }
       padding: 10px 50px;
-      height: 625px;
+      height: 500px;
       h1 {
         color: $prophet-blue;
         font-size: 3.0em;

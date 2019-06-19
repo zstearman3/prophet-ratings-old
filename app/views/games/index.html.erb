@@ -12,7 +12,9 @@
       <th>Matchup</th>
       <th>Time</th>
       <th>Point Spread</th>
+      <th>Prophet Line</th>
       <th>Over/Under</th>
+      <th>Prophet O/U</th>
       <th>Away Score</th>
       <th>Home Score</th>
       <th>Possessions</th>
@@ -41,7 +43,9 @@
         </td>
         <td><%= link_to game.date_time.strftime("%I:%M%p"), game unless game.date_time.nil? %></td>
         <td><%= game.point_spread %></td>
+        <td><%= game.prediction.predicted_point_spread if game.prediction %></td>
         <td><%= game.over_under %></td>
+        <td><%= game.prediction.predicted_over_under if game.prediction %></td>
         <td><%= game.away_team_score %></td>
         <td><%= game.home_team_score %></td>
         <td><%= game.possessions %></td>
