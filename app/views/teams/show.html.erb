@@ -145,6 +145,10 @@
         <th>HomeAdv</th>
         <td class="center" colspan="2"><%= @team_season.home_advantage %> <small><%= TeamSeason.where(season: @season).order(home_advantage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
+      <tr>
+        <th>Consistency</th>
+        <td class="center" colspan="2"><%= @team_season.consistency %> <small><%= TeamSeason.where(season: @season).order(consistency: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+      </tr>
     </table>
   </div>
 </div>

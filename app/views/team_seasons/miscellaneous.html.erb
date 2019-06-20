@@ -16,6 +16,7 @@
       <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year %></th>
       <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year %></th>
       <th><%= sort_link "home_advantage", "HomeAdv", "desc", year %></th>
+      <th><%= sort_link "consistency", "Consistency", "asc", year %></th>
     </tr>
   </thead>
   <tbody>
@@ -33,6 +34,7 @@
         <td><%= season.turnovers_percentage_allowed %></td>
         <td><%= season.free_throws_rate_allowed %></td>
         <td><%= season.home_advantage %></td>
+        <td><%= season.consistency %></td>
       </tr>
       <% if x % 20 == 0 %>
         <tr>
@@ -47,6 +49,7 @@
           <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year %></th>
           <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year %></th>
           <th><%= sort_link "home_advantage", "HomeAdv", "desc", year %></th>
+          <th><%= sort_link "consistency", "Consistency", "asc", year %></th>
         </tr>
       <% end %>
       <% x += 1 %>

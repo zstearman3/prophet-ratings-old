@@ -281,6 +281,8 @@ namespace :calcs do
       season.adjem_rank = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
 
       #### Game by Game advantage calculations ####
+      ortg_array = []
+      drtg_array = []
       TeamGame.where(team: season.team, season: current_season).each do |game|
         if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0
           opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
@@ -290,18 +292,20 @@ namespace :calcs do
             expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
             actual_ortg = 100 * game.points.to_f / game.game.possessions
             actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
+            ortg_array.push(actual_ortg - expected_ortg)
+            drtg_array.push(actual_drtg - expected_drtg)
             pace = game.game.possessions * 40 / (game.minutes / 5)
             performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) *( pace / 100 )
             
             if actual_ortg - actual_drtg > 30
-              if performance > 10
-                performance = 10
+              if performance > 15
+                performance = 15
               end
             end
                   ## Performance capped at 10 over 30 points per 100 possessions
             if actual_drtg - actual_ortg > 30
-              if performance < -10
-                performance = -10
+              if performance < -15
+                performance = -15
               end
             end
             if game.game.stadium == game.team.stadium
@@ -414,6 +418,19 @@ namespace :calcs do
         ssr_pace += (((pace_advantage * game["pace"]) + b_pace) - (sum_performance.to_f / game_count)) ** 2
         ssto += (game["performance"] - (sum_performance.to_f / game_count)) ** 2
       end
+      ortg_avg = ortg_array.inject{ |sum, el| sum + el }.to_f / ortg_array.size
+      drtg_avg = drtg_array.inject{ |sum, el| sum + el }.to_f / drtg_array.size
+      ortg_squares = []
+      drtg_squares = []
+      ortg_array.each do |rating|
+        ortg_squares.push((ortg_avg - rating) ** 2)
+      end
+      drtg_array.each do |rating|
+        drtg_squares.push((drtg_avg - rating) ** 2)
+      end
+      ortg_stdev = Math.sqrt(ortg_squares.inject{ |sum, el| sum + el }.to_f / ortg_squares.size)
+      drtg_stdev = Math.sqrt(drtg_squares.inject{ |sum, el| sum + el }.to_f / drtg_squares.size)
+      season.consistency = (Math.sqrt(ortg_stdev * drtg_stdev)).round(1)
       r_defensive_style = (ssr_defensive_style.to_f / ssto).round(3)
       r_three_pointers = (ssr_three_pointers.to_f / ssto).round(3)
       r_assists = (ssr_assists.to_f / ssto).round(3)
@@ -436,6 +453,13 @@ namespace :calcs do
       team.adjem_rank = season.adjem_rank
       team.save
     end
+    team_seasons.reload
+    current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
+    current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
+    current_season.adj_tempo = team_seasons.average(:adj_tempo)
+    current_season.home_advantage = team_seasons.average(:home_advantage)
+    current_season.consistency = team_seasons.average(:consistency)
+    current_season.save
   end
   
   task advanced_player_stats: :environment do
@@ -777,7 +801,7 @@ namespace :calcs do
         
         ##### MONEYLINE CALCS ######
         mean = predicted_home_efficiency - predicted_away_efficiency
-        std_dev = 12.0
+        std_dev = current_season.consistency
         home_win_z_score = (0.0 - mean) / std_dev
         home_win_probability = getProbability(home_win_z_score)
         prediction.home_win_probability = (home_win_probability * 100.0).round(1)
