@@ -15,6 +15,7 @@ namespace :calcs do
         away_team_game = game.team_games.find_by(home_or_away: "AWAY")
         if home_team_game && away_team_game
           begin
+          if home_team_game.field_goals_attempted > 10 && away_team_game.field_goals_attempted > 10
             game.possessions = 0.5 * ((home_team_game.field_goals_attempted + (0.4 * home_team_game.free_throws_attempted) - (1.07 * (home_team_game.offensive_rebounds / (home_team_game.offensive_rebounds + away_team_game.defensive_rebounds))) *
             (home_team_game.field_goals_attempted - home_team_game.field_goals_made) + home_team_game.turnovers) + (away_team_game.field_goals_attempted + (0.4 * away_team_game.free_throws_attempted) -
             (1.07 * (away_team_game.offensive_rebounds/(away_team_game.offensive_rebounds + home_team_game.defensive_rebounds)) * (away_team_game.field_goals_attempted - away_team_game.field_goals_made) + away_team_game.turnovers)))
@@ -22,6 +23,13 @@ namespace :calcs do
             game.away_offensive_efficiency = ((100 * game.away_team_score) / game.possessions).round(1)
             game.pace = (40 * game.possessions / ((home_team_game.minutes + away_team_game.minutes) / 10)).round(1)
             game.save
+          else
+            game.possessions = nil
+            game.home_offensive_efficiency = nil
+            game.away_offensive_efficiency = nil
+            game.pace = nil
+            game.save
+          end
           rescue
           
           end
@@ -210,7 +218,7 @@ namespace :calcs do
         x = 0
         game_count = 0
         team_games.each do |game|
-          if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0
+          if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0 && !game.opponent.nil? && !game.game.possessions.nil?
             competitiveness = 0
             opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
             opponent_game = game.game.team_games.find_by(team: game.opponent)
@@ -284,7 +292,7 @@ namespace :calcs do
       ortg_array = []
       drtg_array = []
       TeamGame.where(team: season.team, season: current_season).each do |game|
-        if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0
+        if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0 && !game.opponent.nil? && !game.game.possessions.nil?
           opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
           opponent_game = game.game.team_games.find_by(team: game.opponent)
           if opponent_season && opponent_game
@@ -784,7 +792,7 @@ namespace :calcs do
         if prediction.home_team_prediction && prediction.away_team_prediction && game.home_team_score && game.away_team_score
           if prediction.home_team_prediction > (prediction.away_team_prediction + 1)
             if game.home_team_score > game.away_team_score
-              prediction.win_moneyline = true
+              prediction.win_straigh_up = true
             else
               prediction.win_moneyline = false
             end

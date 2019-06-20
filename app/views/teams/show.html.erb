@@ -168,6 +168,9 @@
       <th>Steals</th>
       <th>FG%</th>
       <th>3P%</th>
+      <th>Box +/-</th>
+      <th>PER</th>
+      <th>PRate</th>
     </tr>
   </thead>
   <tbody>
@@ -184,6 +187,9 @@
         <td><%= (player_season.steals.to_f / player_season.games).round(1) %></td>
         <td><%= player_season.field_goals_percentage %></td>
         <td><%= player_season.three_pointers_percentage %></td>
+        <td><%= player_season.bpm %></td>
+        <td><%= player_season.player_efficiency_rating %></td>
+        <td><%= player_season.prophet_rating %></td>
       </tr>
     <% end %>
   </tbody>
