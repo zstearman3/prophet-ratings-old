@@ -56,10 +56,8 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "away_offensive_efficiency"
     t.decimal "pace"
     t.boolean "is_completed"
-    t.bigint "player_of_the_game_id"
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
-    t.index ["player_of_the_game_id"], name: "index_games_on_player_of_the_game_id"
     t.index ["season_id"], name: "index_games_on_season_id"
     t.index ["stadium_id"], name: "index_games_on_stadium_id"
   end
@@ -350,10 +348,8 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "defensive_rebounds_percentage"
     t.decimal "expected_ortg"
     t.decimal "expected_drtg"
-    t.bigint "player_of_the_game_id"
     t.index ["game_id"], name: "index_team_games_on_game_id"
     t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
-    t.index ["player_of_the_game_id"], name: "index_team_games_on_player_of_the_game_id"
     t.index ["season_id"], name: "index_team_games_on_season_id"
     t.index ["team_id"], name: "index_team_games_on_team_id"
   end
@@ -480,7 +476,6 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "games", "players", column: "player_of_the_game_id"
   add_foreign_key "games", "seasons"
   add_foreign_key "games", "stadia"
   add_foreign_key "games", "teams", column: "away_team_id"
@@ -499,7 +494,6 @@ ActiveRecord::Schema.define(version: 20190620003415) do
   add_foreign_key "predictions", "games"
   add_foreign_key "predictions", "seasons"
   add_foreign_key "team_games", "games"
-  add_foreign_key "team_games", "players", column: "player_of_the_game_id"
   add_foreign_key "team_games", "seasons"
   add_foreign_key "team_games", "teams"
   add_foreign_key "team_games", "teams", column: "opponent_id"
