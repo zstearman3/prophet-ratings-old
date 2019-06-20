@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "predicted_over_under"
     t.integer "predicted_moneyline"
     t.decimal "home_win_probability"
-    t.decimal "win_straight_up"
+    t.boolean "win_straight_up"
     t.decimal "confidence_straight_up"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"

@@ -28,6 +28,7 @@
         <th>Spread</th>
         <th>O/U</th>
         <th>ML</th>
+        <th>Winnings</th>
         <th>Details</th>
       </tr>
     </thead>
@@ -73,6 +74,7 @@
                 N/A
               <% end %>
             </td>
+            <td><%= prediction.winnings_moneyline %></td>
             <td><%= link_to "Details", prediction %></td>
           <% end %>
         </tr>
@@ -82,6 +84,7 @@
         <th><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
         <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
         <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
+        <th><%= '$' + @predictions.sum(:winnings_moneyline).to_s %></th>
         <td></td>
       </tr>
     </tbody>

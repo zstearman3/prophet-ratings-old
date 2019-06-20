@@ -22,5 +22,7 @@ class PredictionsController < ApplicationController
     @over_under_losses = @predictions.where(win_over_under: false).count
     @moneyline_wins = @predictions.where(win_moneyline: true).count
     @moneyline_losses = @predictions.where(win_moneyline: false).count
+    @straight_up_wins = @predictions.where(win_straight_up: true).count
+    @straight_up_losses = @predictions.where(win_straight_up: false).count
   end
 end

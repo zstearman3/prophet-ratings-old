@@ -14,6 +14,12 @@
   </thead>
   <tbody>
     <tr>
+      <th>Straight Up</th>
+      <td><%= @straight_up_wins.to_s + "-" + @straight_up_losses.to_s %></td>
+      <td><%= (100.0 * @straight_up_wins.to_f / (@straight_up_wins + @straight_up_losses)).round(1).to_s + "%" %></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
       <th>ATS</th>
       <td><%= @point_spread_wins.to_s + "-" + @point_spread_losses.to_s %></td>
       <td><%= (100.0 * @point_spread_wins.to_f / (@point_spread_wins + @point_spread_losses)).round(1).to_s + "%" %></td>
