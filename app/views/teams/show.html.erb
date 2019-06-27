@@ -59,18 +59,18 @@
   <div class="charts-container col-md-6">
     <h3>Style/Performance Relationships</h3>
     <div class="col-xs-6 style-charts">
-      <%= scatter_chart @team_games.where(season: @season).pluck(:defensive_style_advantage, :performance), xtitle: "Defensive Aggression", ytitle: "Performance" %>
+      <%= scatter_chart @team_games.where(season: @season).pluck(:defensive_style_advantage, :performance), xtitle: "Defensive Aggression", ytitle: "Performance", colors: ["#0a0d5e"] %>
       <p>Slope: <%= @team_season.defensive_style_advantage %></p>
       <p>Correlation: <%= @team_season.r_defensive_style %></p>
-      <%= scatter_chart @team_games.where(season: @season).pluck(:three_pointers_advantage, :performance), xtitle: "Three Pointers", ytitle: "Performance" %>
+      <%= scatter_chart @team_games.where(season: @season).pluck(:three_pointers_advantage, :performance), xtitle: "Three Pointers", ytitle: "Performance", colors: ["#0a0d5e"] %>
       <p>Slope: <%= @team_season.three_pointers_advantage %></p>
       <p>Correlation: <%= @team_season.r_three_pointers %></p></p>
     </div>
     <div class="col-xs-6 style-charts">
-      <%= scatter_chart @team_games.where(season: @season).pluck(:assists_advantage, :performance), xtitle: "Assists", ytitle: "Performance" %>
+      <%= scatter_chart @team_games.where(season: @season).pluck(:assists_advantage, :performance), xtitle: "Assists", ytitle: "Performance", colors: ["#0a0d5e"] %>
       <p>Slope: <%= @team_season.assists_advantage %></p>
       <p>Correlation: <%= @team_season.r_assists %></p></p>
-      <%= scatter_chart @team_games.where(season: @season).pluck(:pace_advantage, :performance), xtitle: "Pace", ytitle: "Performance" %>
+      <%= scatter_chart @team_games.where(season: @season).pluck(:pace_advantage, :performance), xtitle: "Pace", ytitle: "Performance", colors: ["#0a0d5e"] %>
       <p>Slope: <%= @team_season.pace_advantage %></p>
       <p>Correlation: <%= @team_season.r_pace %></p></p>
     </div> 
@@ -187,8 +187,16 @@
         <td><%= (player_season.steals.to_f / player_season.games).round(1) %></td>
         <td><%= player_season.field_goals_percentage %></td>
         <td><%= player_season.three_pointers_percentage %></td>
-        <td><%= player_season.bpm %></td>
-        <td><%= player_season.player_efficiency_rating %></td>
+        <% if player_season.bpm %>
+          <td><%= player_season.bpm %></td>
+        <% else %>
+          <td>N/A</td>
+        <% end %>
+        <% if player_season.player_efficiency_rating %>
+          <td><%= player_season.player_efficiency_rating %></td>  
+        <% else %>
+          <td>N/A</td>
+        <% end %>
         <td><%= player_season.prophet_rating %></td>
       </tr>
     <% end %>

@@ -120,8 +120,16 @@
           <td><%= season.steals_percentage %></td>
           <td><%= season.blocks_percentage %></td>
           <td><%= season.usage_rate %></td>
-          <td><%= season.bpm %></td>
-          <td><%= season.player_efficiency_rating %></td>
+          <% if season.bpm %>
+            <td><%= season.bpm %></td>
+          <% else %>
+            <td>N/A</td>
+          <% end %>
+          <% if season.player_efficiency_rating %>
+            <td><%= season.player_efficiency_rating %></td>
+          <% else %>
+            <td>N/A</td>
+          <% end %>
           <td><%= season.prophet_rating %></td>
           <% player_of_the_games = @player.player_of_the_games.where(season: season.season) %>
           <td><%= player_of_the_games.count %></td>
@@ -233,6 +241,7 @@
         <th>STL%</th>
         <th>BLK%</th>
         <th>Box +/-</th>
+        <th>PRt</th>
     </thead>
     <tbody>
       <% @player_games.each do |game| %>
@@ -273,6 +282,7 @@
         <td><%= game.steals_percentage %></td>
         <td><%= game.blocks_percentage %></td>
         <td><%= game.bpm %></td>
+        <td><%= game.prophet_rating %></td>
       </tr>
       <% end %>
     </tbody>
