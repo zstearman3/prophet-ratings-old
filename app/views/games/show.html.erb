@@ -76,8 +76,12 @@
         </thead>
         <tbody>
           <% @away_player_games.each do |game| %>
-            <tr>
               <% player = game.player %>
+              <% if game.game.player_of_the_game == player %>
+                <tr class="player-of-the-game">
+              <% else %>
+                <tr>
+              <% end %>
               <td><%= player.jersey %></td>
               <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
               <td><%= game.minutes %></td>
@@ -215,6 +219,11 @@
             <% @away_player_games.each do |game| %>
               <tr>
                 <% player = game.player %>
+                <% if game.game.player_of_the_game == player %>
+                  <tr class="player-of-the-game">
+                <% else %>
+                  <tr>
+                <% end %>
                 <td><%= player.jersey %></td>
                 <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
                 <% if game.minutes > 0 %>
@@ -263,8 +272,12 @@
         </thead>
         <tbody>
           <% @home_player_games.each do |game| %>
-            <tr>
               <% player = game.player %>
+              <% if game.game.player_of_the_game == player %>
+                <tr class="player-of-the-game">
+              <% else %>
+                <tr>
+              <% end %>
               <td><%= player.jersey %></td>
               <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
               <td><%= game.minutes %></td>
@@ -402,6 +415,11 @@
             <% @home_player_games.each do |game| %>
               <tr>
                 <% player = game.player %>
+                <% if game.game.player_of_the_game == player %>
+                  <tr class="player-of-the-game">
+                <% else %>
+                  <tr>
+                <% end %>
                 <td><%= player.jersey %></td>
                 <td><%= link_to player.first_name[0]+ ". " + player.last_name, player %></td>
                 <% if game.minutes > 0 %>

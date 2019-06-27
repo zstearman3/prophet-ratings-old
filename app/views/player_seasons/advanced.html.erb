@@ -21,6 +21,7 @@
       <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
       <th><%= sort_link "usage_rate", "USG%", "desc", year %></th>
       <th><%= sort_link "player_efficiency_rating", "PER", "desc", year %></th>
+      <th><%= sort_link "player_of_the_games", "PoTG", "desc", year %></th>
       <th><%= sort_link "prophet_rating", "PRate", "desc", year %></th>
     </tr>
   </thead>
@@ -46,6 +47,7 @@
         <td><%= season.turnovers_percentage %></td>
         <td><%= season.usage_rate %></td>
         <td><%= season.player_efficiency_rating %></td>
+        <th><%= season.player_of_the_games %></th>
         <td><%= season.prophet_rating %></td>
       </tr>
       <% if x % 20 == 0 && x % 100 != 0 %>
@@ -63,6 +65,7 @@
           <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
           <th><%= sort_link "usage_rate", "USG%", "desc", year %></th>
           <th><%= sort_link "player_efficiency_rating", "PER", "desc", year %></th>
+          <th><%= sort_link "player_of_the_games", "PoTG", "desc", year %></th>
           <th><%= sort_link "prophet_rating", "PRate", "desc", year %></th>
         </tr>
       <% end %>

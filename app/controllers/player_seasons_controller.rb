@@ -17,7 +17,7 @@ class PlayerSeasonsController < ApplicationController
     def sortable_columns
       ['prophet_rating', 'two_pointers_percentage', 'three_pointers_percentage', 'field_goals_percentage', 'effective_field_goals_percentage', 'true_shooting_percentage',
        'points', 'points_per_game', 'assists_percentage', 'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'steals_percentage',
-       'blocks_percentage', 'turnovers_percentage', 'usage_rate', 'player_efficiency_rating', 'prophet_rating']
+       'blocks_percentage', 'turnovers_percentage', 'usage_rate', 'player_efficiency_rating', 'prophet_rating', 'player_of_the_games']
     end
     
     def sort_column

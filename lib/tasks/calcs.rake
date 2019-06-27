@@ -663,6 +663,7 @@ namespace :calcs do
       season.minutes_percentage = (100.0 * minutes_percentage).round(1)
       season.points_per_game = (points / game_count.to_f).round(1)
       season.rebounds_per_game = (rebounds / game_count.to_f).round(1)
+      season.player_of_the_games = season.player.player_of_the_games.where(season: current_season).count
       begin
         if minutes_percentage > 0.20 && game_percentage > 0.33
           uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * team_season.assists_percentage) * field_goals_made) + 

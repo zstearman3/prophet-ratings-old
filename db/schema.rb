@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 20190627123042) do
     t.decimal "minutes_per_game"
     t.decimal "minutes_percentage"
     t.decimal "games_percentage"
+    t.integer "player_of_the_games"
     t.index ["player_id"], name: "index_player_seasons_on_player_id"
     t.index ["season_id"], name: "index_player_seasons_on_season_id"
     t.index ["team_id"], name: "index_player_seasons_on_team_id"

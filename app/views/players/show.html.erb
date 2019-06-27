@@ -236,7 +236,11 @@
     </thead>
     <tbody>
       <% @player_games.each do |game| %>
-      <tr>
+        <% if game.game.player_of_the_game == @player %>
+          <tr class="player-of-the-game">
+        <% else %>
+          <tr>
+        <% end %>
         <td><%= game.day.strftime("%m/%d/%y") %></td>
         <% home = true if game.home_or_away == "HOME" %>
         <td><%= "@" unless home %><%= link_to game.opponent_name, game.opponent %></td>
