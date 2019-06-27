@@ -51,6 +51,11 @@
         <% end %>
       <% end %>
     </div>
+    <div class="prediction-link center col-xs-12">
+      <% if @game.prediction %>
+        <%= link_to "See Prophet Ratings Prediction", @game.prediction %>
+      <% end %>
+    </div>
   </div>
   <div class="box-score-row row">
     <div class="away-box-score col-lg-6">

@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 20190627163810) do
     t.decimal "aper"
     t.decimal "consistency"
     t.decimal "home_advantage"
+    t.decimal "three_pointers_proficiency"
     t.index ["season"], name: "index_seasons_on_season", unique: true
   end
 
@@ -443,6 +444,7 @@ ActiveRecord::Schema.define(version: 20190627163810) do
     t.decimal "r_assists"
     t.decimal "r_pace"
     t.decimal "consistency"
+    t.decimal "three_pointers_proficiency"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end
