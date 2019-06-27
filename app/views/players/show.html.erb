@@ -123,7 +123,7 @@
           <td><%= season.bpm %></td>
           <td><%= season.player_efficiency_rating %></td>
           <td><%= season.prophet_rating %></td>
-          <% player_of_the_games = Game.where(season: season.season, player_of_the_game: @player) %>
+          <% player_of_the_games = @player.player_of_the_games.where(season: season.season) %>
           <td><%= player_of_the_games.count %></td>
         </tr>
       <% end %>

@@ -1,0 +1,14 @@
+@import "base/variables.scss";
+
+.table{
+  .player-of-the-game{
+    background-color: $prophet-blue;
+    color: white;
+    td{
+      background-color: $prophet-blue;
+    }
+    a{
+      color: $prophet-light-grey;
+    }
+  }
+}
