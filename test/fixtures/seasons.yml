@@ -6,6 +6,7 @@
 #
 one: 
   season: 2019
+  post_season_end_date: Date.parse("09 APR 2019")
 #
 two: {}
 # column: value
