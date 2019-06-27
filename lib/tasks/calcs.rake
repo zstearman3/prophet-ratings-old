@@ -724,6 +724,12 @@ namespace :calcs do
       home_team_season = TeamSeason.find_by(season: current_season, team: game.home_team)
       away_team_season = TeamSeason.find_by(season: current_season, team: game.away_team)
       if home_team_season && away_team_season
+        home_advantage = 0
+        defensive_advantage = 0
+        assists_advantage = 0
+        three_pointers_advantage = 0
+        pace_advantage = 0
+        injury_advantage = 0
         prediction = Prediction.find_or_create_by(game: game)
         prediction.season = current_season
         prediction.day = game.day
@@ -736,10 +742,35 @@ namespace :calcs do
         
         # Matchup Specific Modifiers
         if game.home_team.stadium == game.stadium
-          predicted_home_efficiency += 2.0
-          predicted_away_efficiency += -2.0
+          home_advantage = (((4.0 * current_season.home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
+          predicted_home_efficiency += home_advantage / 2.0
+          predicted_away_efficiency += home_advantage / -2.0
         end
         
+        if home_team_season.r_defensive_style > 0.1
+          defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0)
+        end
+        
+        if away_team_season.r_defensive_style > 0.1
+          defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)
+        end
+        
+        if home_team_season.r_assists > 0.1
+          assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if away_team_season.r_assists > 0.1
+          assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        predicted_home_efficiency += defensive_advantage / 2.0
+        predicted_away_efficiency += defensive_advantage / -2.0
+        predicted_home_efficiency += assists_advantage / 2.0
+        predicted_away_efficiency += assists_advantage / -2.0
+        defensive_advantage = defensive_advantage.round(1)
+        assists_advantage = assists_advantage.round(1)
+        prediction.home_advantage = home_advantage
+        prediction.defense_advantage = defensive_advantage
+        prediction.assists_advantage = assists_advantage
         predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
         predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
         prediction.home_team_prediction = predicted_home_score.round

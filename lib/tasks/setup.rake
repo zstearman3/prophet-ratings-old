@@ -2,7 +2,7 @@ require 'net/http'
 
 namespace :setup do
   desc "Download database info from fantasydata.com"
-  api_key = 'ead8f64bde6e4b6cab0bbbf95c6d98db'
+  api_key = '771069411cbf42f4bbb07001c1a741fc'
   sd_api_key = '8b5aef100e21492e869155a34e58e245'
   task hierarchy: :environment do
     # Gets all stadiums

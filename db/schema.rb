@@ -248,6 +248,12 @@ ActiveRecord::Schema.define(version: 20190627163810) do
     t.boolean "win_straight_up"
     t.decimal "confidence_straight_up"
     t.text "description"
+    t.decimal "home_advantage"
+    t.decimal "defense_advantage"
+    t.decimal "assists_advantage"
+    t.decimal "three_pointers_advantage"
+    t.decimal "pace_advantage"
+    t.decimal "injury_advantage"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
   end
