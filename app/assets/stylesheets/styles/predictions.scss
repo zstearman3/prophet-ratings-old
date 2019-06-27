@@ -1,0 +1,12 @@
+@import "base/variables.scss";
+
+.prediction-container{
+  background-color: $prophet-light-grey;
+  border-radius: 10px;
+  .prediction-details{
+    background-color: white;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: grey;
+  }
+}

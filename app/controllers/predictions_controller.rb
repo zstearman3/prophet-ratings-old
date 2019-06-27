@@ -5,7 +5,8 @@ class PredictionsController < ApplicationController
   end
   
   def show
-  
+    @prediction = Prediction.find(params[:id])
+    @game = @prediction.game
   end
   
   def statistics

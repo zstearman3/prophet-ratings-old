@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190627123042) do
+ActiveRecord::Schema.define(version: 20190627163810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(version: 20190627123042) do
     t.decimal "home_win_probability"
     t.boolean "win_straight_up"
     t.decimal "confidence_straight_up"
+    t.text "description"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
   end

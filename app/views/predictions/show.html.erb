@@ -1,1 +1,29 @@
 <h1>Prediction Details</h1>
+<div class="row">
+  <div class="prediction-container col-xs-12">
+      
+    <h1>
+      <% if @game.away_team %>
+        <%= link_to @game.away_team.school, @game.away_team %>
+      <% else %>
+        <%= @game.away_team_name %>
+      <% end %>
+      <%= " @ " %>
+      <% if @game.home_team %>
+        <%= link_to @game.home_team.school, @game.home_team %>
+      <% else %>
+        <%= @game.home_team_name %>
+      <% end %>
+    </h1>
+    <div class="prediction-details col-xs-12">
+      <table class="table">
+        <tr>
+          <th>Predicted Score</th>
+          <td><%= @game.away_team_name + @prediction.away_team_prediction.to_s  + " - " + @game.home_team_name + @prediction.home_team_prediction.to_s%></td>
+        </tr>
+      </table>
+      <p><%= @prediction.description %></p>
+    </div>
+  </div>
+</div>
+
