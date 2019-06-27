@@ -6,7 +6,7 @@ class Game < ApplicationRecord
   has_many :team_games
   has_many :player_games
   has_one  :prediction
-  has_one  :player_of_the_game, :class_name => 'Player', :foreign_key => 'id'
+  belongs_to :player_of_the_game, :class_name => 'Player', :foreign_key => 'player_of_the_game_id'
   validates :status, presence: true
   validates :day, presence: true
 end

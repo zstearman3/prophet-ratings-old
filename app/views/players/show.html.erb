@@ -99,6 +99,7 @@
         <th>Box +/-</th>
         <th>PER</th>
         <th>pRATE</th>
+        <th>POTG</th>
       </tr>
     </thead>
     <tbody>
@@ -122,6 +123,8 @@
           <td><%= season.bpm %></td>
           <td><%= season.player_efficiency_rating %></td>
           <td><%= season.prophet_rating %></td>
+          <% player_of_the_games = Game.where(season: season.season, player_of_the_game: @player) %>
+          <td><%= player_of_the_games.count %></td>
         </tr>
       <% end %>
     </tbody>
@@ -159,47 +162,51 @@
     </thead>
     <tbody>
       <% @player_games.each do |game| %>
-      <tr>
-        <td><%= game.day.strftime("%m/%d/%y") %></td>
-        <% home = true if game.home_or_away == "HOME" %>
-        <td><%= "@" unless home %><%= link_to game.opponent_name, game.opponent %></td>
-        <% if game.game && game.game.home_team_score && game.game.away_team_score %>
-          <% if home %>
-            <% if game.game.home_team_score > game.game.away_team_score %>
-              <td><%= link_to("W " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+        <% if game.game.player_of_the_game == @player %>
+          <tr class="player-of-the-game">
+        <% else %>
+          <tr>
+        <% end %>
+          <td><%= game.day.strftime("%m/%d/%y") %></td>
+          <% home = true if game.home_or_away == "HOME" %>
+          <td><%= "@" unless home %><%= link_to game.opponent_name, game.opponent %></td>
+          <% if game.game && game.game.home_team_score && game.game.away_team_score %>
+            <% if home %>
+              <% if game.game.home_team_score > game.game.away_team_score %>
+                <td><%= link_to("W " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+              <% else %>
+                <td><%= link_to("L " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+              <% end %>
             <% else %>
-              <td><%= link_to("L " + game.game.home_team_score.to_s + "-" + game.game.away_team_score.to_s, game.game ) %></td>
+              <% if game.game.away_team_score > game.game.home_team_score %>
+                <td><%= link_to("W " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+              <% else %>
+               <td><%= link_to("L " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
+              <% end %>
             <% end %>
           <% else %>
-            <% if game.game.away_team_score > game.game.home_team_score %>
-              <td><%= link_to("W " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
-            <% else %>
-             <td><%= link_to("L " + game.game.away_team_score.to_s + "-" + game.game.home_team_score.to_s, game.game) %></td>
-            <% end %>
+            <td><%= link_to "err", game.game %></td>
           <% end %>
-        <% else %>
-          <td><%= link_to "err", game.game %></td>
-        <% end %>
-        <td><%= game.minutes %></td>
-        <td><%= game.field_goals_made %></td>
-        <td><%= game.field_goals_attempted %></td>
-        <td><%= game.field_goals_percentage %></td>
-        <td><%= game.three_pointers_made %></td>
-        <td><%= game.three_pointers_attempted %></td>
-        <td><%= game.three_pointers_percentage %></td>
-        <td><%= game.free_throws_made %></td>
-        <td><%= game.free_throws_attempted %></td>
-        <td><%= game.free_throws_percentage %></td>
-        <td><%= game.offensive_rebounds %></td>
-        <td><%= game.defensive_rebounds %></td>
-        <td><%= game.rebounds %></td>
-        <td><%= game.assists %></td>
-        <td><%= game.steals %></td>
-        <td><%= game.blocked_shots %></td>
-        <td><%= game.turnovers %></td>
-        <td><%= game.personal_fouls %></td>
-        <td><%= game.points %></td>
-      </tr>
+          <td><%= game.minutes %></td>
+          <td><%= game.field_goals_made %></td>
+          <td><%= game.field_goals_attempted %></td>
+          <td><%= game.field_goals_percentage %></td>
+          <td><%= game.three_pointers_made %></td>
+          <td><%= game.three_pointers_attempted %></td>
+          <td><%= game.three_pointers_percentage %></td>
+          <td><%= game.free_throws_made %></td>
+          <td><%= game.free_throws_attempted %></td>
+          <td><%= game.free_throws_percentage %></td>
+          <td><%= game.offensive_rebounds %></td>
+          <td><%= game.defensive_rebounds %></td>
+          <td><%= game.rebounds %></td>
+          <td><%= game.assists %></td>
+          <td><%= game.steals %></td>
+          <td><%= game.blocked_shots %></td>
+          <td><%= game.turnovers %></td>
+          <td><%= game.personal_fouls %></td>
+          <td><%= game.points %></td>
+        </tr>
       <% end %>
     </tbody>
   </table>

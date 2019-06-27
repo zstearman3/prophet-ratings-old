@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190620003415) do
+ActiveRecord::Schema.define(version: 20190627123042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,8 +56,10 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "away_offensive_efficiency"
     t.decimal "pace"
     t.boolean "is_completed"
+    t.integer "player_of_the_game_id"
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
+    t.index ["player_of_the_game_id"], name: "index_games_on_player_of_the_game_id"
     t.index ["season_id"], name: "index_games_on_season_id"
     t.index ["stadium_id"], name: "index_games_on_stadium_id"
   end
@@ -120,6 +122,7 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "true_shooting_percentage"
     t.decimal "effective_field_goals_percentage"
     t.boolean "qualified"
+    t.decimal "prophet_rating"
     t.index ["game_id"], name: "index_player_games_on_game_id"
     t.index ["opponent_id"], name: "index_player_games_on_opponent_id"
     t.index ["player_id"], name: "index_player_games_on_player_id"
@@ -348,8 +351,10 @@ ActiveRecord::Schema.define(version: 20190620003415) do
     t.decimal "defensive_rebounds_percentage"
     t.decimal "expected_ortg"
     t.decimal "expected_drtg"
+    t.integer "player_of_the_game_id"
     t.index ["game_id"], name: "index_team_games_on_game_id"
     t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
+    t.index ["player_of_the_game_id"], name: "index_team_games_on_player_of_the_game_id"
     t.index ["season_id"], name: "index_team_games_on_season_id"
     t.index ["team_id"], name: "index_team_games_on_team_id"
   end

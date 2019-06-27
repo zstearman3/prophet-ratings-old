@@ -480,6 +480,7 @@ namespace :calcs do
     player_games = PlayerGame.where(season: current_season)
     if redo_input == "y"
       player_games.update_all(bpm: nil)
+      player_games.update_all(prophet_rating: nil)
     else
       player_games = player_games.where(bpm: nil)
     end
@@ -512,8 +513,17 @@ namespace :calcs do
                   game.bpm = ((0.138 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
                               (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0)) +
                               (0.0170 * game.assists_percentage) + (0.2976 * ((game.three_pointers_attempted / ( game.field_goals_attempted * 100.0)) - (game.season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
+                
+                  if game.minutes < 24 
+                    prate_minutes_multiplier = game.minutes / 24.0
+                  else
+                    prate_minutes_multiplier = 1
+                  end
+                  usage_adj = (game.usage_rate * (team_game.points.to_f / game.game.possessions) * (100.0 / opponent_season.adj_defensive_efficiency)) / 15.0
+                  game.prophet_rating = ((game.bpm * prate_minutes_multiplier) + usage_adj).round(1)
                 else
                   game.bpm = 0
+                  game.prophet_rating = 0
                 end
                 game.save
               rescue
@@ -624,6 +634,7 @@ namespace :calcs do
                 else
                   game.qualified = true
                   game.bpm = 0
+                  game.prophet_rating = 0
                   game.save
                 end
               end
@@ -693,6 +704,12 @@ namespace :calcs do
         season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
         season.save
       end
+    end
+    games = Game.where(season: current_season)
+    games.each do |game|
+      player_game = game.player_games.where("minutes > ?", 22).order(prophet_rating: :desc).first
+      game.player_of_the_game = player_game.player if player_game
+      game.save
     end
   end
   

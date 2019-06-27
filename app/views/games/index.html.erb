@@ -47,7 +47,12 @@
           <% else %>
           
           <% end %>
-          <td><%=  %></td>
+          <% player_of_the_game = game.player_of_the_game %>
+          <% player_game = PlayerGame.find_by(player: player_of_the_game, game: game) %>
+          <% if player_game %>
+            <td><%= link_to player_of_the_game.first_name + " " + player_of_the_game.last_name, player_of_the_game %>
+                <%= " " + player_game.points.to_s + "p, " + player_game.assists.to_s  + "a, " + player_game.rebounds.to_s + "r, " + player_game.prophet_rating.to_s %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
