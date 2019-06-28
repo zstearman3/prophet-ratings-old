@@ -915,7 +915,7 @@ namespace :calcs do
               ### HOME TEAM BET ###
               if game.home_team_score > game.away_team_score
                 prediction.win_moneyline = true
-                prediction.winnings_moneyline = 100.0 + (100.0 / (game.home_team_money_line / -100.0)).round(2)
+                prediction.winnings_moneyline = (100.0 / (game.home_team_money_line / -100.0)).round(2)
               else
                 prediction.win_moneyline = false
                 prediction.winnings_moneyline = -100.0
@@ -924,7 +924,7 @@ namespace :calcs do
               ### AWAY TEAM BET ###
               if game.away_team_score > game.home_team_score
                 prediction.win_moneyline = true
-                prediction.winnings_moneyline = 100.0 + (100.0 * (game.away_team_money_line / 100.0)).round(2)
+                prediction.winnings_moneyline = (100.0 * (game.away_team_money_line / 100.0)).round(2)
               else
                 prediction.win_moneyline = false
                 prediction.winnings_moneyline = -100.0
@@ -939,7 +939,7 @@ namespace :calcs do
               ### HOME TEAM BET ###
               if game.home_team_score > game.away_team_score
                 prediction.win_moneyline = true
-                prediction.winnings_moneyline = 100.0 + (100.0 * (game.home_team_money_line / 100.0)).round(2)
+                prediction.winnings_moneyline = (100.0 * (game.home_team_money_line / 100.0)).round(2)
               else
                 prediction.win_moneyline = false
                 prediction.winnings_moneyline = -100.0
@@ -948,7 +948,7 @@ namespace :calcs do
               ### AWAY TEAM BET ###
               if game.away_team_score > game.home_team_score
                 prediction.win_moneyline = true
-                prediction.winnings_moneyline = 100.0 + (100.0 / (game.away_team_money_line / -100.0)).round(2)
+                prediction.winnings_moneyline = (100.0 / (game.away_team_money_line / -100.0)).round(2)
               else
                 prediction.win_moneyline = false
                 prediction.winnings_moneyline = -100.0
