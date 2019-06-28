@@ -664,7 +664,6 @@ namespace :calcs do
       season.minutes_percentage = (100.0 * minutes_percentage).round(1)
       season.points_per_game = (points / game_count.to_f).round(1)
       season.rebounds_per_game = (rebounds / game_count.to_f).round(1)
-      season.player_of_the_games = season.player.player_of_the_games.where(season: current_season).count
       begin
         if minutes_percentage > 0.20 && game_percentage > 0.33
           uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * team_season.assists_percentage) * field_goals_made) + 
@@ -699,19 +698,20 @@ namespace :calcs do
       end
     end
     player_seasons.reload
-    current_season.aper = player_seasons.average(:aper)
-    current_season.save
-    player_seasons.each do |season|
-      if season.aper
-        season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
-        season.save
-      end
-    end
     games = Game.where(season: current_season)
     games.each do |game|
       player_game = game.player_games.where("minutes > ?", 22).order(prophet_rating: :desc).first
       game.player_of_the_game = player_game.player if player_game
       game.save
+    end
+    current_season.aper = player_seasons.average(:aper)
+    current_season.save
+    player_seasons.each do |season|
+      if season.aper
+        season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
+        season.player_of_the_games = season.player.player_of_the_games.where(season: current_season).count
+        season.save
+      end
     end
   end
   
