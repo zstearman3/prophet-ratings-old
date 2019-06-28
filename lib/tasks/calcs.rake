@@ -697,7 +697,7 @@ namespace :calcs do
         puts i.to_s + " of " + seasons_count.to_s + " seasons completed."
       end
     end
-    player_seasons.reload
+    player_seasons = PlayerSeason.where(season: current_season)
     games = Game.where(season: current_season)
     games.each do |game|
       player_game = game.player_games.where("minutes > ?", 22).order(prophet_rating: :desc).first
