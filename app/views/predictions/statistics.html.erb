@@ -23,19 +23,19 @@
       <th>ATS</th>
       <td><%= @point_spread_wins.to_s + "-" + @point_spread_losses.to_s %></td>
       <td><%= (100.0 * @point_spread_wins.to_f / (@point_spread_wins + @point_spread_losses)).round(1).to_s + "%" %></td>
-      <td><%= '$' + ((90.90 * @point_spread_wins) - (100.0 * @point_spread_losses)).round(2).to_s %></td>
+      <td><%= number_to_currency((90.90 * @point_spread_wins) - (100.0 * @point_spread_losses)) %></td>
     </tr>
     <tr>
       <th>O/U</th>
       <td><%= @over_under_wins.to_s + "-" + @over_under_losses.to_s %></td>
       <td><%= (100.0 * @over_under_wins.to_f / (@over_under_wins + @over_under_losses)).round(1).to_s + "%" %></td>
-      <td><%= '$' + ((90.90 * @over_under_wins) - (100.0 * @over_under_losses)).round(2).to_s %></td>
+      <td><%= number_to_currency((90.90 * @over_under_wins) - (100.0 * @over_under_losses)) %></td>
     </tr>
     <tr>
       <th>Moneyline</th>
       <td><%= @moneyline_wins.to_s + "-" + @moneyline_losses.to_s %></td>
       <td><%= (100.0 * @moneyline_wins.to_f / (@moneyline_wins + @moneyline_losses)).round(1).to_s + "%" %></td>
-      <td><%= '$' + @predictions.sum(:winnings_moneyline).to_s %></td>
+      <td><%= number_to_currency(@predictions.sum(:winnings_moneyline), unit: '$') %></td>
     </tr>
   </tbody>
 </table>

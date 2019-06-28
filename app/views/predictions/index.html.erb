@@ -74,7 +74,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= prediction.winnings_moneyline %></td>
+            <td><%= number_to_currency(prediction.winnings_moneyline) if prediction.winnings_moneyline %></td>
             <td><%= link_to "Details", prediction %></td>
           <% end %>
         </tr>
@@ -84,7 +84,7 @@
         <th><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
         <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
         <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
-        <th><%= '$' + @predictions.sum(:winnings_moneyline).to_s %></th>
+        <th><%= number_to_currency(@predictions.sum(:winnings_moneyline)) %></th>
         <td></td>
       </tr>
     </tbody>
