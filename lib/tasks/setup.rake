@@ -217,7 +217,7 @@ namespace :setup do
     season = Season.find_by(season: year_input)
     puts("Number of Days (Leave Blank if All):")
     days = STDIN.gets.chomp.to_i
-    if days.nil?
+    if days == 0
       start_date = season.regular_season_start_date
     else
       if Date.today > season.post_season_end_date
@@ -276,7 +276,7 @@ namespace :setup do
     season = Season.find_by(season: year_input)
     puts("Number of Days (Leave Blank if All):")
     days = STDIN.gets.chomp.to_i
-    if days.nil?
+    if days == 0
       start_date = season.regular_season_start_date
     else
       if Date.today > season.post_season_end_date
