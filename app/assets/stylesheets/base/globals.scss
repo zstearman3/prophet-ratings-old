@@ -8,7 +8,41 @@ a{
   }
 }
 
+
+/* fonts */
+
+p, h1, h2, h3, h4, h5, a {
+  font-family: 'Roboto', sans-serif;
+}
+
+table {
+  td, th {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+p, a{
+  font-size: 18px;
+  @media only screen and (min-width: 850px){
+    font-size: 14px;
+  }
+}
+
 /* header */
+body {
+ padding-top: 60px; 
+}
+#logo{
+  height: 50px;
+  img{
+    height: 98%;
+    margin-top: 1%;
+  }
+}
+
+.navbar-header{
+  float: right;
+}
 .navbar-inverse{
   background-image: linear-gradient(-120deg, rgba(0,0,0,0), 90%, rgba(225,225,225,1));
   background-color: $prophet-blue;
@@ -17,9 +51,78 @@ a{
     float: left;
   }
 }
+.navbar-collapse.collapse.in {
+  display: block!important;
+}
 
-body {
- padding-top: 60px; 
+.navbar{
+  margin-bottom: 0;
+}
+@media (max-width: 850px) {
+  body{
+    padding-top: 100px;
+  }
+  .navbar{
+    #logo{
+      height: 80px;
+    }
+  }
+  .navbar-header {
+    float: none;
+    height: 80px;
+    .navbar-toggle{
+      padding: 0px 8px;
+      height: 60px;
+      width: 60px;
+      margin: 10px;
+      .icon-bar{
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+  }
+  .navbar-toggle {
+    display: block;
+  }
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  .navbar-collapse.collapse{
+    display: none!important;
+  }
+  .navbar-nav {
+    float: none!important;
+    margin: 7.5px -15px;
+    .open{
+      .dropdown-menu{
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        li{
+          a{
+            overflow: visible;
+            color: #9d9d9d;
+            &:hover {
+              color: $prophet-light-grey;
+              background: transparent;
+            }
+          }
+        }
+      }
+    }
+  }
+  .navbar-nav>li {
+    float: none;
+  }
+  .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 }
 
 
@@ -136,7 +239,11 @@ form{
 /* body */
 
 .container{
-  width: 80% !important;
+  width: 95% !important;
+  margin: auto;
+  @media (min-width: 850px){
+    width: 80% !important;
+  }
 }
 
 .center{
