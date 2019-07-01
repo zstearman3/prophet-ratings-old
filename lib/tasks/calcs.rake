@@ -814,9 +814,11 @@ namespace :calcs do
             if (game.away_team_score - game.home_team_score) < prediction.point_spread
               # winning bet
               prediction.win_point_spread = true
+              prediction.winnings_point_spread = 90.9
             elsif (game.away_team_score - game.home_team_score) > prediction.point_spread
               # losing bet
               prediction.win_point_spread = false
+              prediction.winnings_point_spread = -100
             else
               prediction.win_point_spread = nil
             end
@@ -824,9 +826,11 @@ namespace :calcs do
             if (game.away_team_score - game.home_team_score) > prediction.point_spread
               # winning bet
               prediction.win_point_spread = true
+              prediction.winnings_point_spread = 90.9
             elsif (game.away_team_score - game.home_team_score) < prediction.point_spread
               # losing bet
               prediction.win_point_spread = false
+              prediction.winnings_point_spread = -100
             else
               prediction.win_point_spread = nil
             end
@@ -843,9 +847,11 @@ namespace :calcs do
             if (game.away_team_score + game.home_team_score) < prediction.over_under
               # winning bet
               prediction.win_over_under = true
+              prediction.winnings_over_under = 90.9
             elsif (game.away_team_score + game.home_team_score) < prediction.over_under
               # losing bet
-              prediction.win_over_under = false
+              prediction.win_over_under = fals
+              prediction.winnings_over_under = -100
             else
               prediction.win_over_under = nil
             end
@@ -854,9 +860,11 @@ namespace :calcs do
             if (game.away_team_score + game.home_team_score) < prediction.over_under
               # winning bet
               prediction.win_over_under = true
+              prediction.winnings_over_under = 90.9
             elsif (game.away_team_score + game.home_team_score) > prediction.over_under
               # losing bet
               prediction.win_over_under = false
+              prediction.winnings_over_under = -100
             else
               prediction.win_over_under = nil
             end

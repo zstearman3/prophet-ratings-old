@@ -14,22 +14,26 @@
         <th></th>
         <th colspan="3" class="center">Vegas Lines</th>
         <th colspan="3" class="center">Prophet Lines</th>
-        <th colspan="3" class="center">Bet Outcomes</th>
+        <th colspan="6" class="center">Bet Outcomes</th>
+        <th></th>
         <th></th>
       </tr>
       <tr>
         <th>Game</th>
-        <th>Spread</th>
+        <th class="left-column">Spread</th>
         <th>O/U</th>
         <th>ML</th>
-        <th>Spread</th>
+        <th class="left-column">Spread</th>
         <th>O/U</th>
         <th>ML</th>
-        <th>Spread</th>
+        <th class="left-column">Spread</th>
+        <th>Winnings</th>
         <th>O/U</th>
+        <th>Winnings</th>
         <th>ML</th>
         <th>Winnings</th>
-        <th>Details</th>
+        <th class="left-column">Straight Up</th>
+        <th class="left-column">Details</th>
       </tr>
     </thead>
     <tbody>
@@ -40,14 +44,14 @@
             <% description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
             <%= link_to description, game %>
           </td>
-          <td><%= game.point_spread %></td>
+          <td class="left-column"><%= game.point_spread %></td>
           <td><%= game.over_under %></td>
           <td><%= game.home_team_money_line %></td>
           <% if prediction %>
-            <td><%= prediction.predicted_point_spread %></td>
+            <td class="left-column"><%= prediction.predicted_point_spread %></td>
             <td><%= prediction.predicted_over_under %></td>
             <td><%= prediction.predicted_moneyline %></td>
-            <td>
+            <td class="left-column">
               <% if prediction.win_point_spread == true %>
                 WIN
               <% elsif prediction.win_point_spread == false %>
@@ -56,6 +60,7 @@
                 N/A
               <% end %>
             </td>
+            <td><%= number_to_currency(prediction.point_spread) if prediction.point_spread %></td>
             <td>
               <% if prediction.win_over_under == true %>
                 WIN
@@ -65,6 +70,7 @@
                 N/A
               <% end %>
             </td>
+            <td><%= number_to_currency(prediction.over_under) if prediction.over_under %></td>
             <td>              
               <% if prediction.win_moneyline == true %>
                 WIN
@@ -75,17 +81,30 @@
               <% end %>
             </td>
             <td><%= number_to_currency(prediction.winnings_moneyline) if prediction.winnings_moneyline %></td>
-            <td><%= link_to "Details", prediction %></td>
+            <td class="left-column"> 
+            <% if prediction.win_straight_up == true %>
+                WIN
+              <% elsif prediction.win_straight_up == false %>
+                LOSS
+              <% else %>
+                N/A
+              <% end %></td>
+            <td class="left-column"><%= link_to "Details", prediction %></td>
           <% end %>
         </tr>
       <% end %>
       <tr class="total-row">
-        <th colspan="7">Totals</th>
-        <th><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
+        <th>Totals</th>
+        <th colspan="3" class="left-column"></th>
+        <th colspan="3" class="left-column"></th>
+        <th class="left-column"><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
+        <th><%= number_to_currency(@predictions.sum(:winnings_point_spread)) %></th>
         <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
+        <th><%= number_to_currency(@predictions.sum(:winnings_over_under)) %></th>
         <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
         <th><%= number_to_currency(@predictions.sum(:winnings_moneyline)) %></th>
-        <td></td>
+        <th class="left-column"><%= @predictions.where(win_straight_up: true).count.to_s + "-" + @predictions.where(win_straight_up: false).count.to_s %></th>
+        <th class="left-column"></td>
       </tr>
     </tbody>
   </table>
