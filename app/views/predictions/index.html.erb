@@ -60,7 +60,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= number_to_currency(prediction.point_spread) if prediction.point_spread %></td>
+            <td><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
             <td>
               <% if prediction.win_over_under == true %>
                 WIN
@@ -70,7 +70,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= number_to_currency(prediction.over_under) if prediction.over_under %></td>
+            <td><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
             <td>              
               <% if prediction.win_moneyline == true %>
                 WIN
