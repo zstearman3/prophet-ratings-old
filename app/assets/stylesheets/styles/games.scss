@@ -1,5 +1,63 @@
 /* show.html.erb */
 
+.score-banner{
+  .box-score-team-title{
+    h1{
+      font-size: 16px;
+      a{
+        font-size: 16px;
+      }
+    }
+    @media only screen and (min-width: 850px){
+      h1{
+        font-size: 24px;
+        a{
+          font-size: 28px;
+        }
+      }
+    } 
+  }
+  .team-logo{
+    padding: 0px;
+    img{
+      margin-top: 15px;
+      padding-top: 0px;
+    }
+  }
+  @media only screen and (min-width: 850px){
+    .team-logo{
+      padding: 10px;
+      img{
+        margin-top: -10px;
+        padding-top: 0px;
+      }
+    }
+  }
+  .team-info{
+    p{
+      font-size: 14px;
+    }
+  }
+  .banner-score-box{
+    h1{
+      font-size: 18px;
+      padding-top: 5px;
+    }
+    h2{
+      font-size: 16px;
+    }
+    @media only screen and (min-width: 850px){
+      padding-top: 10px;
+      h1{
+        font-size: 30px;
+      }
+      h2{
+        padding-top: 10px;
+        font-size: 22px;
+      }
+    }
+  }
+}
 .box-score{
   .team-logo{
     img{

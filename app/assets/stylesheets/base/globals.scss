@@ -28,9 +28,34 @@ p, a{
   }
 }
 
+h1{
+  a{
+    font-size: 24px;
+    @media only screen and (min-width: 850px){
+      font-size: 32px;
+    }
+  }
+}
+
+.box-score-table {
+  td{
+    a{
+      font-size: 12px;
+      @media only screen and (min-width: 850px){
+        font-size: 14px;
+      }
+    }
+  }
+}
 .table-sm{
   td, th, a {
     font-size: 12px;
+  }
+}
+
+.table-xs{
+  td, th, a {
+    font-size: 11px;
   }
 }
 

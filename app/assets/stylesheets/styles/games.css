@@ -1,0 +1,32 @@
+/* show.html.erb */
+.box-score .team-logo img {
+  padding-top: 10px;
+  width: 80%;
+  min-width: 30px; }
+.box-score .game-status {
+  margin-top: 20px; }
+.box-score .away-team-banner {
+  text-align: right; }
+.box-score .game-details {
+  font-weight: bold; }
+.box-score .banner-score-box {
+  padding: 0; }
+  .box-score .banner-score-box .away-score {
+    padding: 0; }
+  .box-score .banner-score-box .home-score {
+    padding: 0;
+    text-align: right; }
+.box-score .box-score-row {
+  font-size: 0.9em; }
+  .box-score .box-score-row thead {
+    font-size: 0.85em; }
+  .box-score .box-score-row .total-row {
+    font-weight: bold; }
+.box-score .advanced-stats {
+  overflow: auto; }
+  .box-score .advanced-stats .left-column {
+    padding-left: 0; }
+  .box-score .advanced-stats .right-column {
+    padding-right: 0; }
+
+/*# sourceMappingURL=games.css.map */
