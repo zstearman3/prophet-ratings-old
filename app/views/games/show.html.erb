@@ -63,7 +63,7 @@
   </div>
   <div class="box-score-row row">
     <div class="away-box-score col-lg-6">
-      <h3 class="hidden-lg"><%= @away_team.school + " Stats" %></h3>
+      <h3 class="hidden-large"><%= @away_team.school + " Stats" %></h3>
       <table class="box-score-table table table-striped">
         <thead>
           <tr>
@@ -73,8 +73,8 @@
             <th>FG</th>
             <th>3PT</th>
             <th>FT</th>
-            <th>OREB</th>
-            <th>DREB</th>
+            <th class="hidden-small">OREB</th>
+            <th class="hidden-small">DREB</th>
             <th>REB</th>
             <th>AST</th>
             <th>STL</th>
@@ -98,8 +98,8 @@
               <td><%= game.field_goals_made.to_s + "-" + game.field_goals_attempted.to_s %></td>
               <td><%= game.three_pointers_made.to_s + "-" + game.three_pointers_attempted.to_s %></td>
               <td><%= game.free_throws_made.to_s + "-" + game.free_throws_attempted.to_s %></td>
-              <td><%= game.offensive_rebounds %></td>
-              <td><%= game.defensive_rebounds %></td>
+              <td class="hidden-small"><%= game.offensive_rebounds %></td>
+              <td class="hidden-small"><%= game.defensive_rebounds %></td>
               <td><%= game.rebounds %></td>
               <td><%= game.assists %></td>
               <td><%= game.steals %></td>
@@ -114,8 +114,8 @@
             <td><%= @away_team_game.field_goals_made.to_s + "-" + @away_team_game.field_goals_attempted.to_s %></td>
             <td><%= @away_team_game.three_pointers_made.to_s + + "-" + @away_team_game.three_pointers_attempted.to_s %></td>
             <td><%= @away_team_game.free_throws_made.to_s + "-" + @away_team_game.free_throws_attempted.to_s %></td>
-            <td><%= @away_team_game.offensive_rebounds %></td>
-            <td><%= @away_team_game.defensive_rebounds %></td>
+            <td class="hidden-small"><%= @away_team_game.offensive_rebounds %></td>
+            <td class="hidden-small"><%= @away_team_game.defensive_rebounds %></td>
             <td><%= @away_team_game.rebounds %></td>
             <td><%= @away_team_game.assists %></td>
             <td><%= @away_team_game.steals %></td>
@@ -129,7 +129,8 @@
             <td><%= @away_team_game.field_goals_percentage.to_s + "%" %></td>
             <td><%= @away_team_game.three_pointers_percentage.to_s + "%" %></td>
             <td><%= @away_team_game.free_throws_percentage.to_s + "%" %></td>
-            <td colspan="9"></td>
+            <td colspan="9" class="hidden-small"></td>
+            <td colspan="7" class="hidden-large"></td>
           </tr>
         </tbody>
       </table>
@@ -212,12 +213,12 @@
               <th>Player</th>
               <th>MIN</th>
               <th>USG</th>
-              <th>eFG%</th>
+              <th class="hidden-small">eFG%</th>
               <th>TS%</th>
               <th>AST%</th>
               <th>TO%</th>
-              <th>ORB%</th>
-              <th>DRB%</th>
+              <th class="hidden-small">ORB%</th>
+              <th class="hidden-small">DRB%</th>
               <th>TRB%</th>
               <th>STL%</th>
               <th>BLK%</th>
@@ -239,12 +240,12 @@
                 <% if game.minutes > 0 %>
                   <td><%= game.minutes %></td>
                   <td><%= game.usage_rate %></td>
-                  <td><%= game.effective_field_goals_percentage %></td>
+                  <td class="hidden-small"><%= game.effective_field_goals_percentage %></td>
                   <td><%= game.true_shooting_percentage %></td>
                   <td><%= game.assists_percentage %></td>
                   <td><%= game.turnovers_percentage %></td>
-                  <td><%= game.offensive_rebounds_percentage %></td>
-                  <td><%= game.defensive_rebounds_percentage %></td>
+                  <td class="hidden-small"><%= game.offensive_rebounds_percentage %></td>
+                  <td class="hidden-small"><%= game.defensive_rebounds_percentage %></td>
                   <td><%= game.rebounds_percentage %></td>
                   <td><%= game.steals_percentage %></td>
                   <td><%= game.blocks_percentage %></td>
@@ -260,7 +261,7 @@
       </div>
     </div>
     <div class="home-box-score col-lg-6">
-      <h3 class="hidden-lg"><%= @home_team.school + " Stats" %></h3>
+      <h3 class="hidden-large"><%= @home_team.school + " Stats" %></h3>
       <table class="box-score-table table table-striped">
         <thead>
           <tr>
@@ -270,8 +271,8 @@
             <th>FG</th>
             <th>3PT</th>
             <th>FT</th>
-            <th>OREB</th>
-            <th>DREB</th>
+            <th class="hidden-small">OREB</th>
+            <th class="hidden-small">DREB</th>
             <th>REB</th>
             <th>AST</th>
             <th>STL</th>
@@ -295,8 +296,8 @@
               <td><%= game.field_goals_made.to_s + "-" + game.field_goals_attempted.to_s %></td>
               <td><%= game.three_pointers_made.to_s + "-" + game.three_pointers_attempted.to_s %></td>
               <td><%= game.free_throws_made.to_s + "-" + game.free_throws_attempted.to_s %></td>
-              <td><%= game.offensive_rebounds %></td>
-              <td><%= game.defensive_rebounds %></td>
+              <td class="hidden-small"><%= game.offensive_rebounds %></td>
+              <td class="hidden-small"><%= game.defensive_rebounds %></td>
               <td><%= game.rebounds %></td>
               <td><%= game.assists %></td>
               <td><%= game.steals %></td>
@@ -311,8 +312,8 @@
             <td><%= @home_team_game.field_goals_made.to_s + "-" + @home_team_game.field_goals_attempted.to_s %></td>
             <td><%= @home_team_game.three_pointers_made.to_s + + "-" + @home_team_game.three_pointers_attempted.to_s %></td>
             <td><%= @home_team_game.free_throws_made.to_s + "-" + @home_team_game.free_throws_attempted.to_s %></td>
-            <td><%= @home_team_game.offensive_rebounds %></td>
-            <td><%= @home_team_game.defensive_rebounds %></td>
+            <td class="hidden-small"><%= @home_team_game.offensive_rebounds %></td>
+            <td class="hidden-small"><%= @home_team_game.defensive_rebounds %></td>
             <td><%= @home_team_game.rebounds %></td>
             <td><%= @home_team_game.assists %></td>
             <td><%= @home_team_game.steals %></td>
@@ -326,7 +327,8 @@
             <td><%= @home_team_game.field_goals_percentage.to_s + "%" %></td>
             <td><%= @home_team_game.three_pointers_percentage.to_s + "%" %></td>
             <td><%= @home_team_game.free_throws_percentage.to_s + "%" %></td>
-            <td colspan="9"></td>
+            <td colspan="9" class="hidden-small"></td>
+            <td colspan="7" class="hidden-large"></td>
           </tr>
         </tbody>
       </table>
@@ -409,12 +411,12 @@
               <th>Player</th>
               <th>MIN</th>
               <th>USG</th>
-              <th>eFG%</th>
+              <th class="hidden-small">eFG%</th>
               <th>TS%</th>
               <th>AST%</th>
               <th>TO%</th>
-              <th>ORB%</th>
-              <th>DRB%</th>
+              <th class="hidden-small">ORB%</th>
+              <th class="hidden-small">DRB%</th>
               <th>TRB%</th>
               <th>STL%</th>
               <th>BLK%</th>
@@ -436,12 +438,12 @@
                 <% if game.minutes > 0 %>
                   <td><%= game.minutes %></td>
                   <td><%= game.usage_rate %></td>
-                  <td><%= game.effective_field_goals_percentage %></td>
+                  <td class="hidden-small"><%= game.effective_field_goals_percentage %></td>
                   <td><%= game.true_shooting_percentage %></td>
                   <td><%= game.assists_percentage %></td>
                   <td><%= game.turnovers_percentage %></td>
-                  <td><%= game.offensive_rebounds_percentage %></td>
-                  <td><%= game.defensive_rebounds_percentage %></td>
+                  <td class="hidden-small"><%= game.offensive_rebounds_percentage %></td>
+                  <td class="hidden-small"><%= game.defensive_rebounds_percentage %></td>
                   <td><%= game.rebounds_percentage %></td>
                   <td><%= game.steals_percentage %></td>
                   <td><%= game.blocks_percentage %></td>

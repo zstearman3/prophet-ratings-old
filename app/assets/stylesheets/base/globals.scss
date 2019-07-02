@@ -293,8 +293,13 @@ form{
   float: right;
 }
 
-.hidden-lg{
+.hidden-large{
   @media only screen and (min-width: 850px){
-    visible: none; 
+    display: none; 
+  }
+}
+.hidden-small{
+  @media only screen and (max-width: 850px){
+    display: none; 
   }
 }
