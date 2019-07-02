@@ -1,69 +1,64 @@
 /* show.html.erb */
 
-.score-banner{
-  .box-score-team-title{
-    h1{
-      font-size: 16px;
-      a{
-        font-size: 16px;
-      }
-    }
-    @media only screen and (min-width: 850px){
+.box-score{
+  .score-banner{
+    .box-score-team-title{
       h1{
-        font-size: 24px;
+        font-size: 16px;
         a{
-          font-size: 28px;
+          font-size: 16px;
         }
       }
-    } 
-  }
-  .team-logo{
-    padding: 0px;
-    img{
-      margin-top: 15px;
-      padding-top: 0px;
+      @media only screen and (min-width: 850px){
+        h1{
+          font-size: 24px;
+          a{
+            font-size: 28px;
+          }
+        }
+      } 
     }
-  }
-  @media only screen and (min-width: 850px){
     .team-logo{
-      padding: 10px;
+      padding: 0px;
       img{
-        margin-top: -10px;
+        margin-top: 15px;
         padding-top: 0px;
+        width: 80%;
+        min-width: 30px;
       }
-    }
-  }
-  .team-info{
-    p{
-      font-size: 14px;
-    }
-  }
-  .banner-score-box{
-    h1{
-      font-size: 18px;
-      padding-top: 5px;
-    }
-    h2{
-      font-size: 16px;
     }
     @media only screen and (min-width: 850px){
-      padding-top: 10px;
-      h1{
-        font-size: 30px;
-      }
-      h2{
-        padding-top: 10px;
-        font-size: 22px;
+      .team-logo{
+        padding: 10px;
+        img{
+          margin-top: -10px;
+          padding-top: 0px;
+        }
       }
     }
-  }
-}
-.box-score{
-  .team-logo{
-    img{
-      padding-top: 10px;
-      width: 80%;
-      min-width: 30px;
+    .team-info{
+      p{
+        font-size: 14px;
+      }
+    }
+    .banner-score-box{
+      h1{
+        font-size: 18px;
+        padding-top: 5px;
+      }
+      h2{
+        font-size: 16px;
+      }
+      @media only screen and (min-width: 850px){
+        padding-top: 10px;
+        h1{
+          font-size: 30px;
+        }
+        h2{
+          padding-top: 10px;
+          font-size: 22px;
+        }
+      }
     }
   }
   .game-status{
@@ -73,7 +68,18 @@
     text-align: right;
   }
   .game-details{
+    font-size: 10px;
     font-weight: bold;
+    @media only screen and (min-width: 850px){
+     font-size: 14px; 
+    }
+    a{
+      font-size: 10px;
+      font-weight: bold;
+      @media only screen and (min-width: 850px){
+        font-size: 14px; 
+      }
+    }
   }
   .banner-score-box{
     padding: 0;
@@ -86,15 +92,43 @@
     }
   }
   .box-score-row{
-    font-size: 0.9em;
-    thead{
-      font-size: 0.85em;
+    padding-top: 10px;
+    .box-score-table{
+      th, td{
+        padding: 1px;
+        font-size: 9px;
+        @media only screen and (min-width: 850px){
+          padding: 4px 2px;
+          font-size: 12px;
+        }
+        a {
+          font-size: 9px;
+          @media only screen and (min-width: 850px){
+            font-size: 12px;
+          }
+        }
+      }
     }
     .total-row{
       font-weight: bold;
     }
   }
   .advanced-stats{
+    .col-md-4{
+      padding: 0;
+      @media only screen and (min-width: 850px){
+       padding: 0px 5px; 
+      }
+      td, th{
+        font-size: 10px;
+         width: 50%;
+        text-align: center;
+        @media only screen and (min-width: 850px){
+          font-size: 12px;
+          text-align: left;
+        }
+      }
+    }
     .left-column{
       padding-left: 0;
     }
