@@ -8,35 +8,35 @@
 
 <div class="Stats-row row">
   <h3>Player Statistics</h3>
-  <table class="table table-striped">
+  <table class="table table-striped table-sm">
     <thead>
       <tr>
         <th>Year</th>
         <th>Team</th>
         <th>Pos</th>
-        <th>G</th>
+        <th class="hidden-small">G</th>
         <th>MIN</th>
-        <th>FG</th>
-        <th>FGA</th>
+        <th class="hidden-small">FG</th>
+        <th class="hidden-small">FGA</th>
         <th>FG%</th>
-        <th>3P</th>
-        <th>3PA</th>
+        <th class="hidden-small">3P</th>
+        <th class="hidden-small">3PA</th>
         <th>3P%</th>
-        <th>2P</th>
-        <th>2PA</th>
-        <th>2P%</th>
+        <th class="hidden-small">2P</th>
+        <th class="hidden-small">2PA</th>
+        <th class="hidden-small">2P%</th>
         <th>eFG%</th>
-        <th>FT</th>
-        <th>FTA</th>
+        <th class="hidden-small">FT</th>
+        <th class="hidden-small">FTA</th>
         <th>FT%</th>
-        <th>ORB</th>
-        <th>DRB</th>
+        <th class="hidden-small">ORB</th>
+        <th class="hidden-small">DRB</th>
         <th>TRB</th>
         <th>AST</th>
         <th>STL</th>
         <th>BLK</th>
         <th>TO</th>
-        <th>PF</th>
+        <th class="hidden-small">PF</th>
         <th>PTS</th>
       </tr>
     </thead>
@@ -46,29 +46,29 @@
           <td><%= season.year %></td>
           <td><%= link_to season.team_name, season.team %></td>
           <td><%= season.position %></td>
-          <td><%= season.games %></td>
+          <td class="hidden-small"><%= season.games %></td>
           <td><%= (season.minutes.to_f / season.games).round(1) %></td>
-          <td><%= (season.field_goals_made.to_f / season.games).round(1) %></td>
-          <td><%= (season.field_goals_attempted.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.field_goals_made.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.field_goals_attempted.to_f / season.games).round(1) %></td>
           <td><%= season.field_goals_percentage %></td>
-          <td><%= (season.three_pointers_made.to_f / season.games).round(1) %></td>
-          <td><%= (season.three_pointers_attempted.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.three_pointers_made.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.three_pointers_attempted.to_f / season.games).round(1) %></td>
           <td><%= season.three_pointers_percentage %></td>
-          <td><%= (season.two_pointers_made.to_f / season.games).round(1) %></td>
-          <td><%= (season.two_pointers_attempted.to_f / season.games).round(1) %></td>
-          <td><%= season.two_pointers_percentage %></td>
+          <td class="hidden-small"><%= (season.two_pointers_made.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.two_pointers_attempted.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= season.two_pointers_percentage %></td>
           <td><%= season.effective_field_goals_percentage %></td>
-          <td><%= (season.free_throws_made.to_f / season.games).round(1) %></td>
-          <td><%= (season.free_throws_attempted.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.free_throws_made.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.free_throws_attempted.to_f / season.games).round(1) %></td>
           <td><%= season.free_throws_percentage %></td>
-          <td><%= (season.offensive_rebounds.to_f / season.games).round(1) %></td>
-          <td><%= (season.defensive_rebounds.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.offensive_rebounds.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.defensive_rebounds.to_f / season.games).round(1) %></td>
           <td><%= (season.rebounds.to_f / season.games).round(1) %></td>
           <td><%= (season.assists.to_f / season.games).round(1) %></td>
           <td><%= (season.steals.to_f / season.games).round(1) %></td>
           <td><%= (season.blocked_shots.to_f / season.games).round(1) %></td>
           <td><%= (season.turnovers.to_f / season.games).round(1) %></td>
-          <td><%= (season.personal_fouls.to_f / season.games).round(1) %></td>
+          <td class="hidden-small"><%= (season.personal_fouls.to_f / season.games).round(1) %></td>
           <td><%= (season.points.to_f / season.games).round(1) %></td>
         </tr>
       <% end %>
@@ -78,26 +78,26 @@
 
 <div class="Stats-row row">
   <h3>Advanced Player Statistics</h3>
-  <table class="table table-striped">
+  <table class="table table-striped table-sm">
     <thead>
       <tr>
         <th>Year</th>
         <th>Team</th>
         <th>Pos</th>
-        <th>G</th>
+        <th class="hidden-small">G</th>
         <th>MIN</th>
-        <th>eFG%</th>
+        <th class="hidden-small">eFG%</th>
         <th>TS%</th>
         <th>AST%</th>
         <th>TO%</th>
-        <th>ORB%</th>
-        <th>DRB%</th>
+        <th class="hidden-small">ORB%</th>
+        <th class="hidden-small">DRB%</th>
         <th>TRB%</th>
         <th>STL%</th>
         <th>BLK%</th>
         <th>USG</th>
-        <th>Box +/-</th>
-        <th>PER</th>
+        <th class="hidden-small">Box +/-</th>
+        <th class="hidden-small">PER</th>
         <th>pRATE</th>
         <th>POTG</th>
       </tr>
@@ -108,27 +108,27 @@
           <td><%= season.year %></td>
           <td><%= link_to season.team_name, season.team %></td>
           <td><%= season.position %></td>
-          <td><%= season.games %></td>
+          <td class="hidden-small"><%= season.games %></td>
           <td><%= (season.minutes.to_f / season.games).round(1) %></td>
-          <td><%= season.effective_field_goals_percentage %></td>
+          <td class="hidden-small"><%= season.effective_field_goals_percentage %></td>
           <td><%= season.true_shooting_percentage %></td>
           <td><%= season.assists_percentage %></td>
           <td><%= season.turnovers_percentage %></td>
-          <td><%= season.offensive_rebounds_percentage %></td>
-          <td><%= season.defensive_rebounds_percentage %></td>
+          <td class="hidden-small"><%= season.offensive_rebounds_percentage %></td>
+          <td class="hidden-small"><%= season.defensive_rebounds_percentage %></td>
           <td><%= season.total_rebounds_percentage %></td>
           <td><%= season.steals_percentage %></td>
           <td><%= season.blocks_percentage %></td>
           <td><%= season.usage_rate %></td>
           <% if season.bpm %>
-            <td><%= season.bpm %></td>
+            <td class="hidden-small"><%= season.bpm %></td>
           <% else %>
-            <td>N/A</td>
+            <td class="hidden-small">N/A</td>
           <% end %>
           <% if season.player_efficiency_rating %>
-            <td><%= season.player_efficiency_rating %></td>
+            <td class="hidden-small"><%= season.player_efficiency_rating %></td>
           <% else %>
-            <td>N/A</td>
+            <td class="hidden-small">N/A</td>
           <% end %>
           <td><%= season.prophet_rating %></td>
           <% player_of_the_games = @player.player_of_the_games.where(season: season.season) %>
@@ -141,24 +141,24 @@
 
 <div class="games-row row">
   <h3>Game Logs</h3>
-  <table class="table table-striped">
+  <table class="table table-striped table-sm">
     <thead>
       <tr>
         <th>Date</th>
         <th>OPP</th>
         <th>Score</th>
         <th>MIN</th>
-        <th>FG</th>
-        <th>FGA</th>
+        <th class="hidden-small">FG</th>
+        <th class="hidden-small">FGA</th>
         <th>FG%</th>
-        <th>3P</th>
-        <th>3PA</th>
+        <th class="hidden-small">3P</th>
+        <th class="hidden-small">3PA</th>
         <th>3P%</th>
-        <th>FT</th>
-        <th>FTA</th>
+        <th class="hidden-small">FT</th>
+        <th class="hidden-small">FTA</th>
         <th>FT%</th>
-        <th>ORB</th>
-        <th>DRB</th>
+        <th class="hidden-small">ORB</th>
+        <th class="hidden-small">DRB</th>
         <th>TRB</th>
         <th>AST</th>
         <th>STL</th>
@@ -196,17 +196,17 @@
             <td><%= link_to "err", game.game %></td>
           <% end %>
           <td><%= game.minutes %></td>
-          <td><%= game.field_goals_made %></td>
-          <td><%= game.field_goals_attempted %></td>
+          <td class="hidden-small"><%= game.field_goals_made %></td>
+          <td class="hidden-small"><%= game.field_goals_attempted %></td>
           <td><%= game.field_goals_percentage %></td>
-          <td><%= game.three_pointers_made %></td>
-          <td><%= game.three_pointers_attempted %></td>
+          <td class="hidden-small"><%= game.three_pointers_made %></td>
+          <td class="hidden-small"><%= game.three_pointers_attempted %></td>
           <td><%= game.three_pointers_percentage %></td>
-          <td><%= game.free_throws_made %></td>
-          <td><%= game.free_throws_attempted %></td>
+          <td class="hidden-small"><%= game.free_throws_made %></td>
+          <td class="hidden-small"><%= game.free_throws_attempted %></td>
           <td><%= game.free_throws_percentage %></td>
-          <td><%= game.offensive_rebounds %></td>
-          <td><%= game.defensive_rebounds %></td>
+          <td class="hidden-small"><%= game.offensive_rebounds %></td>
+          <td class="hidden-small"><%= game.defensive_rebounds %></td>
           <td><%= game.rebounds %></td>
           <td><%= game.assists %></td>
           <td><%= game.steals %></td>
@@ -223,7 +223,7 @@
 
 <div class="games-row row">
   <h3>Advanced Game Stats</h3>
-  <table class="table table-striped">
+  <table class="table table-striped table-sm">
     <thead>
       <tr>
         <th>Date</th>
@@ -231,16 +231,16 @@
         <th>Score</th>
         <th>MIN</th>
         <th>USG</th>
-        <th>eFG%</th>
+        <th class="hidden-small">eFG%</th>
         <th>TS%</th>
         <th>AST%</th>
         <th>TO%</th>
-        <th>ORB%</th>
-        <th>DRB%</th>
+        <th class="hidden-small">ORB%</th>
+        <th class="hidden-small">DRB%</th>
         <th>TRB%</th>
         <th>STL%</th>
         <th>BLK%</th>
-        <th>Box +/-</th>
+        <th class="hidden-small">Box +/-</th>
         <th>PRt</th>
     </thead>
     <tbody>
@@ -272,16 +272,16 @@
         <% end %>
         <td><%= game.minutes %></td>
         <td><%= game.usage_rate %></td>
-        <td><%= game.effective_field_goals_percentage %></td>
+        <td class="hidden-small"><%= game.effective_field_goals_percentage %></td>
         <td><%= game.true_shooting_percentage %></td>
         <td><%= game.assists_percentage %></td>
         <td><%= game.turnovers_percentage %></td>
-        <td><%= game.offensive_rebounds_percentage %></td>
-        <td><%= game.defensive_rebounds_percentage %></td>
+        <td class="hidden-small"><%= game.offensive_rebounds_percentage %></td>
+        <td class="hidden-small"><%= game.defensive_rebounds_percentage %></td>
         <td><%= game.rebounds_percentage %></td>
         <td><%= game.steals_percentage %></td>
         <td><%= game.blocks_percentage %></td>
-        <td><%= game.bpm %></td>
+        <td class="hidden-small"><%= game.bpm %></td>
         <td><%= game.prophet_rating %></td>
       </tr>
       <% end %>

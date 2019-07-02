@@ -154,22 +154,22 @@
 </div>
 
 <h3>Player Stats</h3>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th>Player</th>
-      <th>Pos</th>
-      <th>Games</th>
-      <th>Min</th>
-      <th>Points</th>
-      <th>Assists</th>
-      <th>Rebounds</th>
-      <th>Blocks</th>
-      <th>Steals</th>
+      <th>POS</th>
+      <th class="hidden-small">GM</th>
+      <th>MIN</th>
+      <th>PTS</th>
+      <th>AST</th>
+      <th>REB</th>
+      <th>BLK</th>
+      <th>STL</th>
       <th>FG%</th>
       <th>3P%</th>
-      <th>Box +/-</th>
-      <th>PER</th>
+      <th class="hidden-small">Box +/-</th>
+      <th class="hidden-small">PER</th>
       <th>PRate</th>
     </tr>
   </thead>
@@ -178,7 +178,7 @@
       <tr>
         <td><%= link_to player_season.name, player_season.player %></td>
         <td><%= player_season.position %></td>
-        <td><%= player_season.games %>
+        <td class="hidden-small"><%= player_season.games %>
         <td><%= (player_season.minutes.to_f / player_season.games).round(1) %></td>
         <td><%= (player_season.points.to_f / player_season.games).round(1) %></td>
         <td><%= (player_season.assists.to_f / player_season.games).round(1) %></td>
@@ -188,14 +188,14 @@
         <td><%= player_season.field_goals_percentage %></td>
         <td><%= player_season.three_pointers_percentage %></td>
         <% if player_season.bpm %>
-          <td><%= player_season.bpm %></td>
+          <td class="hidden-small"><%= player_season.bpm %></td>
         <% else %>
-          <td>N/A</td>
+          <td class="hidden-small">N/A</td>
         <% end %>
         <% if player_season.player_efficiency_rating %>
-          <td><%= player_season.player_efficiency_rating %></td>  
+          <td class="hidden-small"><%= player_season.player_efficiency_rating %></td>  
         <% else %>
-          <td>N/A</td>
+          <td class="hidden-small">N/A</td>
         <% end %>
         <td><%= player_season.prophet_rating %></td>
       </tr>

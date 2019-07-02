@@ -14,7 +14,8 @@
         <th></th>
         <th colspan="3" class="center">Vegas Lines</th>
         <th colspan="3" class="center">Prophet Lines</th>
-        <th colspan="6" class="center">Bet Outcomes</th>
+        <th colspan="6" class="center hidden-small">Bet Outcomes</th>
+        <th colspan="3" class="center hidden-large">Bet Outcomes</th>
         <th></th>
         <th></th>
       </tr>
@@ -27,11 +28,11 @@
         <th>O/U</th>
         <th>ML</th>
         <th class="left-column">Spread</th>
-        <th>Winnings</th>
+        <th class="hidden-small">Winnings</th>
         <th>O/U</th>
-        <th>Winnings</th>
+        <th class="hidden-small">Winnings</th>
         <th>ML</th>
-        <th>Winnings</th>
+        <th class="hidden-small">Winnings</th>
         <th class="left-column">Straight Up</th>
         <th class="left-column">Details</th>
       </tr>
@@ -60,7 +61,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
+            <td class="hidden-small"><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
             <td>
               <% if prediction.win_over_under == true %>
                 WIN
@@ -70,7 +71,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
+            <td class="hidden-small"><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
             <td>              
               <% if prediction.win_moneyline == true %>
                 WIN
@@ -80,7 +81,7 @@
                 N/A
               <% end %>
             </td>
-            <td><%= number_to_currency(prediction.winnings_moneyline) if prediction.winnings_moneyline %></td>
+            <td class="hidden-small"><%= number_to_currency(prediction.winnings_moneyline) if prediction.winnings_moneyline %></td>
             <td class="left-column"> 
             <% if prediction.win_straight_up == true %>
                 WIN
@@ -98,11 +99,11 @@
         <th colspan="3" class="left-column"></th>
         <th colspan="3" class="left-column"></th>
         <th class="left-column"><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>
-        <th><%= number_to_currency(@predictions.sum(:winnings_point_spread)) %></th>
+        <th class="hidden-small"><%= number_to_currency(@predictions.sum(:winnings_point_spread)) %></th>
         <th><%= @predictions.where(win_over_under: true).count.to_s + "-" + @predictions.where(win_over_under: false).count.to_s %></th>
-        <th><%= number_to_currency(@predictions.sum(:winnings_over_under)) %></th>
+        <th class="hidden-small"><%= number_to_currency(@predictions.sum(:winnings_over_under)) %></th>
         <th><%= @predictions.where(win_moneyline: true).count.to_s + "-" + @predictions.where(win_moneyline: false).count.to_s %></th>
-        <th><%= number_to_currency(@predictions.sum(:winnings_moneyline)) %></th>
+        <th class="hidden-small"><%= number_to_currency(@predictions.sum(:winnings_moneyline)) %></th>
         <th class="left-column"><%= @predictions.where(win_straight_up: true).count.to_s + "-" + @predictions.where(win_straight_up: false).count.to_s %></th>
         <th class="left-column"></td>
       </tr>
