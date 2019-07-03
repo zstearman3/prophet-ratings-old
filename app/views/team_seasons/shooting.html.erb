@@ -25,8 +25,8 @@
         <td><%= x %></td>
         <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
-        <td><%= season.offensive_efficiency %></td>
         <td><%= season.adj_offensive_efficiency %></td>
+        <td><%= season.offensive_efficiency %></td>
         <td><%= season.field_goals_percentage %></td>
         <td><%= season.two_pointers_percentage %></td>
         <td><%= season.three_pointers_percentage %></td>
