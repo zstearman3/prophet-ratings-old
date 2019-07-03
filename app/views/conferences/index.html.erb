@@ -1,2 +1,21 @@
-<h1>Conferences#index</h1>
-<p>Find me in app/views/conferences/index.html.erb</p>
+<h1>All Conferences</h1>
+<table class="table table-striped table-sm">
+  <tr>
+    <th>Name</th>
+    <th>Abbreviation</th>
+    <th>Teams</th>
+    <th>Actions</th>
+  </tr>
+  <% @conferences.each do |conference| %>
+    <tr>
+      <td><%= conference.name %></td>
+      <td><%= conference.abbreviation %></td>
+      <td><%= conference.teams.count %></td>
+      <% if logged_in? && current_user.admin? %>
+        <td><%= link_to('Edit', edit_conference_path(conference)) + " | " +
+                link_to('Destroy', conference, method: :delete, data: { confirm: 'Are you sure?' }) %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

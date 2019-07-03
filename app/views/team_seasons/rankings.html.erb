@@ -9,6 +9,7 @@
       <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
       <th><%= sort_link "name", "Team", "asc", year %></th>
       <th class="hidden-small">Conference</th>
+      <th class="hidden-large">Conf</th>
       <th><%= sort_link "wins", "Record", "desc", year %></th>
       <th><%= sort_link "adj_efficiency_margin", "AdjEM", "desc", year %></th>
       <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
@@ -22,7 +23,8 @@
       <tr>
         <td><%= x %></td>
         <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
-        <td class="hidden-small"><%= season.team.conference.name %></td>
+        <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
+        <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
         <td><%= season.adj_efficiency_margin %></td>
         <td><%= season.adj_offensive_efficiency %></td>
@@ -34,6 +36,7 @@
           <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
           <th><%= sort_link "name", "Team", "asc", year %></th>
           <th class="hidden-small">Conference</th>
+          <th class="hidden-large">Conf</th>
           <th><%= sort_link "wins", "Record", "desc", year %></th>
           <th><%= sort_link "adj_efficiency_margin", "AdjEM", "desc", year %></th>
           <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>

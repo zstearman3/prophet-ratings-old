@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190627163810) do
+ActiveRecord::Schema.define(version: 20190703145621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20190627163810) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "abbreviation"
   end
 
   create_table "games", force: :cascade do |t|
@@ -445,6 +446,9 @@ ActiveRecord::Schema.define(version: 20190627163810) do
     t.decimal "r_pace"
     t.decimal "consistency"
     t.decimal "three_pointers_proficiency"
+    t.decimal "initial_adj_o"
+    t.decimal "initial_adj_d"
+    t.decimal "initial_adj_t"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end

@@ -1,2 +1,27 @@
-<h1>Conferences#edit</h1>
-<p>Find me in app/views/conferences/edit.html.erb</p>
+<h1><%= @conference.name %></h1>
+
+<%= form_for(@conference) do |form| %>
+  <% if @conference.errors.any? %>
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        <%= pluralize(@conference.errors.count, "error") %> prohibited this conference from being saved:
+      </div>
+      <% @conference.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: 'form-control', id: :conference_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :abbreviation %>
+    <%= form.text_field :abbreviation, class: 'form-control', id: :conference_abbreviation %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit 'Edit Conference', class: "btn btn-standard btn-wide" %>
+  </div>
+<% end %>

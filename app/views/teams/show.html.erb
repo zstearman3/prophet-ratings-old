@@ -7,7 +7,7 @@
   <h4>
     <%= @team_season.wins.to_s + "-" + @team_season.losses.to_s + " (" + @team_season.conference_wins.to_s + "-" + @team_season.conference_losses.to_s + ")" %>
     <span>•</span>
-    <%= @team.conference.name %>
+    <%= link_to @team.conference.name, @team.conference %>
   </h4>
   <h4><%= @team.stadium.name if @team.stadium %></h4>
   <%= link_to '2017 ', '#' %>
