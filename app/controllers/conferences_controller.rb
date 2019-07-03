@@ -10,8 +10,10 @@ class ConferencesController < ApplicationController
     @conference = Conference.find(params[:id])
     @teams = @conference.teams
     team_season_ids = []
+    year = params[:season]
+    year ||= current_season.season
     @teams.each do |team|
-      season = team.team_seasons.find_by(season: current_season)
+      season = team.team_seasons.find_by(year: year)
       team_season_ids << season.id
     end
     @team_seasons = TeamSeason.find(team_season_ids).sort_by(&:conference_wins).reverse
