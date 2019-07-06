@@ -664,6 +664,9 @@ namespace :calcs do
       season.minutes_percentage = (100.0 * minutes_percentage).round(1)
       season.points_per_game = (points / game_count.to_f).round(1)
       season.rebounds_per_game = (rebounds / game_count.to_f).round(1)
+      season.assists_per_game = (assists / game_count.to_f).round(1)
+      season.steals_per_game = (steals / game_count.to_f).round(1)
+      season.blocks_per_game = (blocked_shots / game_count.to_f).round(1)
       begin
         if minutes_percentage > 0.20 && game_percentage > 0.33
           uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * team_season.assists_percentage) * field_goals_made) + 

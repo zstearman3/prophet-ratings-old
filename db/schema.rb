@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190703145621) do
+ActiveRecord::Schema.define(version: 20190706191303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,6 +190,9 @@ ActiveRecord::Schema.define(version: 20190703145621) do
     t.decimal "minutes_percentage"
     t.decimal "games_percentage"
     t.integer "player_of_the_games"
+    t.decimal "assists_per_game"
+    t.decimal "steals_per_game"
+    t.decimal "blocks_per_game"
     t.index ["player_id"], name: "index_player_seasons_on_player_id"
     t.index ["season_id"], name: "index_player_seasons_on_season_id"
     t.index ["team_id"], name: "index_player_seasons_on_team_id"

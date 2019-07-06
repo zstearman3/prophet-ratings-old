@@ -16,8 +16,13 @@ p, h1, h2, h3, h4, h5, a {
 }
 
 table {
-  td, th {
+  td, th, a {
     font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    @media only screen and (min-width: 850px){
+      font-size: 16px;
+      padding: 4px !important;
+    }
   }
 }
 
