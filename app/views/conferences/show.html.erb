@@ -32,7 +32,7 @@
     <div class="player card">
       <h2>Points Leader</h2>
       <h1><%= link_to @points_leader.player.first_name + " " + @points_leader.player.last_name, @points_leader.player %></h1>
-      <h3><%= (@points_leader.points.to_f / @points_leader.games).round(1).to_s + " PPG" %></h3>
+      <h3><%= (@points_leader.points_per_game).round(1).to_s + " PPG" %></h3>
     </div>
   </div>
   <div class="player-backsplash center col-lg-4">
@@ -46,7 +46,7 @@
     <div class="player card">
       <h2>Rebounds Leader</h2>
       <h1><%= link_to @rebounds_leader.player.first_name + " " + @rebounds_leader.player.last_name, @rebounds_leader.player %></h1>
-      <h3><%= (@rebounds_leader.rebounds.to_f / @rebounds_leader.games).round(1).to_s + " RPG" %></h3>
+      <h3><%= (@rebounds_leader.rebounds_per_game).round(1).to_s + " RPG" %></h3>
     </div>
   </div>
   <div class="player-backsplash center col-lg-4">

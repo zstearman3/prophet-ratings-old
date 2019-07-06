@@ -23,12 +23,15 @@ class ConferencesController < ApplicationController
     end
     @team_seasons = TeamSeason.find(team_season_ids).sort_by(&:conference_wins).reverse
     @player_seasons = PlayerSeason.find(player_season_ids)
-    @points_leader = @player_seasons.sort_by(&:points).reverse.first
-    @assists_leader = @player_seasons.max_by{|y| y[:assists]}
-    @rebounds_leader = @player_seasons.max_by{|x| x[:rebounds]}
-    @steals_leader = @player_seasons.max_by{|w| w[:steals]}
-    @blocks_leader = @player_seasons.max_by{|v| v[:blocked_shots]}
-    @prate_leader = @player_seasons.max_by{|u| u[:prophet_rating]}
+    max_minutes = @player_seasons.sort_by(&:minutes).reverse.first.minutes
+    min_minutes = max_minutes / 2.0
+    qualified_players = @player_seasons.select {|qualified| qualified["minutes"] > min_minutes}
+    @points_leader = qualified_players.max_by{|z| z[:points_per_game]}
+    @assists_leader = qualified_players.max_by{|y| y[:assists]}
+    @rebounds_leader = qualified_players.max_by{|x| x[:rebounds_per_game]}
+    @steals_leader = qualified_players.max_by{|w| w[:steals]}
+    @blocks_leader = qualified_players.max_by{|v| v[:blocked_shots]}
+    @prate_leader = qualified_players.max_by{|u| u[:prophet_rating]}
   end
 
 
