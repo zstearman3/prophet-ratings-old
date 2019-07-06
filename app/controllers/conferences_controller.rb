@@ -27,7 +27,7 @@ class ConferencesController < ApplicationController
     @assists_leader = @player_seasons.max_by{|y| y[:assists]}
     @rebounds_leader = @player_seasons.max_by{|x| x[:rebounds]}
     @steals_leader = @player_seasons.max_by{|w| w[:steals]}
-    @blocks_leader = @player_seasons.max_by{|v| v[:blocks]}
+    @blocks_leader = @player_seasons.max_by{|v| v[:blocked_shots]}
     @prate_leader = @player_seasons.max_by{|u| u[:prophet_rating]}
   end
 
