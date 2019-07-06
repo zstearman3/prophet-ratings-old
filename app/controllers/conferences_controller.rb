@@ -10,14 +10,25 @@ class ConferencesController < ApplicationController
     @conference = Conference.find(params[:id])
     @teams = @conference.teams
     team_season_ids = []
+    player_season_ids = []
     year = params[:season]
     year ||= current_season.season
     @teams.each do |team|
       season = team.team_seasons.find_by(year: year)
       team_season_ids << season.id
+      players = team.player_seasons.where(year: year)
+      players.each do |player|
+        player_season_ids << player.id
+      end
     end
     @team_seasons = TeamSeason.find(team_season_ids).sort_by(&:conference_wins).reverse
-    
+    @player_seasons = PlayerSeason.find(player_season_ids)
+    @points_leader = @player_seasons.sort_by(&:points).reverse.first
+    @assists_leader = @player_seasons.max_by{|y| y[:assists]}
+    @rebounds_leader = @player_seasons.max_by{|x| x[:rebounds]}
+    @steals_leader = @player_seasons.max_by{|w| w[:steals]}
+    @blocks_leader = @player_seasons.max_by{|v| v[:blocks]}
+    @prate_leader = @player_seasons.max_by{|u| u[:prophet_rating]}
   end
 
 
