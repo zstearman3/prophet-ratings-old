@@ -41,7 +41,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @player.player_seasons.each do |season| %> 
+      <% @player_seasons.each do |season| %> 
         <tr>
           <td><%= season.year %></td>
           <td><%= link_to season.team_name, season.team %></td>
@@ -103,7 +103,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @player.player_seasons.each do |season| %> 
+      <% @player_seasons.each do |season| %> 
         <tr>
           <td><%= season.year %></td>
           <td><%= link_to season.team_name, season.team %></td>
