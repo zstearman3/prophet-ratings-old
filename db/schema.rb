@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190706191303) do
+ActiveRecord::Schema.define(version: 20190707012302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "abbreviation"
+    t.boolean "locked", default: false
   end
 
   create_table "games", force: :cascade do |t|
@@ -58,6 +59,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "pace"
     t.boolean "is_completed"
     t.integer "player_of_the_game_id"
+    t.boolean "locked", default: false
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["player_of_the_game_id"], name: "index_games_on_player_of_the_game_id"
@@ -124,6 +126,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "effective_field_goals_percentage"
     t.boolean "qualified"
     t.decimal "prophet_rating"
+    t.boolean "locked", default: false
     t.index ["game_id"], name: "index_player_games_on_game_id"
     t.index ["opponent_id"], name: "index_player_games_on_opponent_id"
     t.index ["player_id"], name: "index_player_games_on_player_id"
@@ -193,6 +196,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "assists_per_game"
     t.decimal "steals_per_game"
     t.decimal "blocks_per_game"
+    t.boolean "locked", default: false
     t.index ["player_id"], name: "index_player_seasons_on_player_id"
     t.index ["season_id"], name: "index_player_seasons_on_season_id"
     t.index ["team_id"], name: "index_player_seasons_on_team_id"
@@ -211,6 +215,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.datetime "updated_at", null: false
     t.bigint "team_id"
     t.boolean "active"
+    t.boolean "locked", default: false
     t.index ["team_id"], name: "index_players_on_team_id"
   end
 
@@ -302,6 +307,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.integer "capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "locked", default: false
   end
 
   create_table "team_games", force: :cascade do |t|
@@ -365,6 +371,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "expected_ortg"
     t.decimal "expected_drtg"
     t.integer "player_of_the_game_id"
+    t.boolean "locked", default: false
     t.index ["game_id"], name: "index_team_games_on_game_id"
     t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
     t.index ["player_of_the_game_id"], name: "index_team_games_on_player_of_the_game_id"
@@ -452,6 +459,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "initial_adj_o"
     t.decimal "initial_adj_d"
     t.decimal "initial_adj_t"
+    t.boolean "locked", default: false
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end
@@ -476,6 +484,7 @@ ActiveRecord::Schema.define(version: 20190706191303) do
     t.decimal "adj_tempo"
     t.integer "adjem_rank"
     t.boolean "active"
+    t.boolean "locked", default: false
     t.index ["conference_id"], name: "index_teams_on_conference_id"
     t.index ["school"], name: "index_teams_on_school", unique: true
     t.index ["stadium_id"], name: "index_teams_on_stadium_id"

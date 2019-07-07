@@ -1,4 +1,5 @@
 class PredictionsController < ApplicationController
+  before_action :logged_in_user
   def index
     @games = Game.where(day: params[:date]).order(date_time: :asc)
     @predictions = Prediction.where(day: params[:date])

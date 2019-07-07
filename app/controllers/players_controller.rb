@@ -1,4 +1,5 @@
 class PlayersController < ApplicationController
+  before_action :logged_in_user
   def show
     @player = Player.find(params[:id])
     @player_seasons = PlayerSeason.where(player: @player).order(year: :desc)

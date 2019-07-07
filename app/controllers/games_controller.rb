@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show]
+  before_action :logged_in_user
   def index
     if params[:date]
       @date = Date.parse(params[:date])

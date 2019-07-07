@@ -1,4 +1,5 @@
 class PlayerSeasonsController < ApplicationController
+  before_action :logged_in_user
   helper_method :sort_column, :sort_direction
   
   def advanced

@@ -10,7 +10,7 @@
     <%= link_to @team.conference.name, @team.conference %>
   </h4>
   <h4><%= @team.stadium.name if @team.stadium %></h4>
-  <%= link_to '2017 ', '#' %>
+  <%= link_to '2017 ', team_path(@team, year: 2017) %>
   <span>•</span>
   <%= link_to '2018 ', team_path(@team, year: 2018) %>
   <span>•</span>
