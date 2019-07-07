@@ -32,7 +32,7 @@
     <div class="player-card">
       <h2>Points Leader</h2>
       <h1><%= link_to @points_leader.player.first_name + " " + @points_leader.player.last_name, @points_leader.player %></h1>
-      <h4><%= link_to @points_leader.team.school, @points_leader.team %><%= " | " + @points_leader.player.position + " | " + @points_leader.player.year %></h4>
+      <h4><%= link_to @points_leader.team.school, @points_leader.team %><%= " | " + @points_leader.player.position.to_s + " | " + @points_leader.player.year.to_s %></h4>
       <h3><%= (@points_leader.points_per_game).round(1).to_s + " PPG" %></h3>
     </div>
   </div>
@@ -40,7 +40,7 @@
     <div class="player-card">
       <h2>Assists Leader</h2>
       <h1><%= link_to @assists_leader.player.first_name + " " + @assists_leader.player.last_name, @assists_leader.player %></h1>
-      <h4><%= link_to @assists_leader.team.school, @assists_leader.team %><%= " | " + @assists_leader.player.position + " | " + @assists_leader.player.year %></h4>
+      <h4><%= link_to @assists_leader.team.school, @assists_leader.team %><%= " | " + @assists_leader.player.position.to_s + " | " + @assists_leader.player.year.to_s %></h4>
       <h3><%= (@assists_leader.assists.to_f / @assists_leader.games).round(1).to_s + " APG" %></h3>
     </div>
   </div>
@@ -48,7 +48,7 @@
     <div class="player-card">
       <h2>Rebounds Leader</h2>
       <h1><%= link_to @rebounds_leader.player.first_name + " " + @rebounds_leader.player.last_name, @rebounds_leader.player %></h1>
-      <h4><%= link_to @rebounds_leader.team.school, @rebounds_leader.team %><%= " | " + @rebounds_leader.player.position + " | " + @rebounds_leader.player.year %></h4>
+      <h4><%= link_to @rebounds_leader.team.school, @rebounds_leader.team %><%= " | " + @rebounds_leader.player.position.to_s + " | " + @rebounds_leader.player.year.to_s %></h4>
       <h3><%= (@rebounds_leader.rebounds_per_game).round(1).to_s + " RPG" %></h3>
     </div>
   </div>
@@ -56,7 +56,7 @@
     <div class="player-card">
       <h2>Steals Leader</h2>
       <h1><%= link_to @steals_leader.player.first_name + " " + @steals_leader.player.last_name, @steals_leader.player %></h1>
-      <h4><%= link_to @steals_leader.team.school, @steals_leader.team %><%= " | " + @steals_leader.player.position + " | " + @steals_leader.player.year %></h4>
+      <h4><%= link_to @steals_leader.team.school, @steals_leader.team %><%= " | " + @steals_leader.player.position.to_s + " | " + @steals_leader.player.year.to_s %></h4>
       <h3><%= (@steals_leader.steals.to_f / @steals_leader.games).round(1).to_s + " SPG" %></h3>
     </div>
   </div>
@@ -64,7 +64,7 @@
     <div class="player-card">
       <h2>Blocks Leader</h2>
       <h1><%= link_to @blocks_leader.player.first_name + " " + @blocks_leader.player.last_name, @blocks_leader.player %></h1>
-      <h4><%= link_to @blocks_leader.team.school, @blocks_leader.team %><%= " | " + @blocks_leader.player.position + " | " + @blocks_leader.player.year %></h4>
+      <h4><%= link_to @blocks_leader.team.school, @blocks_leader.team %><%= " | " + @blocks_leader.player.position.to_s + " | " + @blocks_leader.player.year.to_s %></h4>
       <h3><%= (@blocks_leader.blocked_shots.to_f / @blocks_leader.games).round(1).to_s + " BPG" %></h3>
     </div>
   </div>
@@ -72,7 +72,7 @@
     <div class="player-card">
       <h2>PRate Leader</h2>
       <h1><%= link_to @prate_leader.player.first_name + " " + @prate_leader.player.last_name, @prate_leader.player %></h1>
-      <h4><%= link_to @prate_leader.team.school, @prate_leader.team %><%= " | " + @prate_leader.player.position + " | " + @prate_leader.player.year %></h4>
+      <h4><%= link_to @prate_leader.team.school, @prate_leader.team %><%= " | " + @prate_leader.player.position.to_s + " | " + @prate_leader.player.year.to_s %></h4>
       <h3><%= @prate_leader.prophet_rating.to_s + " PRate" %></h3>
     </div>
   </div>
