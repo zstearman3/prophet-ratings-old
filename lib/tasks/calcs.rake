@@ -191,7 +191,7 @@ namespace :calcs do
         team_games = TeamGame.where(team: season.team, season: current_season).order(day: :asc)
         game_count = 0
         team_games.each do |game|
-          if game.game.is_completed && game.possessions
+          if game.game.is_completed && game.game.possessions
             season_tempo += game.game.possessions
             game_count += 1
           end
