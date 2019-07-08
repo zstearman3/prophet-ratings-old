@@ -355,7 +355,11 @@ namespace :calcs do
             game.expected_drtg = expected_drtg.round(1)
             game.offensive_rebounds_percentage = ((100 * game.offensive_rebounds.to_f) / (game.offensive_rebounds + opponent_game.defensive_rebounds)).round(1)
             game.defensive_rebounds_percentage = ((100 * game.defensive_rebounds.to_f) / (game.defensive_rebounds + opponent_game.offensive_rebounds)).round(1)
-            game.save unless game.pace.infinite?
+            begin
+              game.save
+            rescue
+              ### Error handling ###
+            end
           end
         end
       end
