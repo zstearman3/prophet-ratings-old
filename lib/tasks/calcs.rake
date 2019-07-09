@@ -982,7 +982,7 @@ namespace :calcs do
           # Prediction calculations failed #
         end
         
-        if prediction.home_team_prediction > 0 && prediction.away_team_prediction > 0
+        if prediction.home_team_prediction && prediction.away_team_prediction && prediction.home_team_prediction > 0 && prediction.away_team_prediction > 0
           prediction.save
         end
       end
