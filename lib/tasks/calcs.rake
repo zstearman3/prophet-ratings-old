@@ -817,166 +817,169 @@ namespace :calcs do
         rescue
           puts prediction.inspect
         end
-        if game.home_team_score && game.away_team_score && prediction.point_spread && prediction.predicted_point_spread
-          
-          ### POINT SPREAD OUTCOME ####
-          if prediction.predicted_point_spread < (prediction.point_spread - 1)
-            # home team bet
-            if (game.away_team_score - game.home_team_score) < prediction.point_spread
-              # winning bet
-              prediction.win_point_spread = true
-              prediction.winnings_point_spread = 90.9
-            elsif (game.away_team_score - game.home_team_score) > prediction.point_spread
-              # losing bet
-              prediction.win_point_spread = false
-              prediction.winnings_point_spread = -100
+        begin
+          if game.home_team_score && game.away_team_score && prediction.point_spread && prediction.predicted_point_spread
+            ### POINT SPREAD OUTCOME ####
+            if prediction.predicted_point_spread < (prediction.point_spread - 1)
+              # home team bet
+              if (game.away_team_score - game.home_team_score) < prediction.point_spread
+                # winning bet
+                prediction.win_point_spread = true
+                prediction.winnings_point_spread = 90.9
+              elsif (game.away_team_score - game.home_team_score) > prediction.point_spread
+                # losing bet
+                prediction.win_point_spread = false
+                prediction.winnings_point_spread = -100
+              else
+                prediction.win_point_spread = nil
+              end
+            elsif prediction.predicted_point_spread > (prediction.point_spread + 1)
+              if (game.away_team_score - game.home_team_score) > prediction.point_spread
+                # winning bet
+                prediction.win_point_spread = true
+                prediction.winnings_point_spread = 90.9
+              elsif (game.away_team_score - game.home_team_score) < prediction.point_spread
+                # losing bet
+                prediction.win_point_spread = false
+                prediction.winnings_point_spread = -100
+              else
+                prediction.win_point_spread = nil
+              end
             else
+              # no bet
               prediction.win_point_spread = nil
             end
-          elsif prediction.predicted_point_spread > (prediction.point_spread + 1)
-            if (game.away_team_score - game.home_team_score) > prediction.point_spread
-              # winning bet
-              prediction.win_point_spread = true
-              prediction.winnings_point_spread = 90.9
-            elsif (game.away_team_score - game.home_team_score) < prediction.point_spread
-              # losing bet
-              prediction.win_point_spread = false
-              prediction.winnings_point_spread = -100
-            else
-              prediction.win_point_spread = nil
-            end
-          else
-            # no bet
-            prediction.win_point_spread = nil
           end
-        end
         
-        if game.home_team_score && game.away_team_score && prediction.over_under && prediction.predicted_over_under
-          ### OVER/UNDER OUTCOME ###
-          if prediction.predicted_over_under > (prediction.over_under + 1)
-            # over bet
-            if (game.away_team_score + game.home_team_score) < prediction.over_under
-              # winning bet
-              prediction.win_over_under = true
-              prediction.winnings_over_under = 90.9
-            elsif (game.away_team_score + game.home_team_score) < prediction.over_under
-              # losing bet
-              prediction.win_over_under = fals
-              prediction.winnings_over_under = -100
+          if game.home_team_score && game.away_team_score && prediction.over_under && prediction.predicted_over_under
+            ### OVER/UNDER OUTCOME ###
+            if prediction.predicted_over_under > (prediction.over_under + 1)
+              # over bet
+              if (game.away_team_score + game.home_team_score) < prediction.over_under
+                # winning bet
+                prediction.win_over_under = true
+                prediction.winnings_over_under = 90.9
+              elsif (game.away_team_score + game.home_team_score) < prediction.over_under
+                # losing bet
+                prediction.win_over_under = fals
+                prediction.winnings_over_under = -100
+              else
+                prediction.win_over_under = nil
+              end
+            elsif prediction.predicted_over_under < (prediction.over_under - 1)
+            # under bet
+              if (game.away_team_score + game.home_team_score) < prediction.over_under
+                # winning bet
+                prediction.win_over_under = true
+                prediction.winnings_over_under = 90.9
+              elsif (game.away_team_score + game.home_team_score) > prediction.over_under
+                # losing bet
+                prediction.win_over_under = false
+                prediction.winnings_over_under = -100
+              else
+                prediction.win_over_under = nil
+              end
             else
+              # no bet
               prediction.win_over_under = nil
             end
-          elsif prediction.predicted_over_under < (prediction.over_under - 1)
-          # under bet
-            if (game.away_team_score + game.home_team_score) < prediction.over_under
-              # winning bet
-              prediction.win_over_under = true
-              prediction.winnings_over_under = 90.9
-            elsif (game.away_team_score + game.home_team_score) > prediction.over_under
-              # losing bet
-              prediction.win_over_under = false
-              prediction.winnings_over_under = -100
-            else
-              prediction.win_over_under = nil
-            end
-          else
-            # no bet
-            prediction.win_over_under = nil
           end
-        end
         
-        ### STRAIGHT UP OUTCOME ###
-        if prediction.home_team_prediction && prediction.away_team_prediction && game.home_team_score && game.away_team_score
-          if prediction.home_team_prediction > (prediction.away_team_prediction + 1)
-            if game.home_team_score > game.away_team_score
-              prediction.win_straight_up = true
-            else
-              prediction.win_straight_up = false
-            end
-          elsif prediction.home_team_prediction < (prediction.away_team_prediction - 1)
-            if game.away_team_score > game.home_team_score
-              prediction.win_straight_up = true
-            else
-              prediction.win_straight_up = false
-            end
-          else
-            prediction.win_straight_up = nil
-          end
-        end
-        
-        ##### MONEYLINE CALCS ######
-        mean = predicted_home_efficiency - predicted_away_efficiency
-        std_dev = current_season.consistency
-        home_win_z_score = (0.0 - mean) / std_dev
-        home_win_probability = getProbability(home_win_z_score)
-        prediction.home_win_probability = (home_win_probability * 100.0).round(1)
-        if home_win_probability > 0.5
-          predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
-          if predicted_moneyline < -10000
-            prediction.predicted_moneyline = nil
-          else
-            prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-          end
-        else
-          predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
-          if predicted_moneyline > 10000
-            prediction.predicted_moneyline = nil
-          else
-            prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-          end
-        end
-        
-        ### MONEYLINE UP OUTCOME ###
-        if prediction.predicted_moneyline && prediction.moneyline && game.home_team_score && game.away_team_score
-          if prediction.moneyline < 0
-            ### HOME TEAM FAVORED ###
-            if prediction.predicted_moneyline < (prediction.moneyline * 1.2)
-              ### HOME TEAM BET ###
+          ### STRAIGHT UP OUTCOME ###
+          if prediction.home_team_prediction && prediction.away_team_prediction && game.home_team_score && game.away_team_score
+            if prediction.home_team_prediction > (prediction.away_team_prediction + 1)
               if game.home_team_score > game.away_team_score
-                prediction.win_moneyline = true
-                prediction.winnings_moneyline = (100.0 / (game.home_team_money_line / -100.0)).round(2)
+                prediction.win_straight_up = true
               else
-                prediction.win_moneyline = false
-                prediction.winnings_moneyline = -100.0
+                prediction.win_straight_up = false
               end
-            elsif prediction.predicted_moneyline > (prediction.moneyline / 1.2)
-              ### AWAY TEAM BET ###
+            elsif prediction.home_team_prediction < (prediction.away_team_prediction - 1)
               if game.away_team_score > game.home_team_score
-                prediction.win_moneyline = true
-                prediction.winnings_moneyline = (100.0 * (game.away_team_money_line / 100.0)).round(2)
+                prediction.win_straight_up = true
               else
-                prediction.win_moneyline = false
-                prediction.winnings_moneyline = -100.0
+                prediction.win_straight_up = false
               end
             else
-              prediction.win_moneyline = nil
-              prediction.winnings_moneyline = 0
-            end
-          else
-            ### AWAY TEAM FAVORED ###
-            if prediction.predicted_moneyline < (game.home_team_money_line / 1.2)
-              ### HOME TEAM BET ###
-              if game.home_team_score > game.away_team_score
-                prediction.win_moneyline = true
-                prediction.winnings_moneyline = (100.0 * (game.home_team_money_line / 100.0)).round(2)
-              else
-                prediction.win_moneyline = false
-                prediction.winnings_moneyline = -100.0
-              end
-            elsif prediction.predicted_moneyline > (game.home_team_money_line * 1.2)
-              ### AWAY TEAM BET ###
-              if game.away_team_score > game.home_team_score
-                prediction.win_moneyline = true
-                prediction.winnings_moneyline = (100.0 / (game.away_team_money_line / -100.0)).round(2)
-              else
-                prediction.win_moneyline = false
-                prediction.winnings_moneyline = -100.0
-              end
-            else
-              prediction.win_moneyline = nil
-              prediction.winnings_moneyline = 0
+              prediction.win_straight_up = nil
             end
           end
+        
+          ##### MONEYLINE CALCS ######
+          mean = predicted_home_efficiency - predicted_away_efficiency
+          std_dev = current_season.consistency
+          home_win_z_score = (0.0 - mean) / std_dev
+          home_win_probability = getProbability(home_win_z_score)
+          prediction.home_win_probability = (home_win_probability * 100.0).round(1)
+          if home_win_probability > 0.5
+            predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
+            if predicted_moneyline < -10000
+              prediction.predicted_moneyline = nil
+            else
+              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+            end
+          else
+            predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
+            if predicted_moneyline > 10000
+              prediction.predicted_moneyline = nil
+            else
+              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+            end
+          end
+        
+          ### MONEYLINE UP OUTCOME ###
+          if prediction.predicted_moneyline && prediction.moneyline && game.home_team_score && game.away_team_score
+            if prediction.moneyline < 0
+              ### HOME TEAM FAVORED ###
+              if prediction.predicted_moneyline < (prediction.moneyline * 1.2)
+                ### HOME TEAM BET ###
+                if game.home_team_score > game.away_team_score
+                  prediction.win_moneyline = true
+                  prediction.winnings_moneyline = (100.0 / (game.home_team_money_line / -100.0)).round(2)
+                else
+                  prediction.win_moneyline = false
+                  prediction.winnings_moneyline = -100.0
+                end
+              elsif prediction.predicted_moneyline > (prediction.moneyline / 1.2)
+                ### AWAY TEAM BET ###
+                if game.away_team_score > game.home_team_score
+                  prediction.win_moneyline = true
+                  prediction.winnings_moneyline = (100.0 * (game.away_team_money_line / 100.0)).round(2)
+                else
+                  prediction.win_moneyline = false
+                  prediction.winnings_moneyline = -100.0
+                end
+              else
+                prediction.win_moneyline = nil
+                prediction.winnings_moneyline = 0
+              end
+            else
+              ### AWAY TEAM FAVORED ###
+              if prediction.predicted_moneyline < (game.home_team_money_line / 1.2)
+                ### HOME TEAM BET ###
+                if game.home_team_score > game.away_team_score
+                  prediction.win_moneyline = true
+                  prediction.winnings_moneyline = (100.0 * (game.home_team_money_line / 100.0)).round(2)
+                else
+                  prediction.win_moneyline = false
+                  prediction.winnings_moneyline = -100.0
+                end
+              elsif prediction.predicted_moneyline > (game.home_team_money_line * 1.2)
+                ### AWAY TEAM BET ###
+                if game.away_team_score > game.home_team_score
+                  prediction.win_moneyline = true
+                  prediction.winnings_moneyline = (100.0 / (game.away_team_money_line / -100.0)).round(2)
+                else
+                  prediction.win_moneyline = false
+                  prediction.winnings_moneyline = -100.0
+                end
+              else
+                prediction.win_moneyline = nil
+                prediction.winnings_moneyline = 0
+              end
+            end
+          end
+        rescue
+          # Prediction calculations failed #
         end
         
         if prediction.home_team_prediction > 0 && prediction.away_team_prediction > 0
