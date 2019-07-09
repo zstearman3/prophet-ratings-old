@@ -802,7 +802,7 @@ namespace :calcs do
         predicted_away_efficiency += three_pointers_advantage / -2.0
         predicted_home_efficiency += pace_advantage / 2.0
         predicted_away_efficiency += pace_advantage / -2.0
-        if predicted_home_efficiency.is_a?(Numeric) && predicted_away_efficiency.is_a?(Numeric) && predicted_tempo.is_a?(Numeric)
+        begin
           prediction.home_advantage = home_advantage.round(1)
           prediction.defense_advantage = defensive_advantage.round(1)
           prediction.assists_advantage = assists_advantage.round(1)
@@ -814,6 +814,8 @@ namespace :calcs do
           prediction.away_team_prediction = predicted_away_score.round
           prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
           prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
+        rescue
+          puts prediction.inspect
         end
         if game.home_team_score && game.away_team_score && prediction.point_spread && prediction.predicted_point_spread
           
