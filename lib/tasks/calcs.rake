@@ -802,7 +802,7 @@ namespace :calcs do
         predicted_away_efficiency += three_pointers_advantage / -2.0
         predicted_home_efficiency += pace_advantage / 2.0
         predicted_away_efficiency += pace_advantage / -2.0
-        if predicted_home_efficiency && predicted_away_efficiency && predicted_tempo
+        if predicted_home_efficiency.is_a?(Numeric) && predicted_away_efficiency.is_a?(Numeric) && predicted_tempo.is_a?(Numeric)
           prediction.home_advantage = home_advantage.round(1)
           prediction.defense_advantage = defensive_advantage.round(1)
           prediction.assists_advantage = assists_advantage.round(1)
