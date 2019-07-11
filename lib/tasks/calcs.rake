@@ -121,7 +121,7 @@ namespace :calcs do
       end
       season.offensive_efficiency = (season_efficiency_total / season_games_total).round(1)
       season.defensive_efficiency = (season_efficiency_allowed / season_games_allowed).round(1)
-      season.effective_field_goals_percentage = (100 * (season_field_goals + (0.5 * season_three_pointers)) / season.field_goals_attempted.to_f).round(1)
+      season.effective_field_goals_percentage = (100 * ((season_field_goals.to_f + (0.5 * season_three_pointers)) / season_field_goals_attempted.to_f)).round(1)
       season.effective_field_goals_percentage_allowed = (100 * (season_field_goals_allowed + (0.5 * season_three_pointers_allowed)) / season_field_goals_attempted_allowed.to_f).round(1)
       season.turnovers_percentage = (100 * season_turnovers.to_f / season_possessions).round(1)
       season.turnovers_percentage_allowed = (100 * season_turnovers_allowed.to_f / season_possessions_allowed).round(1)
