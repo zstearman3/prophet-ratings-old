@@ -23,6 +23,13 @@
 .blog-container{
   background-color: $prophet-light-grey;
   margin: 20px 0px;
+  p{
+    padding-top: 10px;
+    margin-bottom: 0px;
+    a{
+      font-size: 18px;
+    }
+  }
   .blog-inner-container{
     background-color: white;
     border-radius: 10px;
@@ -49,6 +56,10 @@
       }
       #subhead{
         font-weight: bold;
+      }
+      #tags{
+        font-style: italic;
+        margin-top: 10px;
       }
     }
     .blog-thumbnail{

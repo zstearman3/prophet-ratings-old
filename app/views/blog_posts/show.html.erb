@@ -1,4 +1,5 @@
 <div class="col-xs-12 blog-container row">
+  <p><%= link_to 'Back to Blog', blog_posts_path %></p>
   <div class="col-xs-12 blog-inner-container">
     <div class="post-title">
       <h1><%= @blog_post.title %></h1>
@@ -13,6 +14,11 @@
       <% end %>
       <h4 id="subhead"><%= @blog_post.subtitle %></h4>
       <%= @blog_post.body.html_safe %>
+      <% if @blog_post.team %>
+        <p id="tags">
+         Tags: <%= link_to @blog_post.team.school, @blog_post.team %>
+        </p>
+      <% end %>
     </div>
   </div>
 </div>

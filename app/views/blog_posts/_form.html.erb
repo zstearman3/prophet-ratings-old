@@ -36,6 +36,11 @@
     <%= form.label :body %>
     <%= form.trix_editor :body, required: true, autofocus: true, class: 'form-control' %>
   </div>
+  
+  <div class="field">
+    <%= form.label :team %>
+    <%= form.collection_select :team_id, Team.all.order(school: :asc), :id, :school, {prompt: 'Select Team'}, {class: 'form-control'} %>
+  </div>
   <div class="actions">
     <%= form.submit yield(:button_text), class: "btn btn-standard btn-wide" %>
   </div>

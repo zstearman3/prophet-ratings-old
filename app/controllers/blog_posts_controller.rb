@@ -24,7 +24,7 @@ class BlogPostsController < ApplicationController
       @blog_post.preview = blog_text[0..max_length]
       if @blog_post.save
         flash[:info] = "Blog Post Created!"
-        redirect_to blog_posts_path
+        redirect_to @blog_post
       else
         render 'new'
       end
@@ -47,7 +47,7 @@ class BlogPostsController < ApplicationController
       @blog_post.preview = blog_text[0..max_length]
       if @blog_post.save
         flash[:info] = "Blog Post Updated!"
-        redirect_to blog_posts_path
+        redirect_to @blog_post
       else
         render 'edit'
       end
@@ -62,6 +62,6 @@ class BlogPostsController < ApplicationController
 
   private
     def post_params
-      params.require(:blog_post).permit(:title, :subtitle, :body, :image_url, :date, :published)
+      params.require(:blog_post).permit(:title, :subtitle, :body, :image_url, :date, :published, :team_id)
     end
 end
