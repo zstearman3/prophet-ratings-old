@@ -1,9 +1,12 @@
 <% provide(:title, 'New Post') %>
 <% provide(:button_text, 'Submit Post') %>
 
-<h1>Create New Post</h1>
-<div class="col-xs-12 new-blog-container row">
-  <div class="new-blog-inner-container">
-    <%= render 'form', blog_post: @blog_post %>
+<div class="row">
+  <h1>Create New Post</h1>
+  <div class="col-xs-12 new-blog-container row">
+    <div class="new-blog-inner-container">
+      <%= render 'form', blog_post: @blog_post %>
+    </div>
   </div>
 </div>
+

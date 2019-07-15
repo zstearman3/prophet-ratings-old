@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
   
   def home
     if logged_in?
-      redirect_to rankings_path
+      redirect_to dashboard_path
     end
   end
 
@@ -12,5 +12,11 @@ class StaticPagesController < ApplicationController
   end
   
   def admin
+  end
+  
+  def dashboard
+    @seasons = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).first(50)
+    @blog_posts = BlogPost.order(date: :desc).first(5)
+    @games = Game.where(day: Date.today)
   end
 end
