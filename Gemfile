@@ -16,6 +16,7 @@ gem 'actionview',              '>= 5.1.7'
 gem 'will_paginate',           '3.1.6'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'font-awesome-sass',       '~> 5.8.1'
+gem 'trix-rails',      require: 'trix'
 
 group :development do
   gem 'web-console',           '3.5.1'

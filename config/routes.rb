@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get '/player_advanced',    to: 'player_seasons#advanced',      as: :player_advanced
   get '/player_misc',        to: 'player_seasons#miscellaneous', as: :player_misc
   get '/season_predictions', to: 'predictions#statistics',       as: :predictions_statistics
+  get '/blog_drafts',        to: 'blog_posts#drafts',            as: :blog_drafts
   resources :conferences
   resources :users
   resources :account_activations, only: [:edit]
@@ -35,4 +36,5 @@ Rails.application.routes.draw do
   resources :player_games,        only: [:index]
   resources :games,               only: [:index, :show]
   resources :predictions,         only: [:index, :show]
+  resources :blog_posts
 end

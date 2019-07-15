@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190707012302) do
+ActiveRecord::Schema.define(version: 20190715164913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.string "title"
+    t.string "subtitle"
+    t.text "preview"
+    t.text "body"
+    t.string "image_url"
+    t.date "date"
+    t.bigint "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "published", default: false
+    t.bigint "user_id"
+    t.index ["team_id"], name: "index_blog_posts_on_team_id"
+    t.index ["user_id"], name: "index_blog_posts_on_user_id"
+  end
 
   create_table "conferences", force: :cascade do |t|
     t.string "name"
@@ -507,6 +523,8 @@ ActiveRecord::Schema.define(version: 20190707012302) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "blog_posts", "teams"
+  add_foreign_key "blog_posts", "users"
   add_foreign_key "games", "seasons"
   add_foreign_key "games", "stadia"
   add_foreign_key "games", "teams", column: "away_team_id"

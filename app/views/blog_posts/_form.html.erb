@@ -1,0 +1,42 @@
+<% if @blog_post.errors.any? %>
+  <div id="error-explanation">
+    <div class="alert alert-danger">
+      The form contains <%= pluralize(@blog_post.errors.count, "error") %>.
+    </div>
+    <ul>
+      <%= @blog_post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_for(@blog_post) do |form| %>
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: 'form-control', id: :blog_post_title %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :subtitle %>
+    <%= form.text_field :subtitle, class: 'form-control', id: :blog_post_subtitle %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :image_url %>
+    <%= form.text_field :image_url, class: 'form-control', id: :blog_post_image_url %>
+  </div>
+  
+  <div class="field">
+    <%= form.label 'Published?' %>
+    <%= form.check_box :published, id: :blog_post_published %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.trix_editor :body, required: true, autofocus: true, class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= form.submit yield(:button_text), class: "btn btn-standard btn-wide" %>
+  </div>
+<% end %>
