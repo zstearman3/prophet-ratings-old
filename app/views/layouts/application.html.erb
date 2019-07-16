@@ -17,8 +17,11 @@
     <title><%= full_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@prophetcbb" />
+    <meta property="twitter:title" content=<%='"' + yield(:og_title) + '"' %> />
+    <meta property="twitter:description" content=<%='"' + yield(:og_description) + '"' %> />
+    <meta property="twitter:image" content=<%='"' + yield(:og_image) + '"' %> />
     <meta property="og:url" content=<%='"' + yield(:og_url) + '"' %> />
     <meta property="og:title" content=<%='"' + yield(:og_title) + '"' %> />
     <meta property="og:description" content=<%='"' + yield(:og_description) + '"' %> />
