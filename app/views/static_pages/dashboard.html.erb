@@ -6,7 +6,7 @@
         <% if @games.count > 0 %>
         
         <% else %>
-          <p>No Games Today</p>
+          <h4 id="no-games">No Games Today</h4>
         <% end %>
       </div>
       <% if Date.today < current_season.post_season_end_date %>
