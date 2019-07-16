@@ -53,7 +53,7 @@ class TeamsController < ApplicationController
   def preseason
     year = current_season.season + 1
     @team = Team.find(params[:team])
-    @player_seasons = PlayerSeason.where(season: year, team: @team)
+    @player_seasons = PlayerSeason.where(year: year, team: @team)
   end
   
   private
