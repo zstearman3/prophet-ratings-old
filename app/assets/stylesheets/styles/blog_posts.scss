@@ -49,6 +49,10 @@
         font-weight: 600;
         
       }
+      p{
+        padding-top: 0px;
+        padding-bottom: 5px;
+      }
     }
     .post-body{
       font-size: 16px;
@@ -62,9 +66,13 @@
       border-bottom: 2px solid $prophet-light-grey;
       #post_title{
         font-size: 28px;
-        text-align: left;
         &:hover{
           text-decoration: none;
+        }
+      }
+      .blog-preview{
+        h2{
+          text-align: left;
         }
       }
     }
