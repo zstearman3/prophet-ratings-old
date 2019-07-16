@@ -1,5 +1,5 @@
 <% provide(:title, @blog_post.title) %>
-<% provide(:og_url, url_for(@blog_post, :host => "https://wwww.prophetratings.com")) %>
+<% provide(:og_url, polymorphic_url(@blog_post, :host => "https://wwww.prophetratings.com")) %>
 <% provide(:og_title, @blog_post.title) %>
 <% provide(:og_description, @blog_post.subtitle) %>
 <% provide(:og_image, @blog_post.image_url) %>
