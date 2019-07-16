@@ -24,7 +24,8 @@
         <td><%= team.wins.to_s + "-" + team.losses.to_s %></td>
         <td><%= team.conference_wins.to_s + "-" + team.conference_losses.to_s %></td>
         <% if logged_in? && current_user.admin? %>
-          <td><%= link_to('Edit', edit_team_path(team)) + " | " +
+          <td><%= link_to('Preseason', preseason_path(team: team.id)) + " | " +
+                  link_to('Edit', edit_team_path(team)) + " | " +
                   link_to('Destroy', team, method: :delete, data: { confirm: 'Are you sure?' }) %>
           </td>
         <% end %>

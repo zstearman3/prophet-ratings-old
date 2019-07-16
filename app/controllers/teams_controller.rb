@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user, only: [:new, :create, :edit, :update, :destroy]
-  before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
+  before_action :admin_user, only: [:new, :create, :edit, :update, :destroy, :preseason]
   
   def index
     @teams = Team.all
@@ -48,6 +48,12 @@ class TeamsController < ApplicationController
     @team.destroy
     flash[:success] = "Team was successfully deleted."
     redirect_to teams_url
+  end
+  
+  def preseason
+    year = current_season.season + 1
+    @team = Team.find(params[:team])
+    @player_seasons = PlayerSeason.where(season: year, team: @team)
   end
   
   private

@@ -1,0 +1,29 @@
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr>
+        <tr>Name</tr>
+        <tr>Class</tr>
+        <tr>PRate</tr>
+        <tr>Old PRate</tr>
+        <tr>Actions</tr>
+      </tr>
+    </thead>
+    <tbody>
+      <%= @player_seasons.each do |season| %>
+        <tr>
+          <td><%= season.name %></td>
+          <td><%= season.player.year %></td>
+          <td><%= season.prophet_rating %></td>
+          <% last_season = PlayerSeason.find_by(player: season.player, year: season.year - 1) %>
+          <% if last_season %>
+            <td><%= last_season.prophet_rating %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td>Edit | Update</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

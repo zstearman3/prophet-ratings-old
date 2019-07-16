@@ -992,4 +992,32 @@ namespace :calcs do
   task gaussian_test: :environment do
     puts getProbability(-1.76)
   end
+  
+  task generate_preseason: :environment do
+    # team_seasons = TeamSeason.where(year: 2019)
+    # team_seasons.each do |season|
+    #   new_season = TeamSeason.new()
+    #   new_season.year = 2020
+    #   new_season.season = Season.find_by(season: 2020)
+    #   new_season.team = season.team
+    #   new_season.save
+    # end
+    player_seasons = PlayerSeason.where(year: 2019)
+    player_seasons.each do |season|
+      new_player_season = PlayerSeason.new
+      new_player_season.player = season.player
+      new_player_season.team = season.team
+      new_player_season.year = 2020
+      new_player_season.season = Season.find_by(season: 2020)
+      new_player_season.name = season.name
+      new_player_season.team_name = season.team_name
+      if new_player_season.save
+        next
+      else
+        new_player_season.errors.full_messages.each do |msg|
+          puts msg
+        end
+      end
+    end
+  end
 end
