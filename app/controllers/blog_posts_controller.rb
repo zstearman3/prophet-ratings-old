@@ -7,7 +7,8 @@ class BlogPostsController < ApplicationController
   end
   
   def show
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.find_by(url_path: params[:id])
+    redirect_to root_url if @blog_post.nil?
   end
   
   def new
@@ -18,6 +19,7 @@ class BlogPostsController < ApplicationController
     @blog_post = BlogPost.new(post_params)
     @blog_post.date = Date.today
     @blog_post.user = current_user
+    @blog_post.url_path = @blog_post.get_url_path
     if @blog_post.save
       blog_text = Nokogiri::HTML(@blog_post.body).text
       max_length = blog_text[0..1000].rindex(' ')
@@ -34,14 +36,16 @@ class BlogPostsController < ApplicationController
   end
   
   def edit 
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.find_by(url_path: params[:id])
   end
   
   def update
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.find_by(url_path: params[:id])
     @blog_post.date = Date.today
     @blog_post.user = current_user
+    @blog_post.url_path = 'dummy-path' if @blog_post.url_path.nil?
     if @blog_post.update(post_params)
+      @blog_post.url_path = @blog_post.get_url_path
       blog_text = Nokogiri::HTML(@blog_post.body).text
       max_length = blog_text[0..1000].rindex(' ')
       @blog_post.preview = blog_text[0..max_length]

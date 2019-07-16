@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   get 'help',       to: 'static_pages#help'
   get 'admin',      to: 'static_pages#admin'
   get 'contact',    to: 'static_pages#contact'
-  get 'blog',       to: 'static_pages#blog'
   get 'dashboard',  to: 'static_pages#dashboard'
   get '/signup',    to: 'users#new'
   post '/signup',   to: 'users#create'
@@ -25,6 +24,7 @@ Rails.application.routes.draw do
   get '/player_misc',        to: 'player_seasons#miscellaneous', as: :player_misc
   get '/season_predictions', to: 'predictions#statistics',       as: :predictions_statistics
   get '/blog_drafts',        to: 'blog_posts#drafts',            as: :blog_drafts
+  get '/blog',               to: 'blog_posts#index',             as: :blog_posts
   resources :conferences
   resources :users
   resources :account_activations, only: [:edit]
@@ -37,5 +37,5 @@ Rails.application.routes.draw do
   resources :player_games,        only: [:index]
   resources :games,               only: [:index, :show]
   resources :predictions,         only: [:index, :show]
-  resources :blog_posts
+  resources :blog_posts, :path => ''
 end
