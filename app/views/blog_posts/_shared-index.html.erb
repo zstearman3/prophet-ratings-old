@@ -11,7 +11,7 @@
         </div>
         <div class='col-lg-10'>
           <h2><%= link_to blog_post.title, blog_post, id: 'post_title' %></h2>
-          <% if current_user.admin? %>
+          <% if logged_id? && current_user.admin? %>
             <%= link_to 'Edit', edit_blog_post_path(blog_post) %>
           <% end %>
           <p><%= blog_post.preview %><%= link_to 'Continue Reading', blog_post %></p>

@@ -4,7 +4,7 @@
     <div class="col-xs-12 blog-inner-container">
       <div class="post-title">
         <h1><%= @blog_post.title %></h1>
-        <% if current_user.admin? %>
+        <% if logged_in? && current_user.admin? %>
         <%= link_to 'Edit Post', edit_blog_post_path(@blog_post) %>
         <% end %>
         <p><%= @blog_post.date.strftime('%B %d, %Y') %> • <%= @blog_post.user.first_name + " " + @blog_post.user.last_name %></p>
