@@ -9,12 +9,12 @@
             <%= image_tag('large_basketball.png') %>
           <% end %>
         </div>
-        <div class='col-lg-10'>
+        <div class='col-lg-10 blog-preview'>
           <h2><%= link_to blog_post.title, blog_post, id: 'post_title' %></h2>
           <% if logged_in? && current_user.admin? %>
             <%= link_to 'Edit', edit_blog_post_path(blog_post) %>
           <% end %>
-          <p><%= blog_post.preview %><%= link_to 'Continue Reading', blog_post %></p>
+          <p><%= blog_post.preview + "..."%><%= link_to 'Continue Reading', blog_post %></p>
           <p><%= blog_post.date.strftime('%B %d, %Y') %> • <%= blog_post.user.first_name + " " + blog_post.user.last_name %></p>
         </div>
       </div>

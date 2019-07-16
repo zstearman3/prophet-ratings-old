@@ -9,7 +9,7 @@ class BlogPost < ApplicationRecord
   validates :url_path, presence: true
   
   def get_url_path
-    URI.encode(title.downcase)
+    URI.encode(title.downcase.tr(" ", "_"))
   end
   
   def to_param
