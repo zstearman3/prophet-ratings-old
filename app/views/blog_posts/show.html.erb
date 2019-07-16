@@ -1,4 +1,8 @@
 <% provide(:title, @blog_post.title) %>
+<% provide(:og_url, url_for(@blog_post, :host => "https://wwww.prophetratings.com")) %>
+<% provide(:og_title, @blog_post.title) %>
+<% provide(:og_description, @blog_post.subtitle) %>
+<% provide(:og_image, @blog_post.image_url) %>
 <div class="row">
   <div class="col-xs-12 blog-container">
     <p><%= link_to 'Back to Blog', blog_posts_path %></p>
