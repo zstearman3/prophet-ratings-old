@@ -1,5 +1,6 @@
 class PlayerSeasonsController < ApplicationController
   before_action :logged_in_user
+  before_action :admin_user, only: [:edit, :update, :destroy] 
   helper_method :sort_column, :sort_direction
   
   def advanced
@@ -14,7 +15,34 @@ class PlayerSeasonsController < ApplicationController
   
   end
   
+  def edit
+    @player_season = PlayerSeason.find(params[:id])
+  end
+  
+  def update
+    @player_season = PlayerSeason.find(params[:id])
+    team = @player_season.team
+    if @player_season.update(player_season_params)
+      flash[:success] = "Player Season Updated"
+      redirect_to preseason_path(team: team)
+    else
+      render 'edit'
+    end
+  end
+  
+  def destroy
+    @player_season = PlayerSeason.find(params[:id])
+    team = @player_season.team
+    @player_season.destroy
+    flash[:success] = "Player Season was destroyed"
+    redirect_to preseason_path(team: team)
+  end
+  
   private 
+    def player_season_params
+      params.require(:player_season).permit(:prophet_rating, :team_id)
+    end
+
     def sortable_columns
       ['prophet_rating', 'two_pointers_percentage', 'three_pointers_percentage', 'field_goals_percentage', 'effective_field_goals_percentage', 'true_shooting_percentage',
        'points', 'points_per_game', 'assists_percentage', 'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'steals_percentage',

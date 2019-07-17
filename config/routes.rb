@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   resources :players,             only: [:show]
   resources :team_seasons,        only: [:index]
   resources :player_games,        only: [:index]
+  resources :player_seasons,      only: [:edit, :update, :destroy]
   resources :games,               only: [:index, :show]
   resources :predictions,         only: [:index, :show]
   resources :blog_posts, :path => 'blog'

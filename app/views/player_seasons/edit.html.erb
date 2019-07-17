@@ -1,0 +1,17 @@
+<h1><%= @player_season.name %></h1>
+<h3><%= @player_season.year %> Season</h3>
+<%= form_for(@player_season) do |form| %>
+  <div class="field">
+    <%= form.label :school %>
+    <%= form.collection_select :team_id, Team.all.order(school: :desc), :id, :school, {prompt: 'Select School'} ,{class: 'form-control'} %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :prophet_rating %>
+    <%= form.number_field :prophet_rating, class: 'form-control', :step => 0.1 %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit 'Edit Season', class: "btn btn-standard btn-wide" %>
+  </div>
+<% end %>

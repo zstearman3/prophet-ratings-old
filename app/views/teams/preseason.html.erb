@@ -21,7 +21,8 @@
           <% else %>
             <td></td>
           <% end %>
-          <td>Edit | Update</td>
+          <td><%= link_to('Edit', edit_player_season_path(season)) + " | " +
+                  link_to('Destroy', season, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
         </tr>
       <% end %>
     </tbody>
