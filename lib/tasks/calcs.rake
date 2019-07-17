@@ -1043,15 +1043,11 @@ namespace :calcs do
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
-          if !player.usage_rate.to_f.nan?
-            if !player.minutes_percentage.to_f.nan?
+          if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               value_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
-            else
-              value_lost += 0.5
-            end
           else
-            value_lost += 0.5
+            value_lost += 2.0
           end
         end
       end
@@ -1069,11 +1065,12 @@ namespace :calcs do
           value_gained += (0.20) * 60.0 * player.prophet_rating
         elsif old_player.team != team
           # immediate transfer
-          old_team_em = TeamSeason.find_by(team: old_player.team, year: 2019).adj_efficiency_margin
-          team_modifier = 1 - ((old_team_em - old_adjem) / 50)
-          usage_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage)
-          value_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (old_player.prophet_rating + 0.65) * team_modifier
-          puts player.name
+          if !old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?
+            old_team_em = TeamSeason.find_by(team: old_player.team, year: 2019).adj_efficiency_margin
+            team_modifier = 1 - ((old_team_em - old_adjem) / 50)
+            usage_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage)
+            value_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (old_player.prophet_rating + 0.65) * team_modifier
+          end
         elsif two_old && two_old.team != team
            # transfer sat out
           if old_player.games < 5
