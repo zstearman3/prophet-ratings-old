@@ -4,7 +4,7 @@ class TeamsController < ApplicationController
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy, :preseason]
   
   def index
-    @teams = Team.all
+    @teams = Team.all.order(school: :asc)
   end
 
   def show

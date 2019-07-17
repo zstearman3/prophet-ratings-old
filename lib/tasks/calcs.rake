@@ -994,30 +994,108 @@ namespace :calcs do
   end
   
   task generate_preseason: :environment do
-    # team_seasons = TeamSeason.where(year: 2019)
-    # team_seasons.each do |season|
-    #   new_season = TeamSeason.new()
-    #   new_season.year = 2020
-    #   new_season.season = Season.find_by(season: 2020)
-    #   new_season.team = season.team
-    #   new_season.save
-    # end
+    team_seasons = TeamSeason.where(year: 2019)
+    team_seasons.each do |season|
+      new_season = TeamSeason.find_or_create_by(team: season.team, year: 2020)
+      new_season.season = Season.find_by(season: 2020)
+      new_season.save
+    end
     player_seasons = PlayerSeason.where(year: 2019)
+    x = 0
+    prate_diff = 0.0
     player_seasons.each do |season|
-      new_player_season = PlayerSeason.new
-      new_player_season.player = season.player
-      new_player_season.team = season.team
-      new_player_season.year = 2020
+      new_player_season = PlayerSeason.find_or_create_by(player: season.player, year: 2020)
       new_player_season.season = Season.find_by(season: 2020)
       new_player_season.name = season.name
       new_player_season.team_name = season.team_name
+      new_player_season.prophet_rating = season.prophet_rating + 0.65
+      new_player_season.team = season.team
       if new_player_season.save
+
         next
       else
         new_player_season.errors.full_messages.each do |msg|
           puts msg
         end
       end
+    end
+  end
+  
+  task preseason_ratings: :environment do
+    s = Season.find_by(season: 2019)
+    avg_adjo = s.adj_offensive_efficiency
+    avg_adjd = s.adj_defensive_efficiency
+    avg_adjt = s.adj_tempo
+    Team.all.each do |team|
+      avg_adjem = TeamSeason.where(team: team).average(:adj_efficiency_margin)
+      new_season = TeamSeason.find_by(team: team, year: 2020)
+      old_season = TeamSeason.find_by(team: team, year: 2019)
+      total_value = ((old_season.adj_efficiency_margin / 5.0 ) + 2.0) * 200
+      next if new_season.nil? || old_season.nil?
+      old_adjo = old_season.adj_offensive_efficiency
+      old_adjd = old_season.adj_defensive_efficiency
+      old_adjt = old_season.adj_tempo
+      old_adjem = old_season.adj_efficiency_margin
+      # get value lost
+      usage_lost = 0
+      value_lost = 0
+      players = PlayerSeason.where(team: team, year: 2019)
+      players.each do |player|
+        new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
+        if new_player.nil?
+          if player.usage_rate.is_a? Numeric 
+            if player.minutes_percentage.is_a? Numeric
+              usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
+              value_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+            else
+              value_lost += 0.5
+            end
+          else
+            value_lost += 0.5
+          end
+        end
+      end
+      
+      ## calculate value added by new players, transfers, current player improvement
+      usage_gained = 0
+      value_gained = 0
+      new_players = PlayerSeason.where(team: team, year: 2020)
+      new_players.each do |player|
+        old_player = PlayerSeason.find_by(player: player.player, year: 2019)
+        if old_player.nil?
+          # top 50 recruit
+          usage_gained += (0.20) * (60)
+          value_gained += (0.20) * 60.0 * player.prophet_rating
+        elsif old_player.team != team
+          # immediate transfer
+          old_team_em = TeamSeason.find_by(team: old_player.team, year: 2019).adj_efficiency_margin
+          team_modifier = 1 - ((old_team_em - old_adjem) / 50)
+          usage_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage)
+          value_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (old_player.prophet_rating + 0.65) * team_modifier
+          puts player.name
+         # transfer sat out
+        end
+      end
+      if usage_gained > usage_lost
+        value_gained = value_gained * (usage_lost / usage_gained)
+      else
+        usage_remaining = usage_lost - usage_gained
+        value_gained += (((avg_adjem / 5.0) + 2.0) * usage_remaining)
+      end
+      puts team.school if usage_lost > 0
+      puts total_value if usage_lost > 0
+      puts "Usage Lost: " + usage_lost.to_s if usage_lost > 0
+      puts "Value Lost: " + value_lost.to_s if value_lost > 0
+      puts "Usage gained: " + usage_gained.to_s if usage_lost > 0
+      puts "Value gained: " + value_gained.to_s if value_lost > 0
+      new_value = total_value - value_lost + value_gained
+      new_adj_em = ((new_value / 200.0) - 2.0) * 5.0
+      em_change = new_adj_em - old_season.adj_efficiency_margin
+      new_season.adj_offensive_efficiency = (old_adjo + (em_change / 2.0)).round(1)
+      new_season.adj_defensive_efficiency = (old_adjd - (em_change / 2.0)).round(1)
+      new_season.adj_tempo = old_adjt.round(1)
+      new_season.adj_efficiency_margin = new_adj_em.round(1)
+      new_season.save
     end
   end
 end
