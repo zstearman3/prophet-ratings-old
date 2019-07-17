@@ -1008,7 +1008,7 @@ namespace :calcs do
       new_player_season.season = Season.find_by(season: 2020)
       new_player_season.name = season.name
       new_player_season.team_name = season.team_name
-      new_player_season.prophet_rating = season.prophet_rating + 0.65
+      new_player_season.prophet_rating = season.prophet_rating.to_f + 0.65
       new_player_season.team = season.team
       if new_player_season.save
 
