@@ -1043,8 +1043,8 @@ namespace :calcs do
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
-          if player.usage_rate.is_a? Numeric 
-            if player.minutes_percentage.is_a? Numeric
+          if !player.usage_rate.to_f.nan?
+            if !player.minutes_percentage.to_f.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               value_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
             else
@@ -1089,6 +1089,7 @@ namespace :calcs do
             value_gained += (two_old.usage_rate / 100.0) * (two_old.minutes_percentage) * (two_old.prophet_rating + 0.65) * team_modifier
           end
         end
+        ## returning injured player
       end
       if usage_gained > usage_lost
         value_gained = value_gained * (usage_lost / usage_gained)
