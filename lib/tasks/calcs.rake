@@ -1062,6 +1062,7 @@ namespace :calcs do
       new_players = PlayerSeason.where(team: team, year: 2020)
       new_players.each do |player|
         old_player = PlayerSeason.find_by(player: player.player, year: 2019)
+        two_old = PlayerSeason.find_by(player: player.player, year: 2018)
         if old_player.nil?
           # top 50 recruit
           usage_gained += (0.20) * (60)
@@ -1073,7 +1074,20 @@ namespace :calcs do
           usage_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage)
           value_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (old_player.prophet_rating + 0.65) * team_modifier
           puts player.name
-         # transfer sat out
+        elsif two_old && two_old.team != team
+           # transfer sat out
+          if old_player.games < 5
+            two_old_season = TeamSeason.find_by(team: two_old.team, year: 2018)
+            if two_old_season
+              old_team_em = two_old_season.adj_efficiency_margin
+              team_modifier = 1 - ((old_team_em - old_adjem) / 50)
+            else
+              team_modifier = 1
+            end
+            puts player.name
+            usage_gained += (two_old.usage_rate / 100.0) * (two_old.minutes_percentage)
+            value_gained += (two_old.usage_rate / 100.0) * (two_old.minutes_percentage) * (two_old.prophet_rating + 0.65) * team_modifier
+          end
         end
       end
       if usage_gained > usage_lost
@@ -1095,7 +1109,14 @@ namespace :calcs do
       new_season.adj_defensive_efficiency = (old_adjd - (em_change / 2.0)).round(1)
       new_season.adj_tempo = old_adjt.round(1)
       new_season.adj_efficiency_margin = new_adj_em.round(1)
+      new_season.initial_adj_o = new_season.adj_offensive_efficiency
+      new_season.initial_adj_d = new_season.adj_defensive_efficiency
+      new_season.initial_adj_t = new_season.adj_tempo
       new_season.save
+    end
+    TeamSeason.where(year: 2020).each do |season|
+      season.adjem_rank = TeamSeason.where(year: 2020).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
+      season.save
     end
   end
 end

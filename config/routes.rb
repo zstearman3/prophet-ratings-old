@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :teams
   resources :seasons,             only: [:new, :create, :edit, :update]
   resources :stadia,              only: [:new, :create, :edit, :update]
-  resources :players,             only: [:show]
+  resources :players,             only: [:show, :new, :create]
   resources :team_seasons,        only: [:index]
   resources :player_games,        only: [:index]
   resources :player_seasons,      only: [:edit, :update, :destroy]

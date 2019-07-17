@@ -1,0 +1,25 @@
+<%= form_for(@player) do |form| %>
+  <div class="field">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name, class: 'form-control', id: :player_first_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name, class: 'form-control', id: :player_last_name %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :team %>
+    <%= form.collection_select :team_id, Team.all, :id, :school, {prompt: 'Select Team'}, {class: 'form-control', id: :player_school} %>
+  </div>
+
+  <div class="field">
+    <%= form.label :active %>
+    <%= form.check_box :active, class: 'form-control', id: :player_active %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit 'Submit', class: "btn btn-standard btn-wide" %>
+  </div>
+<% end %>
