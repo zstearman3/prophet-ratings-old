@@ -1131,6 +1131,7 @@ namespace :calcs do
             usage_gained += player_usage
             transfer_2_value = (player_value * player_usage)
             value_gained += transfer_2_value
+            puts "Transfer 2 Value: " + transfer_2_value.to_s
           end
         elsif (old_player.nil? && two_old) || (!old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?)
           old_player = two_old if old_player.nil?
@@ -1156,7 +1157,9 @@ namespace :calcs do
         value_gained = value_gained * (usage_lost / usage_gained)
       else
         usage_remaining = usage_lost - usage_gained
-        value_gained += (standard_value * usage_remaining)
+        replacement_value = (standard_value * usage_remaining)
+        value_gained += replacement_value
+        puts "Replacement Value: " + replacement_value.to_s if replacement_value > 0
       end
       puts team.school if usage_lost > 0
       puts total_value if usage_lost > 0
@@ -1165,7 +1168,7 @@ namespace :calcs do
       puts "Usage gained: " + usage_gained.to_s if usage_lost > 0
       puts "Value gained: " + value_gained.to_s if value_lost > 0
       new_value = total_value - value_lost + value_gained
-      new_adj_em = ((new_value / 200.0) - 2.0) * 5.0
+      new_adj_em = ((new_value / 280.0) - 2.0) * 5.0
       em_change = new_adj_em - old_season.adj_efficiency_margin
       new_season.adj_offensive_efficiency = (old_adjo + (em_change / 2.0)).round(1)
       new_season.adj_defensive_efficiency = (old_adjd - (em_change / 2.0)).round(1)
