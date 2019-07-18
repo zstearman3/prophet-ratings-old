@@ -1141,8 +1141,7 @@ namespace :calcs do
             injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * old_player.prophet_rating)
             value_gained += injury_value
             player.preseason_description = "injury"
-          end
-          if !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
+          elsif !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
             # Returning Player Improvement
             improvement_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f * 0.65)
             value_gained +=  improvement_value
