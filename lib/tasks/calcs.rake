@@ -1101,7 +1101,7 @@ namespace :calcs do
           usage_gained += (0.25) * (60)
           recruit_value = ((0.25) * 60.0 * player.prophet_rating)
           value_gained += recruit_value
-          puts "Recruit Value: " + recruit_value.to_s
+          player.preseason_description = "recruit"
         elsif old_player && old_player.team != team
           # immediate transfer
           if !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
@@ -1113,7 +1113,7 @@ namespace :calcs do
             usage_gained += player_usage
             transfer_value = (player_value * player_usage)
             value_gained += transfer_value
-            puts "Transfer Value: " + transfer_value.to_s
+            player.preseason_description = "transfer"
           end
         elsif two_old && two_old.team != team
           # transfer sat out
@@ -1131,7 +1131,7 @@ namespace :calcs do
             usage_gained += player_usage
             transfer_2_value = (player_value * player_usage)
             value_gained += transfer_2_value
-            puts "Transfer 2 Value: " + transfer_2_value.to_s
+            player.preseason_description = "transfer"
           end
         elsif (old_player.nil? && two_old) || (!old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?)
           old_player = two_old if old_player.nil?
@@ -1140,17 +1140,17 @@ namespace :calcs do
             usage_gained += ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
             injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * old_player.prophet_rating)
             value_gained += injury_value
-            puts "Injury Value: " + injury_value.to_s
+            players.preseason_description = "injury"
           end
         else
           if !old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?
             # Returning Player Improvement
             improvement_value = ((old_player.usage_rate / 100.0) * old_player.minutes_percentage * 0.65)
             value_gained +=  improvement_value
-            puts "Improvement Value: " + improvement_value.to_s
+            player.preseason_description = "improvement"
           end
         end
-        
+        player.save
       end
       ## Replacement level players
       if usage_gained > usage_lost
