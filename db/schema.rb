@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190716141421) do
+ActiveRecord::Schema.define(version: 20190718190129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 20190716141421) do
     t.decimal "steals_per_game"
     t.decimal "blocks_per_game"
     t.boolean "locked", default: false
+    t.string "preseason_description"
     t.index ["player_id"], name: "index_player_seasons_on_player_id"
     t.index ["season_id"], name: "index_player_seasons_on_season_id"
     t.index ["team_id"], name: "index_player_seasons_on_team_id"

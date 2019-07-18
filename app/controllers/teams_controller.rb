@@ -54,6 +54,19 @@ class TeamsController < ApplicationController
     year = current_season.season + 1
     @team = Team.find(params[:team])
     @player_seasons = PlayerSeason.where(year: year, team: @team)
+    @departed_players = []
+    @transfered_players = []
+    old_players = PlayerSeason.where(year: current_season.season, team: @team)
+    old_players.each do |player|
+      if PlayerSeason.find_by(player: player.player, year: year).nil?
+        @departed_players << player
+      else 
+        new_season = PlayerSeason.find_by(player: player.player, year: year)
+        if new_season.team != player.team
+          @transfered_players << new_season
+        end
+      end
+    end
   end
   
   private
