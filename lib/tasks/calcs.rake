@@ -1000,25 +1000,62 @@ namespace :calcs do
       new_season.season = Season.find_by(season: 2020)
       new_season.save
     end
-    player_seasons = PlayerSeason.where(year: 2019)
-    x = 0
-    prate_diff = 0.0
-    player_seasons.each do |season|
-      new_player_season = PlayerSeason.find_or_create_by(player: season.player, year: 2020)
-      new_player_season.season = Season.find_by(season: 2020)
-      new_player_season.name = season.name
-      new_player_season.team_name = season.team_name
-      new_player_season.prophet_rating = season.prophet_rating.to_f + 0.65
-      new_player_season.team = season.team
-      if new_player_season.save
 
-        next
-      else
-        new_player_season.errors.full_messages.each do |msg|
-          puts msg
+    ## Create players who sat out 2019 ##
+    all_players = Player.where(active: true)
+    transfer_players = []
+    all_players.each do |player|
+      if player.player_seasons.where(year: 2019).empty?
+        transfer_players << player
+      end
+    end
+    transfer_players.each do |player|
+      new_player_season = PlayerSeason.find_by(player: player, year: 2020)
+      if new_player_season.nil?
+        new_player_season = PlayerSeason.new(player: player, year: 2020)
+        old_player_season = PlayerSeason.find_by(player: player, year: 2018)
+        if old_player_season
+          new_player_season.team = player.team
+          new_player_season.name = old_player_season.name
+          new_player_season.team_name = player.team.school
+          if !old_player_season.prophet_rating.nan? && !old_player_season.usage_rate.nan?
+            new_player_season.prophet_rating = old_player_season.prophet_rating + 0.65
+            new_player_season.usage_rate = old_player_season.usage_rate
+          else
+            new_player_season.prophet_rating = 0.0
+            new_player_season.usage_rate = 0.0
+          end
+          if new_player_season.save
+            next
+          else
+            new_player_season.errors.full_messages.each do |msg|
+              puts msg
+            end
+          end
         end
       end
     end
+
+    #### Create players who played 2019... Already done. Don't want to rerun #######
+    # player_seasons = PlayerSeason.where(year: 2019)
+    # player_seasons.each do |season|
+    #   new_player_season = PlayerSeason.find_by(player: season.player, year: 2020)
+    #   if new_player_season.nil?
+    #     new_player_season = PlayerSeason.new(player: season.player, year: 2020)
+    #     new_player_season.season = Season.find_by(season: 2020)
+    #     new_player_season.name = season.name
+    #     new_player_season.team_name = season.team_name
+    #     new_player_season.prophet_rating = season.prophet_rating.to_f + 0.65
+    #     new_player_season.team = season.team
+    #     if new_player_season.save
+    #       next
+    #     else
+    #       new_player_season.errors.full_messages.each do |msg|
+    #         puts msg
+    #       end
+    #     end
+    #   end
+    # end
   end
   
   task preseason_ratings: :environment do
@@ -1030,12 +1067,14 @@ namespace :calcs do
       avg_adjem = TeamSeason.where(team: team).average(:adj_efficiency_margin)
       new_season = TeamSeason.find_by(team: team, year: 2020)
       old_season = TeamSeason.find_by(team: team, year: 2019)
-      total_value = ((old_season.adj_efficiency_margin / 5.0 ) + 2.0) * 200
+      total_value = ((old_season.adj_efficiency_margin / 5.0 ) + 2.0) * 280.0
+      standard_value = ((avg_adjem / 5.0) + 2.0)
       next if new_season.nil? || old_season.nil?
       old_adjo = old_season.adj_offensive_efficiency
       old_adjd = old_season.adj_defensive_efficiency
       old_adjt = old_season.adj_tempo
       old_adjem = old_season.adj_efficiency_margin
+      
       # get value lost
       usage_lost = 0
       value_lost = 0
@@ -1046,8 +1085,6 @@ namespace :calcs do
           if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               value_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
-          else
-            value_lost += 2.0
           end
         end
       end
@@ -1059,21 +1096,28 @@ namespace :calcs do
       new_players.each do |player|
         old_player = PlayerSeason.find_by(player: player.player, year: 2019)
         two_old = PlayerSeason.find_by(player: player.player, year: 2018)
-        if old_player.nil?
+        if old_player.nil? && two_old.nil?
           # top 50 recruit
-          usage_gained += (0.20) * (60)
-          value_gained += (0.20) * 60.0 * player.prophet_rating
-        elsif old_player.team != team
+          usage_gained += (0.25) * (60)
+          recruit_value = ((0.25) * 60.0 * player.prophet_rating)
+          value_gained += recruit_value
+          puts "Recruit Value: " + recruit_value.to_s
+        elsif old_player && old_player.team != team
           # immediate transfer
-          if !old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?
+          if !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
             old_team_em = TeamSeason.find_by(team: old_player.team, year: 2019).adj_efficiency_margin
             team_modifier = 1 - ((old_team_em - old_adjem) / 50)
-            usage_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage)
-            value_gained += (old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (old_player.prophet_rating + 0.65) * team_modifier
+            player_value = (old_player.prophet_rating.to_f + 0.65)
+            player_value = standard_value if player_value < standard_value
+            player_usage = (old_player.usage_rate.to_f / 100.0) * (old_player.minutes_percentage.to_f) * team_modifier
+            usage_gained += player_usage
+            transfer_value = (player_value * player_usage)
+            value_gained += transfer_value
+            puts "Transfer Value: " + transfer_value.to_s
           end
         elsif two_old && two_old.team != team
-           # transfer sat out
-          if old_player.games < 5
+          # transfer sat out
+          if !two_old.usage_rate.to_f.nan? && !two_old.minutes_percentage.to_f.nan? && !two_old.prophet_rating.to_f.nan?
             two_old_season = TeamSeason.find_by(team: two_old.team, year: 2018)
             if two_old_season
               old_team_em = two_old_season.adj_efficiency_margin
@@ -1081,18 +1125,38 @@ namespace :calcs do
             else
               team_modifier = 1
             end
-            puts player.name
-            usage_gained += (two_old.usage_rate / 100.0) * (two_old.minutes_percentage)
-            value_gained += (two_old.usage_rate / 100.0) * (two_old.minutes_percentage) * (two_old.prophet_rating + 0.65) * team_modifier
+            player_value = (two_old.prophet_rating.to_f + 0.65)
+            player_value = standard_value if player_value < standard_value
+            player_usage = (two_old.usage_rate.to_f / 100.0) * (two_old.minutes_percentage.to_f) * team_modifier
+            usage_gained += player_usage
+            transfer_2_value = (player_value * player_usage)
+            value_gained += transfer_2_value
+          end
+        elsif (old_player.nil? && two_old) || (!old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?)
+          old_player = two_old if old_player.nil?
+          if old_player.games_percentage < 70 && old_player.usage_rate > 20 && old_player.minutes_percentage > 20 && old_player.prophet_rating > 2
+        ## returning injured player
+            usage_gained += ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
+            injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * old_player.prophet_rating)
+            value_gained += injury_value
+            puts "Injury Value: " + injury_value.to_s
+          end
+        else
+          if !old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?
+            # Returning Player Improvement
+            improvement_value = ((old_player.usage_rate / 100.0) * old_player.minutes_percentage * 0.65)
+            value_gained +=  improvement_value
+            puts "Improvement Value: " + improvement_value.to_s
           end
         end
-        ## returning injured player
+        
       end
+      ## Replacement level players
       if usage_gained > usage_lost
         value_gained = value_gained * (usage_lost / usage_gained)
       else
         usage_remaining = usage_lost - usage_gained
-        value_gained += (((avg_adjem / 5.0) + 2.0) * usage_remaining)
+        value_gained += (standard_value * usage_remaining)
       end
       puts team.school if usage_lost > 0
       puts total_value if usage_lost > 0
