@@ -1098,8 +1098,8 @@ namespace :calcs do
         two_old = PlayerSeason.find_by(player: player.player, year: 2018)
         if old_player.nil? && two_old.nil?
           # top 50 recruit
-          usage_gained += (0.25) * (60)
-          recruit_value = ((0.25) * 60.0 * player.prophet_rating)
+          usage_gained += (0.25) * (65)
+          recruit_value = ((0.25) * 65.0 * player.prophet_rating)
           value_gained += recruit_value
           player.preseason_description = "recruit"
         elsif old_player && old_player.team != team
@@ -1138,7 +1138,7 @@ namespace :calcs do
           if old_player.games_percentage < 70 && old_player.usage_rate > 20 && old_player.minutes_percentage > 20 && old_player.prophet_rating > 2
         ## returning injured player
             usage_gained += ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
-            injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * old_player.prophet_rating)
+            injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * (old_player.prophet_rating.to_f + 0.65))
             value_gained += injury_value
             player.preseason_description = "injury"
           elsif !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
