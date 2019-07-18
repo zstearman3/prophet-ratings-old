@@ -2,7 +2,7 @@
 <% year = params[:season].to_i %>
 <% year = @team_seasons.first.year if year == 0 %>
 <%= link_to 'Previous Season', rankings_path(season: year - 1) %>
-<%= link_to 'Next Season', rankings_path(season: year + 1), class: 'align-right' %>
+<%= link_to 'Next Season', rankings_path(season: year + 1), class: 'align-right' unless year > current_season.season %>
 <table class="table table-sm table-striped">
   <thead>
     <tr>
@@ -22,7 +22,11 @@
     <% @team_seasons.each do |season| %>
       <tr>
         <td><%= x %></td>
-        <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+        <% if year > current_season.season %>
+          <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
+        <% else %>
+          <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+        <% end %>
         <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
         <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
         <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
