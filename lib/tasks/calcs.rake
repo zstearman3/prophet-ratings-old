@@ -1140,7 +1140,7 @@ namespace :calcs do
             usage_gained += ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
             injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * old_player.prophet_rating)
             value_gained += injury_value
-            players.preseason_description = "injury"
+            player.preseason_description = "injury"
           end
         else
           if !old_player.usage_rate.nan? && !old_player.minutes_percentage.nan? && !old_player.prophet_rating.nan?

@@ -6,6 +6,7 @@
         <th>Class</th>
         <th>PRate</th>
         <th>Old PRate</th>
+        <th>Description</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -21,6 +22,7 @@
           <% else %>
             <td></td>
           <% end %>
+          <td><%= season.preseason_description %></td>
           <td><%= link_to('Edit', edit_player_season_path(season)) + " | " +
                   link_to('Destroy', season, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
         </tr>
