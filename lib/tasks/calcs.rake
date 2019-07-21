@@ -1081,7 +1081,9 @@ namespace :calcs do
       total_player_value = 0
       players = PlayerSeason.where(team: team, year: 2019)
       players.each do |player|
-        total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+        if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
+          total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+        end
       end
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
@@ -1089,7 +1091,7 @@ namespace :calcs do
           if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
-              value_lost += ((player_value / total_player_value) * total_value)
+              value_lost += (((player_value / total_player_value) * total_value) + (2.0 * player_value)) / 3.0
           end
         end
       end
