@@ -1078,13 +1078,18 @@ namespace :calcs do
       # get value lost
       usage_lost = 0
       value_lost = 0
+      total_player_value = 0
       players = PlayerSeason.where(team: team, year: 2019)
+      players.each do |player|
+        total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+      end
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
           if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
-              value_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+              player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+              value_lost += ((player_value / total_player_value) * total_value)
           end
         end
       end
@@ -1098,9 +1103,8 @@ namespace :calcs do
         two_old = PlayerSeason.find_by(player: player.player, year: 2018)
         if old_player.nil? && two_old.nil?
           # top 75 recruit
-          # 16 - (0.12 * RK)
+          # 16 - (4.0 * log(RK))
           usage_gained += (0.25) * (65)
-          puts "1st step" + usage_gained.to_s
           recruit_value = ((0.25) * 65.0 * player.prophet_rating)
           value_gained += recruit_value
           player.preseason_description = "recruit"
@@ -1113,7 +1117,6 @@ namespace :calcs do
             player_value = standard_value if player_value < standard_value
             player_usage = (old_player.usage_rate.to_f / 100.0) * (old_player.minutes_percentage.to_f) * team_modifier
             usage_gained += player_usage
-            puts "2nd step" + usage_gained.to_s
             transfer_value = (player_value * player_usage)
             value_gained += transfer_value
             player.preseason_description = "transfer"
@@ -1132,8 +1135,6 @@ namespace :calcs do
             player_value = standard_value if player_value < standard_value
             player_usage = (two_old.usage_rate.to_f / 100.0) * (two_old.minutes_percentage.to_f) * team_modifier
             usage_gained += player_usage
-            puts "3rd step" + usage_gained.to_s
-            puts two_old.name
             transfer_2_value = (player_value * player_usage)
             value_gained += transfer_2_value
             player.preseason_description = "transfer"
@@ -1158,7 +1159,6 @@ namespace :calcs do
       ## Replacement level players
       if usage_gained > usage_lost
         value_gained = value_gained * (usage_lost / usage_gained)
-        puts usage_gained
       else
         usage_remaining = usage_lost - usage_gained
         replacement_value = (standard_value * usage_remaining)
