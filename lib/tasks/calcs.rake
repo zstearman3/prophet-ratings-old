@@ -1068,7 +1068,7 @@ namespace :calcs do
       new_season = TeamSeason.find_by(team: team, year: 2020)
       old_season = TeamSeason.find_by(team: team, year: 2019)
       total_value = ((old_season.adj_efficiency_margin / 5.0 ) + 2.0) * 200.0
-      standard_value = ((avg_adjem / 5.0) + 1.0)
+      standard_value = ((avg_adjem / 5.0) + 1.5)
       next if new_season.nil? || old_season.nil?
       old_adjo = old_season.adj_offensive_efficiency
       old_adjd = old_season.adj_defensive_efficiency
@@ -1106,8 +1106,8 @@ namespace :calcs do
         if old_player.nil? && two_old.nil?
           # top 75 recruit
           # 16 - (4.0 * log(RK))
-          usage_gained += (0.25) * (65)
-          recruit_value = ((0.25) * 65.0 * player.prophet_rating)
+          usage_gained += (0.25) * (60)
+          recruit_value = ((0.25) * 60.0 * player.prophet_rating)
           value_gained += recruit_value
           player.preseason_description = "recruit"
         elsif old_player && old_player.team != team
