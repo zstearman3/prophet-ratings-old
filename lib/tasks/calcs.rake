@@ -1091,7 +1091,7 @@ namespace :calcs do
           if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
-              value_lost += (((player_value / total_player_value) * total_value) + (2.0 * player_value)) / 3.0
+              value_lost += (((player_value / total_player_value) * total_value) + (player_value)) / 2.0
           end
         end
       end
