@@ -7,3 +7,33 @@
     }
   }
 }
+
+.table{
+  .injury{
+    td, th{
+      background-color: #a83d3d;
+      color: white;
+      a{
+        color: white;
+      }
+    }
+  }
+  .transfer{
+    td, th{
+      background-color: #e3b752;
+      color: white;
+      a{
+        color: white;
+      }
+    }
+  }
+  .recruit{
+    td, th{
+      background-color: $prophet-blue;
+      color: white;
+      a{
+        color: white;
+      }
+    }
+  }
+}

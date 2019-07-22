@@ -15,6 +15,10 @@ class PlayerSeasonsController < ApplicationController
   
   end
   
+  def preseason
+    @player_seasons = PlayerSeason.where(year: (current_season.season + 1)).order(prophet_rating: :desc).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+  end
+  
   def edit
     @player_season = PlayerSeason.find(params[:id])
   end

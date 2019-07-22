@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get '/blog_drafts',        to: 'blog_posts#drafts',            as: :blog_drafts
   get '/blog',               to: 'blog_posts#index',             as: :blog_posts
   get '/preseason',          to: 'teams#preseason',              as: :preseason
+  get '/player_preseason',   to: 'player_seasons#preseason',     as: :player_preseason
   resources :conferences
   resources :users
   resources :account_activations, only: [:edit]

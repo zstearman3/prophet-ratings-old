@@ -1,11 +1,6 @@
-<% provide(:title, 'Advanced Player Stats') %>
-<% year = params[:season].to_i %>
+<% provide(:title, 'Player Preseason Ratings') %>
+<% year = (current_season.season + 1) %>
 <%= link_to 'Previous Season', player_advanced_path(season: year - 1) %>
-<% if year >= current_season.season %>
-  <%= link_to 'Next Season', player_preseason_path, class: 'align-right' %>
-<% else %>
-  <%= link_to 'Next Season', player_advanced_path(season: year + 1), class: 'align-right' %>
-<% end %>
 
 <div class="row pagination-div">
   <%= will_paginate %>
@@ -37,22 +32,27 @@
       <% x = 0 %>
     <% end %>
     <% @player_seasons.each do |season| %>
+    <% old_season = PlayerSeason.find_by(player: season.player, year: current_season.season) %>
     <% x += 1 %>
       <tr>
         <td><%= x %></td>
         <td><%= link_to season.name, season.player %></td>
         <td><%= season.team.school %></td>
-        <td><%= season.true_shooting_percentage %></td>
-        <td><%= season.assists_percentage %></td>
-        <td class="hidden-small"><%= season.offensive_rebounds_percentage %></td>
-        <td class="hidden-small"><%= season.defensive_rebounds_percentage %></td>
-        <td><%= season.total_rebounds_percentage %></td>
-        <td><%= season.steals_percentage %></td>
-        <td><%= season.blocks_percentage %></td>
-        <td><%= season.turnovers_percentage %></td>
-        <td><%= season.usage_rate %></td>
-        <td class="hidden-small"><%= season.player_efficiency_rating %></td>
-        <th><%= season.player_of_the_games %></th>
+        <% if old_season %>
+          <td><%= old_season.true_shooting_percentage %></td>
+          <td><%= old_season.assists_percentage %></td>
+          <td class="hidden-small"><%= old_season.offensive_rebounds_percentage %></td>
+          <td class="hidden-small"><%= old_season.defensive_rebounds_percentage %></td>
+          <td><%= old_season.total_rebounds_percentage %></td>
+          <td><%= old_season.steals_percentage %></td>
+          <td><%= old_season.blocks_percentage %></td>
+          <td><%= old_season.turnovers_percentage %></td>
+          <td><%= old_season.usage_rate %></td>
+          <td class="hidden-small"><%= old_season.player_efficiency_rating %></td>
+          <th><%= old_season.player_of_the_games %></th>
+        <% else %>
+          <td colspan=11></td>
+        <% end %>
         <td><%= season.prophet_rating %></td>
       </tr>
       <% if x % 20 == 0 && x % 100 != 0 %>
@@ -80,4 +80,3 @@
 <div class="row pagination-div">
   <%= will_paginate %>
 </div>
-  

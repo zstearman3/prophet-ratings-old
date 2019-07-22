@@ -1,5 +1,6 @@
 <div class="row">
-  <h1>Roster</h1>
+  <h1><%= link_to @team.school + " " + @team.name, @team %></h1>
+  <h2>Roster</h2>
   <table class="table">
     <thead>
       <tr>
@@ -7,30 +8,48 @@
         <th>Class</th>
         <th>PRate</th>
         <th>Old PRate</th>
-        <th>Description</th>
+        <th>Notes</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <% @player_seasons.each do |season| %>
-        <tr>
-          <td><%= season.name %></td>
-          <td><%= season.player.year %></td>
-          <td><%= season.prophet_rating %></td>
-          <% last_season = PlayerSeason.find_by(player: season.player, year: season.year - 1) %>
-          <% if last_season %>
-            <td><%= last_season.prophet_rating %></td>
-          <% else %>
-            <td></td>
+        <% if season.preseason_description == "injury" %>
+          <tr class="injury">
+        <% elsif season.preseason_description == "transfer" %>
+          <tr class="transfer">
+        <% elsif season.preseason_description == "recruit" %>
+          <tr class="recruit">
+        <% else %>
+          <tr>
+        <% end %>
+        <td><%= link_to season.name, season.player %></td>
+        <td><%= season.player.year %></td>
+        <td><%= season.prophet_rating %></td>
+        <% last_season = PlayerSeason.find_by(player: season.player, year: season.year - 1) %>
+        <% if last_season %>
+          <td><%= last_season.prophet_rating %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if season.preseason_description == "injury" %>
+          <td>Injury Return</td>
+        <% elsif season.preseason_description == "transfer" %>
+          <td>Incoming Transfer</td>
+        <% elsif season.preseason_description == "recruit" %>
+          <td>Top Recruit</td>
+        <% else %>
+          <td></td>
+        <% end %>
+          <% if current_user.admin? %>
+            <td><%= link_to('Edit', edit_player_season_path(season)) + " | " +
+                    link_to('Destroy', season, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
           <% end %>
-          <td><%= season.preseason_description %></td>
-          <td><%= link_to('Edit', edit_player_season_path(season)) + " | " +
-                  link_to('Destroy', season, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <h1>Graduated/Declared for Draft</h1>
+  <h2>Graduated/Declared for Draft</h2>
   <table class="table">
     <thead>
       <tr>
@@ -47,7 +66,7 @@
       <% end %>
     </tbody>
   </table>
-  <h1>Transferred</h1>
+  <h2>Transferred</h2>
   <table class="table">
     <thead>
       <tr>
@@ -66,5 +85,5 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to "Create Player", new_player_path(team: @team) %>
+  <%= link_to "Create Player", new_player_path(team: @team) if current_user.admin?%>
 </div>
