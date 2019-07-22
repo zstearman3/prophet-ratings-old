@@ -24,6 +24,9 @@ p, h1, h2, h3, h4, h5, a {
 
 .scrollable-table{
   overflow-x: scroll;
+  .min-width{
+    min-width: 65px;
+  }
 }
 
 table {
