@@ -22,6 +22,10 @@ p, h1, h2, h3, h4, h5, a {
   }
 }
 
+.scrollable-table{
+  overflow-x: scroll;
+}
+
 table {
   td, th, a {
     font-family: 'Roboto', sans-serif;
