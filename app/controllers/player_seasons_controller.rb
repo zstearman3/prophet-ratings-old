@@ -4,11 +4,43 @@ class PlayerSeasonsController < ApplicationController
   helper_method :sort_column, :sort_direction
   
   def advanced
-    @player_seasons = PlayerSeason.where(year: params[:season]).where("games_percentage > ?", 50).where("minutes_percentage > ?", 35).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+    @player_seasons = PlayerSeason.where(year: params[:season]).where("minutes > ?", 200)
+    if params[:conference_id].to_i > 0
+      if params[:conference_id].to_i == 50
+        conferences_list = [2, 4, 5, 7, 8, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 29, 30, 31, 32, 33]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      elsif params[:conference_id].to_i == 40
+        conferences_list = [1, 3, 6, 9, 10, 15, 24, 26]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      else
+        @player_seasons = @player_seasons.where(conference_id: params[:conference_id])
+      end
+    end
+    @player_seasons = @player_seasons.order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)    
+    @conferences = Conference.order(name: :asc).all.as_json
+    @conferences << {"id" => 40, "name" => "Powers"}
+    @conferences << {"id" => 50, "name" => "Mid-Majors"}
+    @conferences.to_json  
   end
   
   def shooting
-    @player_seasons = PlayerSeason.where(year: params[:season]).where("games_percentage > ?", 50).where("points_per_game > ?", 8).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+    @player_seasons = PlayerSeason.where(year: params[:season]).where("points > ?", 200).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+    if params[:conference_id].to_i > 0
+      if params[:conference_id].to_i == 50
+        conferences_list = [2, 4, 5, 7, 8, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 29, 30, 31, 32, 33]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      elsif params[:conference_id].to_i == 40
+        conferences_list = [1, 3, 6, 9, 10, 15, 24, 26]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      else
+        @player_seasons = @player_seasons.where(conference_id: params[:conference_id])
+      end
+    end
+    @player_seasons = @player_seasons.order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)    
+    @conferences = Conference.order(name: :asc).all.as_json
+    @conferences << {"id" => 40, "name" => "Powers"}
+    @conferences << {"id" => 50, "name" => "Mid-Majors"}
+    @conferences.to_json
   end
   
   def miscellaneous
@@ -16,7 +48,23 @@ class PlayerSeasonsController < ApplicationController
   end
   
   def preseason
-    @player_seasons = PlayerSeason.where(year: (current_season.season + 1)).order(prophet_rating: :desc).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+    @player_seasons = PlayerSeason.where(year: (current_season.season + 1)).order(prophet_rating: :desc)
+    if params[:conference_id].to_i > 0
+      if params[:conference_id].to_i == 50
+        conferences_list = [2, 4, 5, 7, 8, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 29, 30, 31, 32, 33]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      elsif params[:conference_id].to_i == 40
+        conferences_list = [1, 3, 6, 9, 10, 15, 24, 26]
+        @player_seasons = @player_seasons.where(conference_id: conferences_list)
+      else
+        @player_seasons = @player_seasons.where(conference_id: params[:conference_id])
+      end
+    end
+    @player_seasons = @player_seasons.order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)    
+    @conferences = Conference.order(name: :asc).all.as_json
+    @conferences << {"id" => 40, "name" => "Powers"}
+    @conferences << {"id" => 50, "name" => "Mid-Majors"}
+    @conferences.to_json
   end
   
   def edit
@@ -50,7 +98,7 @@ class PlayerSeasonsController < ApplicationController
     def sortable_columns
       ['prophet_rating', 'two_pointers_percentage', 'three_pointers_percentage', 'field_goals_percentage', 'effective_field_goals_percentage', 'true_shooting_percentage',
        'points', 'points_per_game', 'assists_percentage', 'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'steals_percentage',
-       'blocks_percentage', 'turnovers_percentage', 'usage_rate', 'player_efficiency_rating', 'prophet_rating', 'player_of_the_games']
+       'blocks_percentage', 'turnovers_percentage', 'usage_rate', 'player_efficiency_rating', 'prophet_rating', 'player_of_the_games', 'name', 'team_name']
     end
     
     def sort_column

@@ -272,7 +272,7 @@ form{
 .stats-container{
   background-color: $prophet-light-grey;
   padding: 10px 3px;
-  @media (min-width: 1000px){
+  @media (min-width: 850px){
     padding: 15px;
     border-radius: 5px;
   }
@@ -355,9 +355,17 @@ form{
   }
 }
 
-.pagination>li>a{
-  font-size: 12px;
-  @media only screen and (min-width: 850px){
-    font-size: 16px;
+.pagination{
+  margin: 10px 0px;
+  li{
+    padding: 0px;
+    a{
+      font-size: 12px;
+      padding: 8px;
+      @media only screen and (min-width: 850px){
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
   }
 }

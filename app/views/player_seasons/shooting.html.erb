@@ -1,63 +1,101 @@
 <% provide(:title, 'Player Shooting Stats') %>
 <% year = params[:season].to_i %>
-<%= link_to 'Previous Season', player_shooting_path(season: year - 1) %>
-<%= link_to 'Next Season', player_shooting_path(season: year + 1), class: 'align-right' %>
-<div class="row pagination-div">
-  <%= will_paginate %>
+<% year = @team_seasons.first.year if year == 0 %>
+<% conference_id = params[:conference_id].to_i %>
+<%= link_to 'Previous Season', player_shooting_path(season: year - 1, conference_id: conference_id) %>
+<% if year < current_season.season %>
+  <%= link_to 'Next Season', player_shooting_path(season: year + 1, conference_id: conference_id), class: 'align-right' %>
+<% end %>
+<div class="hidden-small row pagination-div">
+  <%= will_paginate @player_seasons, inner_window: 3, outer_window: 1 %>
 </div>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th><%= sort_link "prophet_rating", "Rank", "desc", year %></th>
-      <th>Player</th>
-      <th>Team</th>
-      <th><%= sort_link "field_goals_percentage", "FG%", "desc", year %></th>
-      <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year %></th>
-      <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year %></th>
-      <th><%= sort_link "free_throws_percentage", "FT%", "desc", year %></th>
-      <th><%= sort_link "effective_field_goals_percentage", "eFG%", "desc", year %></th>
-      <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
-      <th><%= sort_link "points_per_game", "PPG", "desc", year %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if params[:page] %>
-      <% x = (params[:page].to_i - 1) * 100 %>
-    <% else %>
-      <% x = 0 %>
-    <% end %>
-    <% @player_seasons.each do |season| %>
-    <% x += 1 %>
-      <tr>
-        <td><%= x %></td>
-        <td><%= link_to season.name, season.player %></td>
-        <td><%= season.team.school %></td>
-        <td><%= season.field_goals_percentage %></td>
-        <td><%= season.two_pointers_percentage %></td>
-        <td><%= season.three_pointers_percentage %></td>
-        <td><%= season.free_throws_percentage %></td>
-        <td><%= season.effective_field_goals_percentage %></td>
-        <td><%= season.true_shooting_percentage %></td>
-        <td><%= season.points_per_game %></td>
-      </tr>
-      <% if x % 20 == 0 && x % 100 != 0 %>
-        <tr>
-          <th><%= sort_link "prophet_rating", "Rank", "desc", year %></th>
-          <th>Player</th>
-          <th>Team</th>
-          <th><%= sort_link "field_goals_percentage", "FG%", "desc", year %></th>
-          <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year %></th>
-          <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year %></th>
-          <th><%= sort_link "free_throws_percentage", "FT%", "desc", year %></th>
-          <th><%= sort_link "effective_field_goals_percentage", "eFG%", "desc", year %></th>
-          <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
-          <th><%= sort_link "points_per_game", "PPG", "desc", year %></th>
-        </tr>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
-<div class="row pagination-div">
-  <%= will_paginate %>
+<div class="hidden-large row pagination-div">
+  <%= will_paginate @player_seasons, inner_window: 1, outer_window: 0 %>
+</div>
+
+<div class="row stats-container">
+  <div class="row filter-container">
+    <ul class="filter-navbar">
+      <li>
+        <%= form_tag player_shooting_path, :method => :get do %>
+          <li>
+            <%= hidden_field_tag 'season', year %>
+          </li>
+          <li>
+            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, conference_id), {include_blank: 'Filter Conference'}) %>
+          </li>
+          <li>
+            <%= submit_tag 'Filter', name: nil %>
+          </li>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to "Clear Filters", player_shooting_path(season: year) %>
+      </li>
+    </ul>
+  </div>
+  <div class="stats-inner-container">
+    <div class="scrollable-table">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th><%= sort_link "prophet_rating", "Rank", "desc", year, conference_id %></th>
+            <th><%= sort_link "name", "Player", "asc", year, conference_id %></th>
+            <th><%= sort_link "team_name", "Team", "asc", year, conference_id %></th>
+            <th><%= sort_link "field_goals_percentage", "FG%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "free_throws_percentage", "FT%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "effective_field_goals_percentage", "eFG%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year, conference_id  %></th>
+            <th><%= sort_link "points_per_game", "PPG", "desc", year, conference_id  %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if params[:page] %>
+            <% x = (params[:page].to_i - 1) * 100 %>
+          <% else %>
+            <% x = 0 %>
+          <% end %>
+          <% @player_seasons.each do |season| %>
+          <% x += 1 %>
+            <tr>
+              <td><%= x %></td>
+              <td><%= link_to season.name, season.player %></td>
+              <td><%= season.team.school %></td>
+              <td><%= season.field_goals_percentage %></td>
+              <td><%= season.two_pointers_percentage %></td>
+              <td><%= season.three_pointers_percentage %></td>
+              <td><%= season.free_throws_percentage %></td>
+              <td><%= season.effective_field_goals_percentage %></td>
+              <td><%= season.true_shooting_percentage %></td>
+              <td><%= season.points_per_game %></td>
+            </tr>
+            <% if x % 20 == 0 && x % 100 != 0 %>
+              <tr>
+                <th><%= sort_link "prophet_rating", "Rank", "desc", year, conference_id %></th>
+                <th><%= sort_link "name", "Player", "asc", year, conference_id %></th>
+                <th><%= sort_link "team_name", "Team", "asc", year, conference_id %></th>
+                <th><%= sort_link "field_goals_percentage", "FG%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "free_throws_percentage", "FT%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "effective_field_goals_percentage", "eFG%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year, conference_id  %></th>
+                <th><%= sort_link "points_per_game", "PPG", "desc", year, conference_id  %></th>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="hidden-small row pagination-div">
+  <%= will_paginate @player_seasons, inner_window: 3, outer_window: 1 %>
+</div>
+<div class="hidden-large row pagination-div">
+  <%= will_paginate @player_seasons, inner_window: 1, outer_window: 0 %>
 </div>
   
