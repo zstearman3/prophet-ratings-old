@@ -4,6 +4,7 @@ class PlayerSeason < ApplicationRecord
   belongs_to :team, optional: true
   belongs_to :season, optional: true
   belongs_to :team_season, optional: true
+  belongs_to :conference, optional: true
   validates :year, presence: true
   validates :name, presence: true
   validates :team_name, presence: true

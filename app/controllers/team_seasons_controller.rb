@@ -4,8 +4,8 @@ class TeamSeasonsController < ApplicationController
   
   def shooting
     @team_seasons = TeamSeason.where(year: params[:season])
-    if params[:conference]
-      @team_seasons = @team_seasons.where(conference_id: params[:conference]).order("#{sort_column} #{sort_direction}")
+    if params[:conference_id]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference_id]).order("#{sort_column} #{sort_direction}")
     else
       @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
     end
