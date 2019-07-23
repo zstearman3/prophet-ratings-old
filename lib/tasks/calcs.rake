@@ -501,7 +501,7 @@ namespace :calcs do
           if team_season && opponent_season
             if game.minutes > 0 && team_game.minutes > 0
               begin
-                game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (5.0 * team_game.minutes)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
+                game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (team_game.minutes / 5.0)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
                 game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
                 game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
                 game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
@@ -531,8 +531,8 @@ namespace :calcs do
                   game.prophet_rating = 0
                 end
                 game.save
-              rescue
-    
+              rescue StandardError => e
+                puts e.message
               end
             end
           end

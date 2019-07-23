@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190718190129) do
+ActiveRecord::Schema.define(version: 20190723144153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,6 +216,8 @@ ActiveRecord::Schema.define(version: 20190718190129) do
     t.decimal "blocks_per_game"
     t.boolean "locked", default: false
     t.string "preseason_description"
+    t.bigint "conference_id"
+    t.index ["conference_id"], name: "index_player_seasons_on_conference_id"
     t.index ["player_id"], name: "index_player_seasons_on_player_id"
     t.index ["season_id"], name: "index_player_seasons_on_season_id"
     t.index ["team_id"], name: "index_player_seasons_on_team_id"
@@ -479,6 +481,8 @@ ActiveRecord::Schema.define(version: 20190718190129) do
     t.decimal "initial_adj_d"
     t.decimal "initial_adj_t"
     t.boolean "locked", default: false
+    t.bigint "conference_id"
+    t.index ["conference_id"], name: "index_team_seasons_on_conference_id"
     t.index ["season_id"], name: "index_team_seasons_on_season_id"
     t.index ["team_id"], name: "index_team_seasons_on_team_id"
   end
@@ -538,6 +542,7 @@ ActiveRecord::Schema.define(version: 20190718190129) do
   add_foreign_key "player_games", "seasons"
   add_foreign_key "player_games", "teams"
   add_foreign_key "player_games", "teams", column: "opponent_id"
+  add_foreign_key "player_seasons", "conferences"
   add_foreign_key "player_seasons", "players"
   add_foreign_key "player_seasons", "seasons"
   add_foreign_key "player_seasons", "team_seasons"
@@ -549,6 +554,7 @@ ActiveRecord::Schema.define(version: 20190718190129) do
   add_foreign_key "team_games", "seasons"
   add_foreign_key "team_games", "teams"
   add_foreign_key "team_games", "teams", column: "opponent_id"
+  add_foreign_key "team_seasons", "conferences"
   add_foreign_key "team_seasons", "seasons"
   add_foreign_key "team_seasons", "teams"
   add_foreign_key "teams", "conferences"
