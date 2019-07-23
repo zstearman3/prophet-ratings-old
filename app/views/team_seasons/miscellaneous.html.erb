@@ -2,8 +2,8 @@
 <% year = params[:season].to_i %>
 <% year = @team_seasons.first.year if year == 0 %>
 <% conference_id = params[:conference_id].to_i %>
-<%= link_to 'Previous Season', team_misc_path(season: year - 1) %>
-<%= link_to 'Next Season', team_misc_path(season: year + 1), class: 'align-right' %>
+<%= link_to 'Previous Season', team_misc_path(season: year - 1), conference_id: conference_id %>
+<%= link_to 'Next Season', team_misc_path(season: year + 1), conference_id: conference_id, class: 'align-right' %>
 <div class="row stats-container">
   <div class="row filter-container">
     <ul class="filter-navbar">
@@ -13,7 +13,7 @@
             <%= hidden_field_tag 'season', year %>
           </li>
           <li>
-            <%= select_tag(:conference_id, options_from_collection_for_select(Conference.all, :id, :name, conference_id), {include_blank: 'Filter Conference'}) %>
+            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, conference_id), {include_blank: 'Filter Conference'}) %>
           </li>
           <li>
             <%= submit_tag 'Filter', name: nil %>
