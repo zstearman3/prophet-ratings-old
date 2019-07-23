@@ -1,58 +1,86 @@
 <% provide(:title, 'Team Miscellaneous Stats') %>
 <% year = params[:season].to_i %>
+<% year = @team_seasons.first.year if year == 0 %>
+<% conference_id = params[:conference_id].to_i %>
 <%= link_to 'Previous Season', team_misc_path(season: year - 1) %>
 <%= link_to 'Next Season', team_misc_path(season: year + 1), class: 'align-right' %>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
-      <th><%= sort_link "name", "Team", "asc", year %></th>
-      <th><%= sort_link "wins", "Record", "desc", year %></th>
-      <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year %></th>
-      <th><%= sort_link "assists_percentage", "AST%", "desc", year %></th>
-      <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
-      <th><%= sort_link "free_throws_rate", "FTRate", "desc", year %></th>
-      <th><%= sort_link "assists_percentage_allowed", "DAST%", "asc", year %></th>
-      <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year %></th>
-      <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year %></th>
-      <th><%= sort_link "home_advantage", "HomeAdv", "desc", year %></th>
-      <th><%= sort_link "consistency", "Consistency", "asc", year %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% x = 1 %>
-    <% @team_seasons.each do |season| %>
-      <tr>
-        <td><%= x %></td>
-        <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
-        <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
-        <td><%= season.adj_tempo %></td>
-        <td><%= season.assists_percentage %></td>
-        <td><%= season.turnovers_percentage %></td>
-        <td><%= season.free_throws_rate %></td>
-        <td><%= season.assists_percentage_allowed %></td>
-        <td><%= season.turnovers_percentage_allowed %></td>
-        <td><%= season.free_throws_rate_allowed %></td>
-        <td><%= season.home_advantage %></td>
-        <td><%= season.consistency %></td>
-      </tr>
-      <% if x % 20 == 0 %>
-        <tr>
-          <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
-          <th><%= sort_link "name", "Team", "asc", year %></th>
-          <th><%= sort_link "wins", "Record", "desc", year %></th>
-          <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year %></th>
-          <th><%= sort_link "assists_percentage", "AST%", "desc", year %></th>
-          <th><%= sort_link "turnovers_percentage", "TO%", "asc", year %></th>
-          <th><%= sort_link "free_throws_rate", "FTRate", "desc", year %></th>
-          <th><%= sort_link "assists_percentage_allowed", "DAST%", "asc", year %></th>
-          <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year %></th>
-          <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year %></th>
-          <th><%= sort_link "home_advantage", "HomeAdv", "desc", year %></th>
-          <th><%= sort_link "consistency", "Consistency", "asc", year %></th>
-        </tr>
-      <% end %>
-      <% x += 1 %>
-    <% end %>
-  </tbody>
-</table>
+<div class="row stats-container">
+  <div class="row filter-container">
+    <ul class="filter-navbar">
+      <li>
+        <%= form_tag team_misc_path, :method => :get do %>
+          <li>
+            <%= hidden_field_tag 'season', year %>
+          </li>
+          <li>
+            <%= select_tag(:conference_id, options_from_collection_for_select(Conference.all, :id, :name, conference_id), {include_blank: 'Filter Conference'}) %>
+          </li>
+          <li>
+            <%= submit_tag 'Filter', name: nil %>
+          </li>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to "Clear Filters", team_misc_path(season: year) %>
+      </li>
+    </ul>
+  </div>
+  <div class="stats-inner-container">
+    <div class="scrollable-table">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+            <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+            <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+            <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year, conference_id %></th>
+            <th><%= sort_link "assists_percentage", "AST%", "desc", year, conference_id %></th>
+            <th><%= sort_link "turnovers_percentage", "TO%", "asc", year, conference_id %></th>
+            <th><%= sort_link "free_throws_rate", "FTRate", "desc", year, conference_id %></th>
+            <th><%= sort_link "assists_percentage_allowed", "DAST%", "asc", year, conference_id %></th>
+            <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year, conference_id %></th>
+            <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year, conference_id %></th>
+            <th><%= sort_link "home_advantage", "HomeAdv", "desc", year, conference_id %></th>
+            <th><%= sort_link "consistency", "Consistency", "asc", year, conference_id %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% x = 1 %>
+          <% @team_seasons.each do |season| %>
+            <tr>
+              <td><%= x %></td>
+              <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+              <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+              <td><%= season.adj_tempo %></td>
+              <td><%= season.assists_percentage %></td>
+              <td><%= season.turnovers_percentage %></td>
+              <td><%= season.free_throws_rate %></td>
+              <td><%= season.assists_percentage_allowed %></td>
+              <td><%= season.turnovers_percentage_allowed %></td>
+              <td><%= season.free_throws_rate_allowed %></td>
+              <td><%= season.home_advantage %></td>
+              <td><%= season.consistency %></td>
+            </tr>
+            <% if x % 20 == 0 %>
+              <tr>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+                <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year, conference_id %></th>
+                <th><%= sort_link "assists_percentage", "AST%", "desc", year, conference_id %></th>
+                <th><%= sort_link "turnovers_percentage", "TO%", "asc", year, conference_id %></th>
+                <th><%= sort_link "free_throws_rate", "FTRate", "desc", year, conference_id %></th>
+                <th><%= sort_link "assists_percentage_allowed", "DAST%", "asc", year, conference_id %></th>
+                <th><%= sort_link "turnovers_percentage_allowed", "DTO%", "desc", year, conference_id %></th>
+                <th><%= sort_link "free_throws_rate_allowed", "DFTRate", "asc", year, conference_id %></th>
+                <th><%= sort_link "home_advantage", "HomeAdv", "desc", year, conference_id %></th>
+                <th><%= sort_link "consistency", "Consistency", "asc", year, conference_id %></th>
+              </tr>
+            <% end %>
+            <% x += 1 %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

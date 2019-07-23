@@ -12,23 +12,42 @@ class TeamSeasonsController < ApplicationController
   end
   
   def defense
-    @team_seasons = TeamSeason.where(year: params[:season]).order("#{sort_column} #{sort_direction}")
+    @team_seasons = TeamSeason.where(year: params[:season])
+    if params[:conference_id]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference_id]).order("#{sort_column} #{sort_direction}")
+    else
+      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+    end
   end
   
   def rebounding
-    @team_seasons = TeamSeason.where(year: params[:season]).order("#{sort_column} #{sort_direction}")
+    @team_seasons = TeamSeason.where(year: params[:season])
+    if params[:conference_id]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference_id]).order("#{sort_column} #{sort_direction}")
+    else
+      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+    end
   end
   
   def miscellaneous
-    @team_seasons = TeamSeason.where(year: params[:season]).order("#{sort_column} #{sort_direction}")
+    @team_seasons = TeamSeason.where(year: params[:season])
+    if params[:conference_id]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference_id]).order("#{sort_column} #{sort_direction}")
+    else
+      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+    end
   end
   
   def rankings
     if params[:season]
-      @team_seasons = TeamSeason.where(year: params[:season]).order("#{sort_column} #{sort_direction}")
+      @team_seasons = TeamSeason.where(year: params[:season])
     else
-      @team_seasons = TeamSeason.where(year: current_season.season).order("#{sort_column} #{sort_direction}")
+      @team_seasons = TeamSeason.where(year: current_season.season)
     end
+    if params[:conference_id]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference_id])
+    end
+    @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
   end
   
   private 

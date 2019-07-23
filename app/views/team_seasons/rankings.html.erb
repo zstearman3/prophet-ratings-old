@@ -1,54 +1,81 @@
 <% provide(:title, 'Rankings') %>
 <% year = params[:season].to_i %>
 <% year = @team_seasons.first.year if year == 0 %>
+<% conference_id = params[:conference_id].to_i %>
 <%= link_to 'Previous Season', rankings_path(season: year - 1) %>
 <%= link_to 'Next Season', rankings_path(season: year + 1), class: 'align-right' unless year > current_season.season %>
-<table class="table table-sm table-striped">
-  <thead>
-    <tr>
-      <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
-      <th><%= sort_link "name", "Team", "asc", year %></th>
-      <th class="hidden-small">Conference</th>
-      <th class="hidden-large">Conf</th>
-      <th><%= sort_link "wins", "Record", "desc", year %></th>
-      <th><%= sort_link "adj_efficiency_margin", "AdjEM", "desc", year %></th>
-      <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
-      <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year %></th>
-      <th><%= sort_link "adj_tempo", "AdjT", "desc", year %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% x = 1 %>
-    <% @team_seasons.each do |season| %>
-      <tr>
-        <td><%= x %></td>
-        <% if year > current_season.season %>
-          <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
-        <% else %>
-          <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+<div class="row stats-container">
+  <div class="row filter-container">
+    <ul class="filter-navbar">
+      <li>
+        <%= form_tag rankings_path, :method => :get do %>
+          <li>
+            <%= hidden_field_tag 'season', year %>
+          </li>
+          <li>
+            <%= select_tag(:conference_id, options_from_collection_for_select(Conference.all, :id, :name, conference_id), {include_blank: 'Filter Conference'}) %>
+          </li>
+          <li>
+            <%= submit_tag 'Filter', name: nil %>
+          </li>
         <% end %>
-        <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
-        <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
-        <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
-        <td><%= season.adj_efficiency_margin %></td>
-        <td><%= season.adj_offensive_efficiency %></td>
-        <td><%= season.adj_defensive_efficiency %></td>
-        <td><%= season.adj_tempo %></td>
-      </tr>
-      <% if x % 20 == 0 %>
-        <tr>
-          <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
-          <th><%= sort_link "name", "Team", "asc", year %></th>
-          <th class="hidden-small">Conference</th>
-          <th class="hidden-large">Conf</th>
-          <th><%= sort_link "wins", "Record", "desc", year %></th>
-          <th><%= sort_link "adj_efficiency_margin", "AdjEM", "desc", year %></th>
-          <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
-          <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year %></th>
-          <th><%= sort_link "adj_tempo", "AdjT", "desc", year %></th>
-        </tr>
-      <% end %>
-      <% x += 1 %>
-    <% end %>
-  </tbody>
-</table>
+      </li>
+      <li>
+        <%= link_to "Clear Filters", rankings_path(season: year) %>
+      </li>
+    </ul>
+  </div>
+  <div class="stats-inner-container">
+    <div class="scrollable-table">
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+            <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+            <th class="hidden-small">Conference</th>
+            <th class="hidden-large">Conf</th>
+            <th class="min-width"><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+            <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", year, conference_id %></th>
+            <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year, conference_id %></th>
+            <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
+            <th><%= sort_link "adj_tempo", "AdjT", "desc", year, conference_id %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% x = 1 %>
+          <% @team_seasons.each do |season| %>
+            <tr>
+              <td><%= x %></td>
+              <% if year > current_season.season %>
+                <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
+              <% else %>
+                <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+              <% end %>
+              <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
+              <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
+              <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+              <td><%= season.adj_efficiency_margin %></td>
+              <td><%= season.adj_offensive_efficiency %></td>
+              <td><%= season.adj_defensive_efficiency %></td>
+              <td><%= season.adj_tempo %></td>
+            </tr>
+            <% if x % 20 == 0 %>
+              <tr>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+                <th class="hidden-small">Conference</th>
+                <th class="hidden-large">Conf</th>
+                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+                <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", year, conference_id %></th>
+                <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year, conference_id %></th>
+                <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
+                <th><%= sort_link "adj_tempo", "AdjT", "desc", year, conference_id %></th>
+              </tr>
+            <% end %>
+            <% x += 1 %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

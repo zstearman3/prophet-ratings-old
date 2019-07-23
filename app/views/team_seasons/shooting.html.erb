@@ -1,5 +1,6 @@
 <% provide(:title, 'Team Shooting Stats') %>
 <% year = params[:season].to_i %>
+<% year = @team_seasons.first.year if year == 0 %>
 <% conference_id = params[:conference_id].to_i %>
 <%= link_to 'Previous Season', team_shooting_path(season: year - 1) %>
 <%= link_to 'Next Season', team_shooting_path(season: year + 1), class: 'align-right' %>
@@ -60,17 +61,17 @@
             </tr>
             <% if x % 20 == 0 %>
               <tr>
-                <th><%= sort_link "adjem_rank", "Rank", "asc", year %></th>
-                <th><%= sort_link "name", "Team", "asc", year %></th>
-                <th><%= sort_link "wins", "Record", "desc", year %></th>
-                <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year %></th>
-                <th><%= sort_link "offensive_efficiency", "OEff", "desc", year %></th>
-                <th><%= sort_link "field_goals_percentage", "FG%", "desc", year %></th>
-                <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year %></th>
-                <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year %></th>
-                <th><%= sort_link "free_throws_percentage", "FT%", "desc", year %></th>
-                <th><%= sort_link "effective_field_goals_percentage", "EFG%", "desc", year %></th>
-                <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year %></th>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+                <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year, conference_id %></th>
+                <th><%= sort_link "offensive_efficiency", "OEff", "desc", year, conference_id %></th>
+                <th><%= sort_link "field_goals_percentage", "FG%", "desc", year, conference_id %></th>
+                <th><%= sort_link "two_pointers_percentage", "2P%", "desc", year, conference_id %></th>
+                <th><%= sort_link "three_pointers_percentage", "3P%", "desc", year, conference_id %></th>
+                <th><%= sort_link "free_throws_percentage", "FT%", "desc", year, conference_id %></th>
+                <th><%= sort_link "effective_field_goals_percentage", "EFG%", "desc", year, conference_id %></th>
+                <th><%= sort_link "true_shooting_percentage", "TS%", "desc", year, conference_id %></th>
               </tr>
             <% end %>
             <% x += 1 %>
