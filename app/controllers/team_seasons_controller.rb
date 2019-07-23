@@ -3,7 +3,12 @@ class TeamSeasonsController < ApplicationController
   helper_method :sort_column, :sort_direction
   
   def shooting
-    @team_seasons = TeamSeason.where(year: params[:season]).order("#{sort_column} #{sort_direction}")
+    @team_seasons = TeamSeason.where(year: params[:season])
+    if params[:conference]
+      @team_seasons = @team_seasons.where(conference_id: params[:conference]).order("#{sort_column} #{sort_direction}")
+    else
+      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+    end
   end
   
   def defense
