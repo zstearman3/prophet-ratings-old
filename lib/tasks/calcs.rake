@@ -1093,9 +1093,11 @@ namespace :calcs do
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
           if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
+            if player.prophet_rating > standard_value
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
               value_lost += (((player_value / total_player_value) * total_value) + (player_value)) / 2.0
+            end
           end
         end
       end
