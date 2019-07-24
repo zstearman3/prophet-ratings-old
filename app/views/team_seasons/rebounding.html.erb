@@ -21,7 +21,8 @@
         <% end %>
       </li>
       <li>
-        <%= link_to "Clear Filters", team_rebounding_path(season: year) %>
+        <%= link_to "Clear Filters", team_rebounding_path(season: year), class: 'hidden-small' %>
+        <%= link_to "Clear", team_rebounding_path(season: year), class: 'hidden-large' %>
       </li>
     </ul>
   </div>

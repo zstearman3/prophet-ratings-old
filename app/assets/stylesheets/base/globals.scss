@@ -258,15 +258,23 @@ form{
   margin-left: 0;
 }
 
-.filter-navbar{
-  float: right;
-  form{
-    display: inline;
-  }
-  li{
-    display: inline;
+.filter-container{
+  .filter-navbar{
+    padding: 0px;
+    text-align: center;
+    @media (min-width: 850px){
+      float: right;
+    }
+    form{
+      display: inline;
+    }
+    li{
+      display: inline;
+      margin: 0px 2px;
+    }
   }
 }
+
 
 /* tables */
 .stats-container{
