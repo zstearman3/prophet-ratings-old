@@ -1083,15 +1083,12 @@ namespace :calcs do
       usage_lost = 0
       value_lost = 0
       total_player_value = 0
-      total_player_usage = 0
       players = PlayerSeason.where(team: team, year: 2019)
       players.each do |player|
         if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
           total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
-          total_player_usage += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
         end
       end
-      standard_value = (2.0 * standard_value + (total_player_value.to_f / total_player_usage)) / 3.0
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
@@ -1112,6 +1109,8 @@ namespace :calcs do
       ## calculate value added by new players, transfers, current player improvement
       usage_gained = 0
       value_gained = 0
+      total_new_value = 0
+      total_new_usage = 0
       new_players = PlayerSeason.where(team: team, year: 2020)
       new_players.each do |player|
         old_player = PlayerSeason.find_by(player: player.player, year: 2019)
@@ -1119,10 +1118,13 @@ namespace :calcs do
         if old_player.nil? && two_old.nil?
           # top 75 recruit
           # 16 - (4.0 * log(RK))
+          player_usage = 0.25 * 60
           usage_gained += (0.25) * (60)
           recruit_value = ((0.25) * 60.0 * player.prophet_rating)
           recruit_value = standard_value if recruit_value < standard_value
           value_gained += recruit_value
+          player_weight_value = recruit_value
+          player_weight_usage = player_usage
           player.preseason_description = "recruit"
         elsif old_player && old_player.team != team
           # immediate transfer
@@ -1135,6 +1137,8 @@ namespace :calcs do
             usage_gained += player_usage
             transfer_value = (player_value * player_usage)
             value_gained += transfer_value
+            player_weight_value = transfer_value
+            player_weight_usage = player_usage
             player.preseason_description = "transfer"
           end
         elsif two_old && two_old.team != team
@@ -1152,6 +1156,8 @@ namespace :calcs do
             player_usage = (two_old.usage_rate.to_f / 100.0) * (two_old.minutes_percentage.to_f) * team_modifier
             usage_gained += player_usage
             transfer_2_value = (player_value * player_usage)
+            player_weight_value = transfer_2_value
+            player_weight_usage = player_usage
             value_gained += transfer_2_value
             player.preseason_description = "transfer"
           end
@@ -1159,23 +1165,31 @@ namespace :calcs do
           old_player = two_old if old_player.nil?
           if old_player.games_percentage < 70 && old_player.usage_rate > 20 && old_player.minutes_percentage > 20 && old_player.prophet_rating > 2
         ## returning injured player
-            usage_gained += ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
+            player_usage = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)))
+            usage_gained += player_usage
             if (old_player.prophet_rating.to_f + 0.85) > standard_value
               injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * (old_player.prophet_rating.to_f + 0.85))
             else
               injury_value = ((old_player.usage_rate / 100.0) * (old_player.minutes_percentage) * (1-(old_player.games_percentage / 100.0)) * (standard_value))
             end
             value_gained += injury_value
+            player_weight_value = injury_value
+            player_weight_usage = player_usage
             player.preseason_description = "injury"
           elsif !old_player.usage_rate.to_f.nan? && !old_player.minutes_percentage.to_f.nan? && !old_player.prophet_rating.to_f.nan?
             # Returning Player Improvement
             improvement_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f * 0.85)
             value_gained +=  improvement_value
             player.preseason_description = "improvement"
+            player_weight_usage = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f)
+            player_weight_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f) * old_player.prophet_rating
           end
         end
+        total_new_usage += player_weight_usage
+        total_new_value += player_weight_value
         player.save
       end
+      standard_value = (2.0 * standard_value + (total_new_value.to_f / total_new_usage)) / 3.0
       ## Replacement level players
       if usage_gained > usage_lost
         value_gained = value_gained * (usage_lost / usage_gained)
