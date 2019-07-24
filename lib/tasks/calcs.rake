@@ -1182,7 +1182,7 @@ namespace :calcs do
             value_gained +=  improvement_value
             player.preseason_description = "improvement"
             player_weight_usage = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f)
-            player_weight_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f) * old_player.prophet_rating
+            player_weight_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f) * (old_player.prophet_rating + 0.85)
           end
         end
         total_new_usage += player_weight_usage if player_weight_usage
