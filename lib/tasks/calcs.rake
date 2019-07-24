@@ -1097,6 +1097,10 @@ namespace :calcs do
               usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
               player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
               value_lost += (((player_value / total_player_value) * total_value) + (player_value)) / 2.0
+            else
+              usage_lost += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
+              player_value = (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * standard_value
+              value_lost += (((player_value / total_player_value) * total_value) + (player_value)) / 2.0
             end
           end
         end
