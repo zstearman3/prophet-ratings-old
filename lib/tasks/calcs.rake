@@ -1088,10 +1088,11 @@ namespace :calcs do
       players.each do |player|
         if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
           total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
+          total_prophet_ratings += player.prophet_rating
           player_count += 1
         end
       end
-      standard_value = (2.0 * standard_value + (total_player_value.to_f / player_count)) / 3.0
+      standard_value = (2.0 * standard_value + (total_prophet_ratings.to_f / player_count)) / 3.0
       players.each do |player|
         new_player = PlayerSeason.find_by(player: player.player, team: team, year: 2020)
         if new_player.nil?
