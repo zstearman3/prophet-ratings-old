@@ -1083,6 +1083,7 @@ namespace :calcs do
       usage_lost = 0
       value_lost = 0
       total_player_value = 0
+      total_prophet_ratings = 0
       player_count = 0
       players = PlayerSeason.where(team: team, year: 2019)
       players.each do |player|
