@@ -1185,8 +1185,8 @@ namespace :calcs do
             player_weight_value = ((old_player.usage_rate.to_f / 100.0) * old_player.minutes_percentage.to_f) * old_player.prophet_rating
           end
         end
-        total_new_usage += player_weight_usage
-        total_new_value += player_weight_value
+        total_new_usage += player_weight_usage if player_weight_usage
+        total_new_value += player_weight_value if player_weight_value
         player.save
       end
       standard_value = (2.0 * standard_value + (total_new_value.to_f / total_new_usage)) / 3.0
