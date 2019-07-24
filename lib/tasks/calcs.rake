@@ -1089,7 +1089,6 @@ namespace :calcs do
         if !player.usage_rate.nan? && !player.minutes_percentage.nan? && !player.games_percentage.nan? && !player.prophet_rating.nan?
           total_player_value += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)  * player.prophet_rating
           total_player_usage += (player.usage_rate / 100.0) * player.minutes_percentage * (player.games_percentage / 100.0)
-          player_count += 1
         end
       end
       standard_value = (2.0 * standard_value + (total_player_value.to_f / total_player_usage)) / 3.0
