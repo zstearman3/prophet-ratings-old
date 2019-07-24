@@ -21,7 +21,8 @@
         <% end %>
       </li>
       <li>
-        <%= link_to "Clear Filters", rankings_path(season: year) %>
+        <%= link_to "Clear Filters", rankings_path(season: year), class: 'hidden-small' %>
+        <%= link_to "Clear", rankings_path(season: year), class: 'hidden-large' %>
       </li>
     </ul>
   </div>

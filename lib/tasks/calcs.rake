@@ -348,6 +348,8 @@ namespace :calcs do
             game.blocks_percentage = ((100 * game.blocked_shots.to_f) / (opponent_game.field_goals_attempted - game.three_pointers_attempted)).round(1)
             game.steals_percentage = ((100 * game.steals) / game.game.possessions).round(1)
             game.assists_percentage = ((100 * game.assists.to_f) / game.field_goals_made).round(1)
+            game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
+            game.assists_percentage = 100.0 if game.assits_percentage > 100.0
             game.turnovers_percentage = ((100 * game.turnovers) / game.game.possessions).round(1)
             game.offensive_efficiency = actual_ortg.round(1)
             game.defensive_efficiency = actual_drtg.round(1)
@@ -502,6 +504,8 @@ namespace :calcs do
             if game.minutes > 0 && team_game.minutes > 0
               begin
                 game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (team_game.minutes / 5.0)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
+                game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
+                game.assists_percentage = 100.0 if game.assits_percentage > 100.0
                 game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
                 game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
                 game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
