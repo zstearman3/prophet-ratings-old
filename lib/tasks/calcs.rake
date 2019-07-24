@@ -1189,7 +1189,7 @@ namespace :calcs do
         total_new_value += player_weight_value if player_weight_value
         player.save
       end
-      standard_value = (standard_value + (total_new_value.to_f / total_new_usage)) / 2.0
+      standard_value = ((2.0 * standard_value) + (total_new_value.to_f / 500.0)) / 3.0
       ## Replacement level players
       if usage_gained > usage_lost
         value_gained = value_gained * (usage_lost / usage_gained)
