@@ -10,6 +10,7 @@
       <th>Last name</th>
       <th>Email</th>
       <th>Activated?</th>
+      <th>Admin?</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -19,8 +20,9 @@
       <tr>
         <td><%= user.first_name %></td>
         <td><%= user.last_name %></td>
-        <td><%= user.activated %></td>
         <td><%= link_to user.email, user %></td>
+        <td><%= user.activated %></td>
+        <td><%= user.admin %></td>
         <td><%= link_to('Edit', edit_user_path(user)) + " | " + 
                 link_to('Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }) %>
         </td>
