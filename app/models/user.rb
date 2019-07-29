@@ -52,6 +52,14 @@ class User < ApplicationRecord
        UserMailer.account_activation(self).deliver_now 
     end
     
+    # Sends email to admins.
+    def send_admin_email
+      admins = User.where(admin: true)
+      admins.each do |admin|
+        UserMailer.account_creation(admin, self).deliver_now
+      end
+    end
+    
     # Sets the password reset attributes.
     def create_reset_digest
         self.reset_token = User.new_token
