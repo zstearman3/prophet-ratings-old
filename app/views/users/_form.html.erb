@@ -24,6 +24,8 @@
     <%= form.label :password_confirmation %>
     <%= form.password_field :password_confirmation, class: 'form-control', id: :user_password_confirmation %>
   </div>
+  
+  <%= form.invisible_captcha :robots %>
 
   <div class="actions">
     <%= form.submit yield(:button_text), class: "btn btn-standard btn-wide" %>
