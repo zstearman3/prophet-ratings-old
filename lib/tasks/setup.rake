@@ -276,8 +276,9 @@ namespace :setup do
           game.home_team = home_team
           begin
             game.save
+            puts "saved"
           rescue Exception => e
-            # exception goes here
+            puts "error"
           end
         end
       end

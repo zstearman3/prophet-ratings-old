@@ -177,30 +177,32 @@
   </thead>
   <tbody>
     <% @player_seasons.each do |player_season| %>
-      <tr>
-        <td><%= link_to player_season.name, player_season.player %></td>
-        <td><%= player_season.position %></td>
-        <td class="hidden-small"><%= player_season.games %>
-        <td><%= (player_season.minutes.to_f / player_season.games).round(1) %></td>
-        <td><%= (player_season.points.to_f / player_season.games).round(1) %></td>
-        <td><%= (player_season.assists.to_f / player_season.games).round(1) %></td>
-        <td><%= (player_season.rebounds.to_f / player_season.games).round(1) %></td>
-        <td><%= (player_season.blocked_shots.to_f / player_season.games).round(1) %></td>
-        <td><%= (player_season.steals.to_f / player_season.games).round(1) %></td>
-        <td><%= player_season.field_goals_percentage %></td>
-        <td><%= player_season.three_pointers_percentage %></td>
-        <% if player_season.bpm %>
-          <td class="hidden-small"><%= player_season.bpm %></td>
-        <% else %>
-          <td class="hidden-small">N/A</td>
-        <% end %>
-        <% if player_season.player_efficiency_rating %>
-          <td class="hidden-small"><%= player_season.player_efficiency_rating %></td>  
-        <% else %>
-          <td class="hidden-small">N/A</td>
-        <% end %>
-        <td><%= player_season.prophet_rating %></td>
-      </tr>
+      <% if player_season.games? %>
+        <tr>
+          <td><%= link_to player_season.name, player_season.player %></td>
+          <td><%= player_season.position %></td>
+          <td class="hidden-small"><%= player_season.games %>
+          <td><%= (player_season.minutes.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.points.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.assists.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.rebounds.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.blocked_shots.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.steals.to_f / player_season.games).round(1) %></td>
+          <td><%= player_season.field_goals_percentage %></td>
+          <td><%= player_season.three_pointers_percentage %></td>
+          <% if player_season.bpm %>
+            <td class="hidden-small"><%= player_season.bpm %></td>
+          <% else %>
+            <td class="hidden-small">N/A</td>
+          <% end %>
+          <% if player_season.player_efficiency_rating %>
+            <td class="hidden-small"><%= player_season.player_efficiency_rating %></td>  
+          <% else %>
+            <td class="hidden-small">N/A</td>
+          <% end %>
+          <td><%= player_season.prophet_rating %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

@@ -58,5 +58,18 @@
     </tbody>
   </table>
 <% else %>
-
+  <table class="table table-sm">
+    <tr>
+      <th>Matchup</th>
+    </tr>
+    <% @games.each do |game| %>
+      <tr>
+        <% if game.away_team && game.home_team %>
+          <td><%= game.away_team.school + " @ " + game.home_team.school %></td>
+        <% else %>
+          <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
