@@ -45,7 +45,7 @@
               <td><%= link_to description, prediction %></td>
             <% end %>
           <% else %>
-          
+            <td>N/A</td>
           <% end %>
           <% player_of_the_game = game.player_of_the_game %>
           <% player_game = PlayerGame.find_by(player: player_of_the_game, game: game) %>
@@ -61,13 +61,54 @@
   <table class="table table-sm">
     <tr>
       <th>Matchup</th>
+      <th>Time</th>
+      <th>Spread</th>
+      <th>O/U</th>
+      <th>Prediction</th>
+      <th>Predicted O/U</th>
     </tr>
     <% @games.each do |game| %>
+      <% prediction = game.prediction %>
       <tr>
         <% if game.away_team && game.home_team %>
-          <td><%= game.away_team.school + " @ " + game.home_team.school %></td>
+          <td><%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %></td>
+          <td><%= game.date_time.strftime("%I:%M%p")%></td>
+          <% unless game.point_spread.nil? %>
+            <% if game.point_spread < 0 %>
+              <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
+            <% else %>
+              <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
+            <% end %>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= game.over_under %></td>
         <% else %>
           <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
+          <td><%= game.date_time.strftime("%I:%M%p")%></td>
+          <% unless game.point_spread.nil? %>
+            <% if game.point_spread < 0 %>
+              <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
+            <% else %>
+              <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
+            <% end %>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= game.over_under %></td>
+        <% end %>
+        <% if prediction %>
+          <% if prediction.home_team_prediction > prediction.away_team_prediction %>
+            <% description = game.home_team_name + " -" + (prediction.home_team_prediction - prediction.away_team_prediction).to_s %>
+            <td><%= link_to description, prediction %></td>
+          <% else %>
+            <% description = game.away_team_name + " -" + (prediction.away_team_prediction - prediction.home_team_prediction).to_s %>
+            <td><%= link_to description, prediction %></td>
+          <% end %>
+          <td><%= prediction.predicted_over_under %></td>
+        <% else %>
+          <td></td>
+          <td></td>
         <% end %>
       </tr>
     <% end %>
