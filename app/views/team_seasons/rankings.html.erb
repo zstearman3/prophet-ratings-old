@@ -3,7 +3,7 @@
 <% year = @team_seasons.first.year if year == 0 %>
 <% conference_id = params[:conference_id].to_i %>
 <%= link_to 'Previous Season', rankings_path(season: year - 1, conference_id: conference_id) %>
-<%= link_to 'Next Season', rankings_path(season: year + 1, conference_id: conference_id), class: 'align-right' unless year > current_season.season %>
+<%= link_to 'Next Season', rankings_path(season: year + 1, conference_id: conference_id), class: 'align-right' unless year >= current_season.season %>
 <div class="row stats-container">
   <div class="row filter-container">
     <ul class="filter-navbar">

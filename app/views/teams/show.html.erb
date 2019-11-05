@@ -55,6 +55,27 @@
             <td><%= game.performance.round(1) if game.performance %></td>
           </tr>
         <% end %>
+        <% @games.each do |game| %>
+          <% if game.home_team == @team %>
+            <tr>
+              <td><%= game.day.strftime("%m/%d/%y") %></td>
+              <% if game.away_team %>
+                <td><%= link_to game.away_team.school, game.away_team %></td>
+              <% else %>
+                <td><%= game.away_team_name %></td>
+              <% end %>
+            </tr>
+          <% else %>
+            <tr>
+              <td><%= game.day.strftime("%m/%d/%y") %></td>
+              <% if game.home_team %>
+                <td><%= link_to "@ " + game.home_team.school, game.home_team %></td>
+              <% else %>
+                <td><%= "@ " + game.home_team_name %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
       </tbody>
     </table>
   </div>

@@ -16,6 +16,10 @@ class TeamsController < ApplicationController
     @player_seasons = @team.player_seasons.where(season: @season).order(minutes: :desc)
     @team_season = TeamSeason.find_by(team: @team, season: @season)
     @team_games = TeamGame.where(team: @team, season: @season).order(day: :asc)
+    @away_games = Game.where(away_team: @team, season: current_season).where("day > ?", Date.today - 1.day)
+    @home_games = Game.where(home_team: @team, season: current_season).where("day > ?", Date.today - 1.day)
+    @games = @away_games + @home_games
+    @games = @games.sort_by{|e| e[:day]}
   end
 
   def new

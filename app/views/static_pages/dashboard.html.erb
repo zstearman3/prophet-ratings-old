@@ -15,10 +15,23 @@
                 <% if game.away_team && game.home_team %>
                   <td><%= game.away_team.school + " @ " + game.home_team.school %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
-                  <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
+                  <% unless game.point_spread.nil? %>
+                    <% if game.point_spread < 0 %>
+                      <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
+                    <% else %>
+                      <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
+                    <% end %>
+                  <% end %>
                 <% else %>
                   <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
+                  <% unless game.point_spread.nil? %>
+                    <% if game.point_spread < 0 %>
+                      <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
+                    <% else %>
+                      <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
+                    <% end %>
+                  <% end %>
                 <% end %>
               </tr>
             <% end %>
