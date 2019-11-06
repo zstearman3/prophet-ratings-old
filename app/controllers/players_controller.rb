@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
   before_action :admin_user, only: [:edit, :create]
   def show
     @player = Player.find(params[:id])
-    @player_seasons = PlayerSeason.where(player: @player).where("year < ?", 2020).order(year: :desc)
+    @player_seasons = PlayerSeason.where(player: @player).where("minutes > ?", 0).order(year: :desc)
     @player_games = @player.player_games.order(day: :desc).first(5)
   end
   
