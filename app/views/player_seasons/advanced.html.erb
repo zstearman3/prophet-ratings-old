@@ -70,7 +70,7 @@
             <tr>
               <td><%= x %></td>
               <td><%= link_to season.name, season.player %></td>
-              <td><%= season.team.school %></td>
+              <td><%= season.team.school if season.team %></td>
               <td><%= season.true_shooting_percentage %></td>
               <td><%= season.assists_percentage %></td>
               <td><%= season.offensive_rebounds_percentage %></td>

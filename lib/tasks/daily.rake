@@ -586,13 +586,9 @@ namespace :daily do
             end
           end
           if game_count < 15
-            puts game_count
-            puts season.adj_offensive_efficiency
             season.adj_offensive_efficiency = (((game_count * ((season.adj_offensive_efficiency + (adj_ortg_error / divisor)))) + (4 * season.initial_adj_o)) / (4 + game_count)).round(1)
             season.adj_defensive_efficiency = (((game_count * ((season.adj_defensive_efficiency + (adj_drtg_error / divisor)))) + (4 * season.initial_adj_d)) / (4 + game_count)).round(1)
             season.adj_tempo = ((( game_count * ((season.adj_tempo + (adj_tempo_error / divisor)))) + (4 * season.initial_adj_t)) / (4 + game_count)).round(1)
-            puts season.adj_offensive_efficiency
-            puts 'next'
           else
             season.adj_offensive_efficiency = (season.adj_offensive_efficiency + (adj_ortg_error / divisor)).round(1)
             season.adj_defensive_efficiency = (season.adj_defensive_efficiency + (adj_drtg_error / divisor)).round(1)
@@ -609,12 +605,10 @@ namespace :daily do
       current_season.adj_tempo = team_seasons.average(:adj_tempo)
       current_season.save
       current_season.reload
-      puts oeff_error
-      puts old_oerror
       error_fraction = Math.sqrt(((oeff_error - old_oerror) / oeff_error) ** 2.0) 
-      puts error_fraction
       x += 1
     end
+    puts "Calculating game by game advantages"
     team_seasons.each do |season|
       games_array = []
       season.adjem_rank = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
@@ -814,235 +808,233 @@ namespace :daily do
     end
   ########### PLAYER STATS CALC######################################
   ########### LONG SECTION #########################################
-    # current_season = Season.find_by(season: current_year)
-    # player_games = PlayerGame.where(season: current_season)
-    # count = player_games.count
-    # x = 0
-    # player_games.each do |game|
-    #   team_game = game.game.team_games.find_by(team: game.team)
-    #   opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
-    #   if team_game && opponent_game
-    #     team_season = TeamSeason.find_by(team: team_game.team, season: current_season)
-    #     opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
-    #     if team_season && opponent_season
-    #       if game.minutes > 0 && team_game.minutes > 0
-    #           game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (team_game.minutes / 5.0)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
-    #           game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
-    #           game.assists_percentage = 100.0 if game.assists_percentage > 100.0
-    #           game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
-    #           game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
-    #           game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
-    #           game.steals_percentage = (100 * game.steals / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
-    #           game.blocks_percentage = (100 * game.blocked_shots / ((( game.minutes * 5.0 ) / team_game.minutes) * (opponent_game.field_goals_attempted - opponent_game.three_pointers_attempted))).round(1)
-    #           if !game.blocks_percentage.finite?
-    #             game.blocks_percentage = 0
-    #           end
-    #           game.turnovers_percentage = (100 * game.turnovers / ( game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers)).round(1)
-    #           game.true_shooting_percentage = (100 * game.points.to_f / (2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
-    #           game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted).round(1)
-    #           game.usage_rate = (100 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers) / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
-    #           if game.minutes > 7
-    #             game.bpm = ((0.138 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
-    #                         (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0)) +
-    #                         (0.0170 * game.assists_percentage) + (0.2976 * ((game.three_pointers_attempted / ( game.field_goals_attempted * 100.0)) - (game.season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
+    puts "Starting player advanced stats"
+    current_season = Season.find_by(season: current_year)
+    player_games = PlayerGame.where(season: current_season).where("day > ?", Date.today - 5.days)
+    count = player_games.count
+    x = 0
+    player_games.each do |game|
+      team_game = game.game.team_games.find_by(team: game.team)
+      opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
+      if team_game && opponent_game
+        team_season = TeamSeason.find_by(team: team_game.team, season: current_season)
+        opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
+        if team_season && opponent_season
+          if game.minutes > 0 && team_game.minutes > 0
+              game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (team_game.minutes / 5.0)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
+              game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
+              game.assists_percentage = 100.0 if game.assists_percentage > 100.0
+              game.offensive_rebounds_percentage = (100 * game.offensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.offensive_rebounds + opponent_game.defensive_rebounds))).round(1)          
+              game.defensive_rebounds_percentage = (100 * game.defensive_rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.defensive_rebounds + opponent_game.offensive_rebounds))).round(1)
+              game.rebounds_percentage = (100 * game.rebounds / (((game.minutes * 5.0) / team_game.minutes) * (team_game.rebounds  + opponent_game.rebounds))).round(1)
+              game.steals_percentage = (100 * game.steals / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
+              game.blocks_percentage = (100 * game.blocked_shots / ((( game.minutes * 5.0 ) / team_game.minutes) * (opponent_game.field_goals_attempted - opponent_game.three_pointers_attempted))).round(1)
+              if !game.blocks_percentage.finite?
+                game.blocks_percentage = 0
+              end
+              game.turnovers_percentage = (100 * game.turnovers / ( game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers)).round(1)
+              game.true_shooting_percentage = (100 * game.points.to_f / (2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
+              game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted).round(1)
+              game.usage_rate = (100 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted) + game.turnovers) / (((game.minutes * 5.0) / team_game.minutes) * game.game.possessions)).round(1)
+              if game.minutes > 7
+                game.bpm = ((0.138 * game.minutes) + (0.1196 * game.offensive_rebounds_percentage) + (-0.1513 * game.defensive_rebounds_percentage) + (1.2556 * game.steals_percentage) + (0.5318 * game.blocks_percentage) +
+                            (-0.3059 * game.assists_percentage) - (0.9213 * game.usage_rate * (game.turnovers_percentage / 100.0)) + ((0.7112 * game.usage_rate * (1 - (game.turnovers_percentage / 100.0))) * (2 * ((game.true_shooting_percentage / 100.0) - (team_game.true_shooting_percentage / 100.0)) +
+                            (0.0170 * game.assists_percentage) + (0.2976 * ((game.three_pointers_attempted / ( game.field_goals_attempted * 100.0)) - (game.season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(game.assists_percentage * game.rebounds_percentage)))).round(1)
               
-    #             if game.minutes < 24 
-    #               prate_minutes_multiplier = game.minutes / 24.0
-    #             else
-    #               prate_minutes_multiplier = 1
-    #             end
-    #             usage_adj = (game.usage_rate * (team_game.points.to_f / game.game.possessions) * (100.0 / opponent_season.adj_defensive_efficiency)) / 15.0
-    #             game.prophet_rating = ((game.bpm * prate_minutes_multiplier) + usage_adj).round(1)
-    #           else
-    #             game.bpm = 0
-    #             game.prophet_rating = 0
-    #           end
-    #           game.save
-    #       end
-    #     end
-    #   end
-    #   x += 1
-    #   if x % 1000 == 0
-    #     puts x.to_s + " of " + count.to_s + " games completed."
-    #   end
-    # end
-    # player_seasons = PlayerSeason.where(season: current_season)
-    # if redo_input == "r"
-    #   player_seasons = player_seasons.where("updated_at < ?", 5.days.ago)
-    # end
-    # seasons_count = player_seasons.count
-    # i = 0
-    # player_seasons.each do |season|
-    #   team_season = TeamSeason.find_by(team: season.team, season: current_season)
-    #   if team_season.nil?
-    #     next
-    #   end
-    #   offensive_rebounds = 0
-    #   defensive_rebounds = 0
-    #   rebounds = 0
-    #   offensive_rebounds_allowed = 0
-    #   defensive_rebounds_allowed = 0
-    #   rebounds_allowed = 0
-    #   team_offensive_rebounds = 0
-    #   team_defensive_rebounds = 0
-    #   team_rebounds = 0
-    #   steals = 0
-    #   blocked_shots = 0
-    #   two_pointers_attempted_allowed = 0
-    #   field_goals_attempted_allowed = 0
-    #   three_pointers_attempted_allowed = 0
-    #   three_pointers_attempted = 0
-    #   team_field_goals_made = 0
-    #   field_goals_made = 0
-    #   three_pointers_made = 0
-    #   free_throws_attempted = 0
-    #   field_goals_attempted = 0
-    #   free_throws_made = 0
-    #   points = 0
-    #   turnovers = 0
-    #   assists = 0
-    #   minutes = 0
-    #   game_count = 0
-    #   team_minutes = 0
-    #   possessions = 0
-    #   prophet_rating = 0
-    #   fouls = 0
-    #   vop = 1.1
-    #   bpm = 0
-    #   drbp = (season.season.defensive_rebounds_percentage / 100.0)
-    #   factor = 0.475
-    #   total_weight = 0
-    #   games = PlayerGame.where(player: season.player, season: current_season)
-    #   games.each do |game|
-    #     team_game = game.game.team_games.find_by(team: game.team)
-    #     opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
-    #     if team_game && opponent_game
-    #       opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
-    #       if team_season && opponent_season
-    #         if game.minutes > 0 && team_game.minutes > 0 && game.game.possessions
-    #           offensive_rebounds += game.offensive_rebounds
-    #           defensive_rebounds += game.defensive_rebounds
-    #           offensive_rebounds_allowed += opponent_game.offensive_rebounds
-    #           defensive_rebounds_allowed += opponent_game.defensive_rebounds
-    #           team_offensive_rebounds += team_game.offensive_rebounds
-    #           team_defensive_rebounds += team_game.defensive_rebounds
-    #           steals += game.steals
-    #           blocked_shots += game.blocked_shots
-    #           field_goals_attempted_allowed += opponent_game.field_goals_attempted
-    #           three_pointers_attempted_allowed += opponent_game.three_pointers_attempted
-    #           field_goals_made += game.field_goals_made
-    #           three_pointers_made += game.three_pointers_made
-    #           three_pointers_attempted += game.three_pointers_attempted
-    #           team_field_goals_made += team_game.field_goals_made
-    #           assists += game.assists
-    #           free_throws_attempted += game.free_throws_attempted
-    #           free_throws_made += game.free_throws_made
-    #           field_goals_attempted += game.field_goals_attempted
-    #           turnovers += game.turnovers
-    #           points += game.points
-    #           minutes += game.minutes
-    #           team_minutes += team_game.minutes
-    #           possessions += game.game.possessions
-    #           fouls += game.personal_fouls
-    #           competitiveness = competitiveness = (30 / (20 + (team_season.adj_efficiency_margin - opponent_season.adj_efficiency_margin) ** 2))
-    #           if game.minutes < 25
-    #             minutes_multiplier = (game.minutes / 25.0)
-    #           else
-    #             minutes_multiplier = 1
-    #           end
-    #           weight =  (1 + competitiveness)
-    #           if game.bpm 
-    #             if game.bpm.finite? && game.qualified != true
-    #               bpm += game.bpm
-    #               total_weight += weight
-    #               competition = (opponent_season.adj_efficiency_margin / 6.5) + ((opponent_season.adj_efficiency_margin - team_season.adj_efficiency_margin) / 20.0 )
-    #               raw_prating = game.bpm + competition
-    #               adj_prating = minutes_multiplier * weight * raw_prating
-    #               prophet_rating += adj_prating
-    #             else
-    #               game.qualified = true
-    #               game.bpm = 0
-    #               game.prophet_rating = 0
-    #               game.save
-    #             end
-    #           end
-    #           game_count += 1
-    #         end
-    #       end
-    #     end
-    #   end
-    #   minutes_percentage = minutes / (team_minutes / 5.0)
-    #   game_percentage = game_count.to_f / team_season.games
-    #   rebounds = offensive_rebounds + defensive_rebounds
-    #   team_rebounds = team_offensive_rebounds + team_defensive_rebounds
-    #   rebounds_allowed = offensive_rebounds_allowed + defensive_rebounds_allowed
-    #   two_pointers_attempted_allowed = field_goals_attempted_allowed - three_pointers_attempted_allowed
-    #   season.offensive_rebounds_percentage = ((100.0 * offensive_rebounds) / (minutes_percentage * (team_offensive_rebounds + defensive_rebounds_allowed))).round(1) 
-    #   season.defensive_rebounds_percentage = ((100.0 * defensive_rebounds) / (minutes_percentage * (team_defensive_rebounds + offensive_rebounds_allowed))).round(1)
-    #   season.total_rebounds_percentage = ((100.0 * rebounds) / (minutes_percentage * (team_rebounds + rebounds_allowed))).round(1)
-    #   season.steals_percentage = ((100.0 * steals) / (minutes_percentage * possessions)).round(1)
-    #   season.blocks_percentage = ((100.0 * blocked_shots) / (minutes_percentage * two_pointers_attempted_allowed)).round(1)
-    #   season.assists_percentage = ((100.0 * assists) / ((minutes_percentage * team_field_goals_made) - field_goals_made)).round(1)
-    #   season.turnovers_percentage = ((100.0 * turnovers) / (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers)).round(1)
-    #   season.effective_field_goals_percentage = ((100.0 * (field_goals_made + (0.5 * three_pointers_made))) / field_goals_attempted).round(1)
-    #   season.true_shooting_percentage = (100.0 * points / (2 * (field_goals_attempted + (0.44 * free_throws_attempted)))).round(1)
-    #   season.usage_rate = (100 * (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers) / (minutes_percentage * possessions)).round(1)
-    #   season.games_percentage = (100.0 * game_percentage).round(1)
-    #   season.minutes_percentage = (100.0 * minutes_percentage).round(1)
-    #   season.points_per_game = (points / game_count.to_f).round(1)
-    #   season.rebounds_per_game = (rebounds / game_count.to_f).round(1)
-    #   season.assists_per_game = (assists / game_count.to_f).round(1)
-    #   season.steals_per_game = (steals / game_count.to_f).round(1)
-    #   season.blocks_per_game = (blocked_shots / game_count.to_f).round(1)
-    #   begin
-    #     if minutes_percentage > 0.20 && game_percentage > 0.33
-    #       uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * team_season.assists_percentage) * field_goals_made) + 
-    #             ((free_throws_made * 0.5) * (1 + (1 - team_season.assists_percentage) + (0.6666 * team_season.assists_percentage))) - (vop * turnovers) - (vop * drbp * (field_goals_attempted - field_goals_made)) -
-    #             (vop * 0.44 * (0.44 + (0.56 * drbp)) * (free_throws_attempted - free_throws_made)) + (vop * (1 - drbp) * defensive_rebounds) +
-    #             (vop * drbp * offensive_rebounds) + (vop * steals) + (vop * drbp * blocked_shots) - (fouls * (0.8 - (0.44 * vop))))
-    #       season.aper = (current_season.adj_tempo / team_season.adj_tempo) * uper
-    #       season.bpm = ((0.138 * (minutes.to_f / (game_count + 3))) + (0.1196 * season.offensive_rebounds_percentage) + (-0.1513 * season.defensive_rebounds_percentage) + (1.2556 * season.steals_percentage) + (0.5318 * season.blocks_percentage) +
-    #                 (-0.3059 * season.assists_percentage) - (0.9213 * season.usage_rate * (season.turnovers_percentage / 100.0)) + ((0.7112 * season.usage_rate * (1 - (season.turnovers_percentage / 100.0))) * (2 * ((season.true_shooting_percentage / 100.0) - (team_season.true_shooting_percentage / 100.0)) +
-    #                 (0.0170 * season.assists_percentage) + (0.2976 * ((three_pointers_attempted / (field_goals_attempted * 100.0)) - (current_season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(season.assists_percentage * season.total_rebounds_percentage)))).round(1)
-    #       if season.usage_rate < 22
-    #         season.prophet_rating = (((season.usage_rate / 22.0) * prophet_rating) / total_weight).round(1)
-    #       else
-    #         season.prophet_rating = (prophet_rating / total_weight).round(1)
-    #       end
-    #       team_adjustment = ((season.usage_rate * minutes_percentage * team_season.adj_efficiency_margin) / 100.0).round(1)
-    #       season.prophet_rating += team_adjustment
-    #       season.save
-    #     else
-    #       season.prophet_rating = 0
-    #       season.aper = nil
-    #       season.player_efficiency_rating = nil
-    #       season.bpm = nil
-    #       season.save
-    #     end
-    #   rescue
+                if game.minutes < 24 
+                  prate_minutes_multiplier = game.minutes / 24.0
+                else
+                  prate_minutes_multiplier = 1
+                end
+                usage_adj = (game.usage_rate * (team_game.points.to_f / game.game.possessions) * (100.0 / opponent_season.adj_defensive_efficiency)) / 15.0
+                game.prophet_rating = ((game.bpm * prate_minutes_multiplier) + usage_adj).round(1)
+              else
+                game.bpm = 0
+                game.prophet_rating = 0
+              end
+              game.save
+          end
+        end
+      end
+      x += 1
+      if x % 1000 == 0
+        puts x.to_s + " of " + count.to_s + " games completed."
+      end
+    end
+    player_seasons = PlayerSeason.where(season: current_season)
+    seasons_count = player_seasons.count
+    i = 0
+    player_seasons.each do |season|
+      team_season = TeamSeason.find_by(team: season.team, season: current_season)
+      if team_season.nil?
+        next
+      end
+      offensive_rebounds = 0
+      defensive_rebounds = 0
+      rebounds = 0
+      offensive_rebounds_allowed = 0
+      defensive_rebounds_allowed = 0
+      rebounds_allowed = 0
+      team_offensive_rebounds = 0
+      team_defensive_rebounds = 0
+      team_rebounds = 0
+      steals = 0
+      blocked_shots = 0
+      two_pointers_attempted_allowed = 0
+      field_goals_attempted_allowed = 0
+      three_pointers_attempted_allowed = 0
+      three_pointers_attempted = 0
+      team_field_goals_made = 0
+      field_goals_made = 0
+      three_pointers_made = 0
+      free_throws_attempted = 0
+      field_goals_attempted = 0
+      free_throws_made = 0
+      points = 0
+      turnovers = 0
+      assists = 0
+      minutes = 0
+      game_count = 0
+      team_minutes = 0
+      possessions = 0
+      prophet_rating = 0
+      fouls = 0
+      vop = 1.1
+      bpm = 0
+      drbp = (season.season.defensive_rebounds_percentage / 100.0)
+      factor = 0.475
+      total_weight = 0
+      games = PlayerGame.where(player: season.player, season: current_season)
+      games.each do |game|
+        team_game = game.game.team_games.find_by(team: game.team)
+        opponent_game = game.game.team_games.find_by(team: team_game.opponent) if !team_game.nil?
+        if team_game && opponent_game
+          opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
+          if team_season && opponent_season
+            if game.minutes > 0 && team_game.minutes > 0 && game.game.possessions
+              offensive_rebounds += game.offensive_rebounds
+              defensive_rebounds += game.defensive_rebounds
+              offensive_rebounds_allowed += opponent_game.offensive_rebounds
+              defensive_rebounds_allowed += opponent_game.defensive_rebounds
+              team_offensive_rebounds += team_game.offensive_rebounds
+              team_defensive_rebounds += team_game.defensive_rebounds
+              steals += game.steals
+              blocked_shots += game.blocked_shots
+              field_goals_attempted_allowed += opponent_game.field_goals_attempted
+              three_pointers_attempted_allowed += opponent_game.three_pointers_attempted
+              field_goals_made += game.field_goals_made
+              three_pointers_made += game.three_pointers_made
+              three_pointers_attempted += game.three_pointers_attempted
+              team_field_goals_made += team_game.field_goals_made
+              assists += game.assists
+              free_throws_attempted += game.free_throws_attempted
+              free_throws_made += game.free_throws_made
+              field_goals_attempted += game.field_goals_attempted
+              turnovers += game.turnovers
+              points += game.points
+              minutes += game.minutes
+              team_minutes += team_game.minutes
+              possessions += game.game.possessions
+              fouls += game.personal_fouls
+              competitiveness = competitiveness = (30 / (20 + (team_season.adj_efficiency_margin - opponent_season.adj_efficiency_margin) ** 2))
+              if game.minutes < 25
+                minutes_multiplier = (game.minutes / 25.0)
+              else
+                minutes_multiplier = 1
+              end
+              weight =  (1 + competitiveness)
+              if game.bpm 
+                if game.bpm.finite? && game.qualified != true
+                  bpm += game.bpm
+                  total_weight += weight
+                  competition = (opponent_season.adj_efficiency_margin / 6.5) + ((opponent_season.adj_efficiency_margin - team_season.adj_efficiency_margin) / 20.0 )
+                  raw_prating = game.bpm + competition
+                  adj_prating = minutes_multiplier * weight * raw_prating
+                  prophet_rating += adj_prating
+                else
+                  game.qualified = true
+                  game.bpm = 0
+                  game.prophet_rating = 0
+                  game.save
+                end
+              end
+              game_count += 1
+            end
+          end
+        end
+      end
+      minutes_percentage = minutes / (team_minutes / 5.0)
+      game_percentage = game_count.to_f / team_season.games
+      rebounds = offensive_rebounds + defensive_rebounds
+      team_rebounds = team_offensive_rebounds + team_defensive_rebounds
+      rebounds_allowed = offensive_rebounds_allowed + defensive_rebounds_allowed
+      two_pointers_attempted_allowed = field_goals_attempted_allowed - three_pointers_attempted_allowed
+      season.offensive_rebounds_percentage = ((100.0 * offensive_rebounds) / (minutes_percentage * (team_offensive_rebounds + defensive_rebounds_allowed))).round(1) 
+      season.defensive_rebounds_percentage = ((100.0 * defensive_rebounds) / (minutes_percentage * (team_defensive_rebounds + offensive_rebounds_allowed))).round(1)
+      season.total_rebounds_percentage = ((100.0 * rebounds) / (minutes_percentage * (team_rebounds + rebounds_allowed))).round(1)
+      season.steals_percentage = ((100.0 * steals) / (minutes_percentage * possessions)).round(1)
+      season.blocks_percentage = ((100.0 * blocked_shots) / (minutes_percentage * two_pointers_attempted_allowed)).round(1)
+      season.assists_percentage = ((100.0 * assists) / ((minutes_percentage * team_field_goals_made) - field_goals_made)).round(1)
+      season.turnovers_percentage = ((100.0 * turnovers) / (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers)).round(1)
+      season.effective_field_goals_percentage = ((100.0 * (field_goals_made + (0.5 * three_pointers_made))) / field_goals_attempted).round(1)
+      season.true_shooting_percentage = (100.0 * points / (2 * (field_goals_attempted + (0.44 * free_throws_attempted)))).round(1)
+      season.usage_rate = (100 * (field_goals_attempted + (0.44 * free_throws_attempted) + turnovers) / (minutes_percentage * possessions)).round(1)
+      season.games_percentage = (100.0 * game_percentage).round(1)
+      season.minutes_percentage = (100.0 * minutes_percentage).round(1)
+      season.points_per_game = (points / game_count.to_f).round(1)
+      season.rebounds_per_game = (rebounds / game_count.to_f).round(1)
+      season.assists_per_game = (assists / game_count.to_f).round(1)
+      season.steals_per_game = (steals / game_count.to_f).round(1)
+      season.blocks_per_game = (blocked_shots / game_count.to_f).round(1)
+      begin
+        if minutes_percentage > 0.20 && game_percentage > 0.33
+          uper = (1.0 / minutes) * (three_pointers_made + (0.6666 * assists) + (((2 - factor) * team_season.assists_percentage) * field_goals_made) + 
+                ((free_throws_made * 0.5) * (1 + (1 - team_season.assists_percentage) + (0.6666 * team_season.assists_percentage))) - (vop * turnovers) - (vop * drbp * (field_goals_attempted - field_goals_made)) -
+                (vop * 0.44 * (0.44 + (0.56 * drbp)) * (free_throws_attempted - free_throws_made)) + (vop * (1 - drbp) * defensive_rebounds) +
+                (vop * drbp * offensive_rebounds) + (vop * steals) + (vop * drbp * blocked_shots) - (fouls * (0.8 - (0.44 * vop))))
+          season.aper = (current_season.adj_tempo / team_season.adj_tempo) * uper
+          season.bpm = ((0.138 * (minutes.to_f / (game_count + 3))) + (0.1196 * season.offensive_rebounds_percentage) + (-0.1513 * season.defensive_rebounds_percentage) + (1.2556 * season.steals_percentage) + (0.5318 * season.blocks_percentage) +
+                    (-0.3059 * season.assists_percentage) - (0.9213 * season.usage_rate * (season.turnovers_percentage / 100.0)) + ((0.7112 * season.usage_rate * (1 - (season.turnovers_percentage / 100.0))) * (2 * ((season.true_shooting_percentage / 100.0) - (team_season.true_shooting_percentage / 100.0)) +
+                    (0.0170 * season.assists_percentage) + (0.2976 * ((three_pointers_attempted / (field_goals_attempted * 100.0)) - (current_season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(season.assists_percentage * season.total_rebounds_percentage)))).round(1)
+          if season.usage_rate < 22
+            season.prophet_rating = (((season.usage_rate / 22.0) * prophet_rating) / total_weight).round(1)
+          else
+            season.prophet_rating = (prophet_rating / total_weight).round(1)
+          end
+          team_adjustment = ((season.usage_rate * minutes_percentage * team_season.adj_efficiency_margin) / 100.0).round(1)
+          season.prophet_rating += team_adjustment
+          season.save
+        else
+          season.prophet_rating = 0
+          season.aper = nil
+          season.player_efficiency_rating = nil
+          season.bpm = nil
+          season.save
+        end
+      rescue
       
-    #   end
-    #   i += 1
-    #   if i % 100 == 0
-    #     puts i.to_s + " of " + seasons_count.to_s + " seasons completed."
-    #   end
-    # end
-    ## player_seasons = PlayerSeason.where(season: current_season)
-    ## games = Game.where(season: current_season)
-    # games.each do |game|
-    #   player_game = game.player_games.where("minutes > ?", 22).order(prophet_rating: :desc).first
-    #   game.player_of_the_game = player_game.player if player_game
-    #   game.save
-    # end
-    # current_season.aper = player_seasons.average(:aper)
-    # current_season.save
-    # player_seasons.each do |season|
-    #   if season.aper
-    #     season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
-    #     season.player_of_the_games = season.player.player_of_the_games.where(season: current_season).count
-    #     season.save
-    #   end
-    # end
+      end
+      i += 1
+      if i % 100 == 0
+        puts i.to_s + " of " + seasons_count.to_s + " seasons completed."
+      end
+    end
+    player_seasons = PlayerSeason.where(season: current_season)
+    games = Game.where(season: current_season)
+    games.each do |game|
+      player_game = game.player_games.where("minutes > ?", 22).order(prophet_rating: :desc).first
+      game.player_of_the_game = player_game.player if player_game
+      game.save
+    end
+    current_season.aper = player_seasons.average(:aper)
+    current_season.save
+    player_seasons.each do |season|
+      if season.aper
+        season.player_efficiency_rating = (season.aper * (15 / current_season.aper)).round(1)
+        season.player_of_the_games = season.player.player_of_the_games.where(season: current_season).count
+        season.save
+      end
+    end
     
   end
 end

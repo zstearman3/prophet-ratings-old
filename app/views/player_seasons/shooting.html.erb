@@ -62,7 +62,7 @@
             <tr>
               <td><%= x %></td>
               <td><%= link_to season.name, season.player %></td>
-              <td><%= season.team.school %></td>
+              <td><%= season.team.school if season.team %></td>
               <td><%= season.field_goals_percentage %></td>
               <td><%= season.two_pointers_percentage %></td>
               <td><%= season.three_pointers_percentage %></td>

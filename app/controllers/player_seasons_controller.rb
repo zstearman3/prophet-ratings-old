@@ -4,7 +4,7 @@ class PlayerSeasonsController < ApplicationController
   helper_method :sort_column, :sort_direction
   
   def advanced
-    @player_seasons = PlayerSeason.where(year: params[:season]).where("minutes > ?", 200)
+    @player_seasons = PlayerSeason.where(year: params[:season]).where("minutes > ?", 10).where("prophet_rating > ?", -20).where.not(prophet_rating: Float::NAN)
     if params[:conference_id].to_i > 0
       if params[:conference_id].to_i == 50
         conferences_list = [2, 4, 5, 7, 8, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 29, 30, 31, 32, 33]
@@ -24,7 +24,7 @@ class PlayerSeasonsController < ApplicationController
   end
   
   def shooting
-    @player_seasons = PlayerSeason.where(year: params[:season]).where("points > ?", 200).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
+    @player_seasons = PlayerSeason.where(year: params[:season]).where("points > ?", 10).where("prophet_rating > ?", -20).where.not(effective_field_goals_percentage: Float::NAN).order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: 100)
     if params[:conference_id].to_i > 0
       if params[:conference_id].to_i == 50
         conferences_list = [2, 4, 5, 7, 8, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 29, 30, 31, 32, 33]
