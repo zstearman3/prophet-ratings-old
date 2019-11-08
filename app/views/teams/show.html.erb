@@ -42,7 +42,7 @@
           <% end %>
           <tr>
             <td><%= game.day.strftime("%m/%d/%y") %></td>
-            <td><% if game.home_or_away == "AWAY" %>@<% end %><% if opponent_game %><%= link_to opponent_game.team.school, opponent_game.team %><% else %><%= game.opponent_name %><% end %></td>
+            <td><% if game.home_or_away == "AWAY" %>@<% end %><% if opponent_game && opponent_game.team %><%= link_to opponent_game.team.school, opponent_game.team %><% else %><%= game.opponent_name %><% end %></td>
             <% if game.wins + game.losses > 0 %>
               <% game_text = "" %>
               <% if game.wins == 1%><% game_text += "W "%><% else %><% game_text += "L "%><% end %>
