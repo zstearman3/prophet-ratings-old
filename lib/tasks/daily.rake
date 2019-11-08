@@ -615,198 +615,203 @@ namespace :daily do
       puts error_fraction
       x += 1
     end
-    # team_seasons.each do |season|
-    #   games_array = []
-    #   season.adjem_rank = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
+    team_seasons.each do |season|
+      games_array = []
+      season.adjem_rank = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
 
     #   #### Game by Game advantage calculations ####
-    #   ortg_array = []
-    #   drtg_array = []
-    #   TeamGame.where(team: season.team, season: current_season).each do |game|
-    #     if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0 && !game.opponent.nil? && !game.game.possessions.nil?
-    #       opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
-    #       opponent_game = game.game.team_games.find_by(team: game.opponent)
-    #       if opponent_season && opponent_game
-    #         expected_ortg = (season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (opponent_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
-    #         expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
-    #         actual_ortg = 100 * game.points.to_f / game.game.possessions
-    #         actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
-    #         ortg_array.push(actual_ortg - expected_ortg)
-    #         drtg_array.push(actual_drtg - expected_drtg)
-    #         pace = game.game.possessions * 40 / (game.minutes / 5)
-    #         performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) *( pace / 100 )
+      ortg_array = []
+      drtg_array = []
+      TeamGame.where(team: season.team, season: current_season).each do |game|
+        if game.game.is_completed && game.wins + game.losses > 0 && game.minutes > 0 && !game.opponent.nil? && !game.game.possessions.nil?
+          opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
+          opponent_game = game.game.team_games.find_by(team: game.opponent)
+          if opponent_season && opponent_game
+            expected_ortg = (season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (opponent_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
+            expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
+            actual_ortg = 100 * game.points.to_f / game.game.possessions
+            actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
+            ortg_array.push(actual_ortg - expected_ortg)
+            drtg_array.push(actual_drtg - expected_drtg)
+            pace = game.game.possessions * 40 / (game.minutes / 5)
+            performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) *( pace / 100 )
             
-    #         if actual_ortg - actual_drtg > 30
-    #           if performance > 15
-    #             performance = 15
-    #           end
-    #         end
-    #               ## Performance capped at 10 over 30 points per 100 possessions
-    #         if actual_drtg - actual_ortg > 30
-    #           if performance < -15
-    #             performance = -15
-    #           end
-    #         end
-    #         if game.game.stadium == game.team.stadium
-    #           home = true
-    #         elsif game.game.stadium == opponent_season.team.stadium
-    #           home = false
-    #         end
-    #         defensive_style = opponent_season.defensive_aggression / 10.0
-    #         three_pointers_advantage = ((opponent_season.three_pointers_rate * 2) + opponent_season.three_pointers_percentage) / 10.0
-    #         pace_advantage = opponent_season.adj_tempo
-    #         assists_advantage = opponent_season.assists_percentage
-    #         game_hash = { "performance" => performance, "home" => home, "defense" => defensive_style, 
-    #                       "three_pointers" => three_pointers_advantage, "pace" => pace_advantage, "assists" => assists_advantage}
-    #         games_array.push(game_hash)
-    #         game.performance = performance.round(1)
-    #         if home == true
-    #           game.home_away_neutral = "home"
-    #         elsif home == false
-    #           game.home_away_neutral = "away"
-    #         else
-    #           game.home_away_neutral = "neutral"
-    #         end
-    #         game.defensive_style_advantage = defensive_style
-    #         game.three_pointers_advantage = three_pointers_advantage
-    #         game.pace_advantage = pace_advantage
-    #         game.assists_advantage = assists_advantage
-    #         game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted.to_f).round(1)
-    #         game.true_shooting_percentage = (100 * game.points / ( 2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
-    #         game.free_throws_rate = (100 * game.free_throws_made.to_f / game.field_goals_attempted).round(1)
-    #         game.pace = pace.round(1)
-    #         game.blocks_percentage = ((100 * game.blocked_shots.to_f) / (opponent_game.field_goals_attempted - game.three_pointers_attempted)).round(1)
-    #         game.steals_percentage = ((100 * game.steals) / game.game.possessions).round(1)
-    #         game.assists_percentage = ((100 * game.assists.to_f) / game.field_goals_made).round(1)
-    #         game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
-    #         game.assists_percentage = 100.0 if game.assists_percentage > 100.0
-    #         game.turnovers_percentage = ((100 * game.turnovers) / game.game.possessions).round(1)
-    #         game.offensive_efficiency = actual_ortg.round(1)
-    #         game.defensive_efficiency = actual_drtg.round(1)
-    #         game.expected_ortg = expected_ortg.round(1)
-    #         game.expected_drtg = expected_drtg.round(1)
-    #         game.offensive_rebounds_percentage = ((100 * game.offensive_rebounds.to_f) / (game.offensive_rebounds + opponent_game.defensive_rebounds)).round(1)
-    #         game.defensive_rebounds_percentage = ((100 * game.defensive_rebounds.to_f) / (game.defensive_rebounds + opponent_game.offensive_rebounds)).round(1)
-    #         begin
-    #           game.save
-    #         rescue
-    #           ### Error handling ###
-    #         end
-    #       end
-    #     end
-    #   end
-    #   sum_performance = games_array.sum { |game| game["performance"] }
-    #   game_count = games_array.size.to_f
-    #   home_games = games_array.select {|game| game["home"] == true}
-    #   away_games = games_array.select {|game| game["home"] == false}
-    #   sum_product_defense = 0
-    #   sum_defense_squared = 0
-    #   sum_defense = 0
-    #   sum_product_threes = 0
-    #   sum_threes_squared = 0
-    #   sum_threes = 0
-    #   sum_product_assists = 0
-    #   sum_assists_squared = 0
-    #   sum_assists = 0
-    #   sum_product_pace = 0
-    #   sum_pace_squared = 0
-    #   sum_pace = 0
-    #   b_defensive_style = 0
-    #   b_three_pointers = 0
-    #   b_assists = 0
-    #   b_pace = 0
-    #   games_array.each do |game|
-    #     sum_product_defense += (game["defense"] * game["performance"])
-    #     sum_defense_squared += (game["defense"]) ** 2
-    #     sum_defense += game["defense"]
-    #     sum_product_threes += (game["three_pointers"] * game["performance"])
-    #     sum_threes_squared += (game["three_pointers"]) ** 2
-    #     sum_threes += game["three_pointers"]
-    #     sum_product_assists += (game["assists"] * game["performance"])
-    #     sum_assists_squared += (game["assists"]) ** 2
-    #     sum_assists += game["assists"]
-    #     sum_product_pace += (game["pace"] * game["performance"])
-    #     sum_pace_squared += (game["pace"]) ** 2
-    #     sum_pace += game["pace"]
-    #   end
-            
-    #   # Home Advantage Calc
-    #   home_advantage = home_games.sum { |game| game["performance"] } / home_games.size.to_f
-    #   away_advantage = away_games.sum { |game| game["performance"] } / away_games.size.to_f
-      
-    #   # Defensive Style Advantage Calc
-    #   defensive_style_advantage = ((game_count * sum_product_defense) - (sum_defense * sum_performance.to_f)) / ((game_count * sum_defense_squared.to_f) - (sum_defense) ** 2)
-    #   b_defensive_style = (sum_performance / game_count ) - (defensive_style_advantage * (games_array.sum { |game| game["defense"]}) / game_count)
-      
-    #   three_pointers_advantage = ((game_count * sum_product_threes) - (sum_threes * sum_performance.to_f)) / ((game_count * sum_threes_squared.to_f) - (sum_threes) ** 2)
-    #   b_three_pointers = (sum_performance / game_count ) - (three_pointers_advantage * (games_array.sum { |game| game["three_pointers"]}) / game_count)
-      
-    #   assists_advantage = ((game_count * sum_product_assists) - (sum_assists * sum_performance.to_f)) / ((game_count * sum_assists_squared.to_f) - (sum_assists) ** 2)
-    #   b_assists = (sum_performance / game_count ) - (assists_advantage * (games_array.sum { |game| game["assists"]}) / game_count)
-      
-    #   pace_advantage = ((game_count * sum_product_pace) - (sum_pace * sum_performance.to_f)) / ((game_count * sum_pace_squared.to_f) - (sum_pace) ** 2)
-    #   b_pace = (sum_performance / game_count ) - (pace_advantage * (games_array.sum { |game| game["pace"]}) / game_count)
-      
-    #   ssr_defensive_style = 0
-    #   ssr_three_pointers = 0
-    #   ssr_assists = 0
-    #   ssr_pace = 0
-    #   ssto = 0
-    #   r_defensive_style = 0
-    #   r_three_pointers = 0
-    #   r_assists = 0
-    #   r_pace = 0
-    #   games_array.each do |game|
-    #     ssr_defensive_style += (((defensive_style_advantage * game["defense"]) + b_defensive_style) - (sum_performance.to_f / game_count)) ** 2
-    #     ssr_three_pointers += (((three_pointers_advantage * game["three_pointers"]) + b_three_pointers) - (sum_performance.to_f / game_count)) ** 2
-    #     ssr_assists += (((assists_advantage * game["assists"]) + b_assists) - (sum_performance.to_f / game_count)) ** 2
-    #     ssr_pace += (((pace_advantage * game["pace"]) + b_pace) - (sum_performance.to_f / game_count)) ** 2
-    #     ssto += (game["performance"] - (sum_performance.to_f / game_count)) ** 2
-    #   end
-    #   ortg_avg = ortg_array.inject{ |sum, el| sum + el }.to_f / ortg_array.size
-    #   drtg_avg = drtg_array.inject{ |sum, el| sum + el }.to_f / drtg_array.size
-    #   ortg_squares = []
-    #   drtg_squares = []
-    #   ortg_array.each do |rating|
-    #     ortg_squares.push((ortg_avg - rating) ** 2)
-    #   end
-    #   drtg_array.each do |rating|
-    #     drtg_squares.push((drtg_avg - rating) ** 2)
-    #   end
-    #   ortg_stdev = Math.sqrt(ortg_squares.inject{ |sum, el| sum + el }.to_f / ortg_squares.size)
-    #   drtg_stdev = Math.sqrt(drtg_squares.inject{ |sum, el| sum + el }.to_f / drtg_squares.size)
-    #   season.consistency = (Math.sqrt(ortg_stdev * drtg_stdev)).round(1)
-    #   r_defensive_style = (ssr_defensive_style.to_f / ssto).round(3)
-    #   r_three_pointers = (ssr_three_pointers.to_f / ssto).round(3)
-    #   r_assists = (ssr_assists.to_f / ssto).round(3)
-    #   r_pace = (ssr_pace.to_f / ssto).round(3)
-    #   season.r_defensive_style = r_defensive_style
-    #   season.r_three_pointers = r_three_pointers
-    #   season.r_assists = r_assists
-    #   season.r_pace = r_pace
-    #   season.home_advantage = ((home_advantage - away_advantage)/2).round(1)
-    #   season.defensive_style_advantage = defensive_style_advantage.round(2)
-    #   season.three_pointers_advantage = three_pointers_advantage.round(2)
-    #   season.assists_advantage = assists_advantage.round(2)
-    #   season.pace_advantage = pace_advantage.round(2)
-    #   season.save
-    #   team = season.team
-    #   team.adj_offensive_efficiency = season.adj_offensive_efficiency
-    #   team.adj_defensive_efficiency = season.adj_defensive_efficiency
-    #   team.adj_efficiency_margin = season.adj_efficiency_margin
-    #   team.adj_tempo = season.adj_tempo
-    #   team.adjem_rank = season.adjem_rank
-    #   team.save
-    # end
-    # team_seasons.reload
-    # current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
-    # current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
-    # current_season.adj_tempo = team_seasons.average(:adj_tempo)
-    # current_season.home_advantage = team_seasons.average(:home_advantage)
-    # current_season.consistency = team_seasons.average(:consistency)
-    # current_season.save
+            if actual_ortg - actual_drtg > 30
+              if performance > 15
+                performance = 15
+              end
+            end
+                  ## Performance capped at 10 over 30 points per 100 possessions
+            if actual_drtg - actual_ortg > 30
+              if performance < -15
+                performance = -15
+              end
+            end
+            if game.game.stadium == game.team.stadium
+              home = true
+            elsif game.game.stadium == opponent_season.team.stadium
+              home = false
+            end
+            defensive_style = opponent_season.defensive_aggression / 10.0
+            three_pointers_advantage = ((opponent_season.three_pointers_rate * 2) + opponent_season.three_pointers_percentage) / 10.0
+            pace_advantage = opponent_season.adj_tempo
+            assists_advantage = opponent_season.assists_percentage
+            game_hash = { "performance" => performance, "home" => home, "defense" => defensive_style, 
+                          "three_pointers" => three_pointers_advantage, "pace" => pace_advantage, "assists" => assists_advantage}
+            games_array.push(game_hash)
+            game.performance = performance.round(1)
+            if home == true
+              game.home_away_neutral = "home"
+            elsif home == false
+              game.home_away_neutral = "away"
+            else
+              game.home_away_neutral = "neutral"
+            end
+            game.defensive_style_advantage = defensive_style
+            game.three_pointers_advantage = three_pointers_advantage
+            game.pace_advantage = pace_advantage
+            game.assists_advantage = assists_advantage
+            game.effective_field_goals_percentage = (100 * (game.field_goals_made + (0.5 * game.three_pointers_made)) / game.field_goals_attempted.to_f).round(1)
+            game.true_shooting_percentage = (100 * game.points / ( 2 * (game.field_goals_attempted + (0.44 * game.free_throws_attempted)))).round(1)
+            game.free_throws_rate = (100 * game.free_throws_made.to_f / game.field_goals_attempted).round(1)
+            game.pace = pace.round(1)
+            game.blocks_percentage = ((100 * game.blocked_shots.to_f) / (opponent_game.field_goals_attempted - game.three_pointers_attempted)).round(1)
+            game.steals_percentage = ((100 * game.steals) / game.game.possessions).round(1)
+            game.assists_percentage = ((100 * game.assists.to_f) / game.field_goals_made).round(1)
+            game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
+            game.assists_percentage = 100.0 if game.assists_percentage > 100.0
+            game.turnovers_percentage = ((100 * game.turnovers) / game.game.possessions).round(1)
+            game.offensive_efficiency = actual_ortg.round(1)
+            game.defensive_efficiency = actual_drtg.round(1)
+            game.expected_ortg = expected_ortg.round(1)
+            game.expected_drtg = expected_drtg.round(1)
+            game.offensive_rebounds_percentage = ((100 * game.offensive_rebounds.to_f) / (game.offensive_rebounds + opponent_game.defensive_rebounds)).round(1)
+            game.defensive_rebounds_percentage = ((100 * game.defensive_rebounds.to_f) / (game.defensive_rebounds + opponent_game.offensive_rebounds)).round(1)
+            begin
+              game.save
+            rescue
+              ### Error handling ###
+            end
+          end
+        end
+      end
+      if season.games && season.games > 10
+        sum_performance = games_array.sum { |game| game["performance"] }
+        game_count = games_array.size.to_f
+        home_games = games_array.select {|game| game["home"] == true}
+        away_games = games_array.select {|game| game["home"] == false}
+        sum_product_defense = 0
+        sum_defense_squared = 0
+        sum_defense = 0
+        sum_product_threes = 0
+        sum_threes_squared = 0
+        sum_threes = 0
+        sum_product_assists = 0
+        sum_assists_squared = 0
+        sum_assists = 0
+        sum_product_pace = 0
+        sum_pace_squared = 0
+        sum_pace = 0
+        b_defensive_style = 0
+        b_three_pointers = 0
+        b_assists = 0
+        b_pace = 0
+        games_array.each do |game|
+          sum_product_defense += (game["defense"] * game["performance"])
+          sum_defense_squared += (game["defense"]) ** 2
+          sum_defense += game["defense"]
+          sum_product_threes += (game["three_pointers"] * game["performance"])
+          sum_threes_squared += (game["three_pointers"]) ** 2
+          sum_threes += game["three_pointers"]
+          sum_product_assists += (game["assists"] * game["performance"])
+          sum_assists_squared += (game["assists"]) ** 2
+          sum_assists += game["assists"]
+          sum_product_pace += (game["pace"] * game["performance"])
+          sum_pace_squared += (game["pace"]) ** 2
+          sum_pace += game["pace"]
+        end
+              
+        # Home Advantage Calc
+        home_advantage = home_games.sum { |game| game["performance"] } / home_games.size.to_f
+        away_advantage = away_games.sum { |game| game["performance"] } / away_games.size.to_f
+        
+        # Defensive Style Advantage Calc
+        defensive_style_advantage = ((game_count * sum_product_defense) - (sum_defense * sum_performance.to_f)) / ((game_count * sum_defense_squared.to_f) - (sum_defense) ** 2)
+        b_defensive_style = (sum_performance / game_count ) - (defensive_style_advantage * (games_array.sum { |game| game["defense"]}) / game_count)
+        
+        three_pointers_advantage = ((game_count * sum_product_threes) - (sum_threes * sum_performance.to_f)) / ((game_count * sum_threes_squared.to_f) - (sum_threes) ** 2)
+        b_three_pointers = (sum_performance / game_count ) - (three_pointers_advantage * (games_array.sum { |game| game["three_pointers"]}) / game_count)
+        
+        assists_advantage = ((game_count * sum_product_assists) - (sum_assists * sum_performance.to_f)) / ((game_count * sum_assists_squared.to_f) - (sum_assists) ** 2)
+        b_assists = (sum_performance / game_count ) - (assists_advantage * (games_array.sum { |game| game["assists"]}) / game_count)
+        
+        pace_advantage = ((game_count * sum_product_pace) - (sum_pace * sum_performance.to_f)) / ((game_count * sum_pace_squared.to_f) - (sum_pace) ** 2)
+        b_pace = (sum_performance / game_count ) - (pace_advantage * (games_array.sum { |game| game["pace"]}) / game_count)
+        
+        ssr_defensive_style = 0
+        ssr_three_pointers = 0
+        ssr_assists = 0
+        ssr_pace = 0
+        ssto = 0
+        r_defensive_style = 0
+        r_three_pointers = 0
+        r_assists = 0
+        r_pace = 0
+        games_array.each do |game|
+          ssr_defensive_style += (((defensive_style_advantage * game["defense"]) + b_defensive_style) - (sum_performance.to_f / game_count)) ** 2
+          ssr_three_pointers += (((three_pointers_advantage * game["three_pointers"]) + b_three_pointers) - (sum_performance.to_f / game_count)) ** 2
+          ssr_assists += (((assists_advantage * game["assists"]) + b_assists) - (sum_performance.to_f / game_count)) ** 2
+          ssr_pace += (((pace_advantage * game["pace"]) + b_pace) - (sum_performance.to_f / game_count)) ** 2
+          ssto += (game["performance"] - (sum_performance.to_f / game_count)) ** 2
+        end
+        ortg_avg = ortg_array.inject{ |sum, el| sum + el }.to_f / ortg_array.size
+        drtg_avg = drtg_array.inject{ |sum, el| sum + el }.to_f / drtg_array.size
+        ortg_squares = []
+        drtg_squares = []
+        ortg_array.each do |rating|
+          ortg_squares.push((ortg_avg - rating) ** 2)
+        end
+        drtg_array.each do |rating|
+          drtg_squares.push((drtg_avg - rating) ** 2)
+        end
+        ortg_stdev = Math.sqrt(ortg_squares.inject{ |sum, el| sum + el }.to_f / ortg_squares.size)
+        drtg_stdev = Math.sqrt(drtg_squares.inject{ |sum, el| sum + el }.to_f / drtg_squares.size)
+        season.consistency = (Math.sqrt(ortg_stdev * drtg_stdev)).round(1)
+        r_defensive_style = (ssr_defensive_style.to_f / ssto).round(3)
+        r_three_pointers = (ssr_three_pointers.to_f / ssto).round(3)
+        r_assists = (ssr_assists.to_f / ssto).round(3)
+        r_pace = (ssr_pace.to_f / ssto).round(3)
+        season.r_defensive_style = r_defensive_style
+        season.r_three_pointers = r_three_pointers
+        season.r_assists = r_assists
+        season.r_pace = r_pace
+        season.home_advantage = ((home_advantage - away_advantage)/2).round(1)
+        season.defensive_style_advantage = defensive_style_advantage.round(2)
+        season.three_pointers_advantage = three_pointers_advantage.round(2)
+        season.assists_advantage = assists_advantage.round(2)
+        season.pace_advantage = pace_advantage.round(2)
+        season.save
+        team = season.team
+        team.adj_offensive_efficiency = season.adj_offensive_efficiency
+        team.adj_defensive_efficiency = season.adj_defensive_efficiency
+        team.adj_efficiency_margin = season.adj_efficiency_margin
+        team.adj_tempo = season.adj_tempo
+        team.adjem_rank = season.adjem_rank
+        team.save
+      end
+    end
+    team_seasons.reload
+    current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
+    current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
+    current_season.adj_tempo = team_seasons.average(:adj_tempo)
+    current_season.home_advantage = team_seasons.average(:home_advantage)
+    current_season.consistency = team_seasons.average(:consistency)
+    current_season.save
     
-  
+    TeamSeason.where(year: current_year).each do |season|
+      season.adjem_rank = TeamSeason.where(year: current_year).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
+      season.save
+    end
   ########### PLAYER STATS CALC######################################
   ########### LONG SECTION #########################################
     # current_season = Season.find_by(season: current_year)
