@@ -1155,8 +1155,8 @@ namespace :daily do
             end
           end
           prediction.save
-        rescue
-          puts prediction.inspect
+        rescue StandardError => e
+          puts e.full_messages
         end
       end
     end
