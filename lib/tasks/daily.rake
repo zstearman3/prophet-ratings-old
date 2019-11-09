@@ -1189,13 +1189,13 @@ namespace :daily do
             ### OVER/UNDER OUTCOME ###
             if prediction.predicted_over_under > (prediction.over_under + 1)
               # over bet
-              if (game.away_team_score + game.home_team_score) < prediction.over_under
+              if (game.away_team_score + game.home_team_score) > prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
                 prediction.winnings_over_under = 90.9
               elsif (game.away_team_score + game.home_team_score) < prediction.over_under
                 # losing bet
-                prediction.win_over_under = fals
+                prediction.win_over_under = false
                 prediction.winnings_over_under = -100
               else
                 prediction.win_over_under = nil
