@@ -1120,6 +1120,7 @@ namespace :daily do
           predicted_home_efficiency += pace_advantage / 2.0
           predicted_away_efficiency += pace_advantage / -2.0
         end
+        
         begin
           prediction.home_advantage = home_advantage.round(1)
           prediction.defense_advantage = defensive_advantage.round(1)
@@ -1132,6 +1133,27 @@ namespace :daily do
           prediction.away_team_prediction = predicted_away_score.round
           prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
           prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
+          ##### MONEYLINE CALCS ######
+          mean = predicted_home_efficiency - predicted_away_efficiency
+          std_dev = current_season.consistency
+          home_win_z_score = (0.0 - mean) / std_dev
+          home_win_probability = getProbability(home_win_z_score)
+          prediction.home_win_probability = (home_win_probability * 100.0).round(1)
+          if home_win_probability > 0.5
+            predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
+            if predicted_moneyline < -10000
+              prediction.predicted_moneyline = nil
+            else
+              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+            end
+          else
+            predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
+            if predicted_moneyline > 10000
+              prediction.predicted_moneyline = nil
+            else
+              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
+            end
+          end
           prediction.save
         rescue
           puts prediction.inspect
@@ -1237,28 +1259,7 @@ namespace :daily do
               prediction.win_straight_up = nil
             end
           end
-        
-          ##### MONEYLINE CALCS ######
-          mean = predicted_home_efficiency - predicted_away_efficiency
-          std_dev = current_season.consistency
-          home_win_z_score = (0.0 - mean) / std_dev
-          home_win_probability = getProbability(home_win_z_score)
-          prediction.home_win_probability = (home_win_probability * 100.0).round(1)
-          if home_win_probability > 0.5
-            predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
-            if predicted_moneyline < -10000
-              prediction.predicted_moneyline = nil
-            else
-              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-            end
-          else
-            predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
-            if predicted_moneyline > 10000
-              prediction.predicted_moneyline = nil
-            else
-              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-            end
-          end
+
         
           ### MONEYLINE UP OUTCOME ###
           if prediction.predicted_moneyline && prediction.moneyline && game.home_team_score && game.away_team_score
