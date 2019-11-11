@@ -40,15 +40,15 @@
     <tbody>
       <% @games.each do |game| %>
         <% prediction = game.prediction %>
-        <tr>
-          <td>
-            <% description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
-            <%= link_to description, game %>
-          </td>
-          <td class="left-column"><%= game.point_spread %></td>
-          <td><%= game.over_under %></td>
-          <td><%= game.home_team_money_line %></td>
-          <% if prediction %>
+        <% if prediction %>
+          <tr>
+            <td>
+              <% description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
+              <%= link_to description, game %>
+            </td>
+            <td class="left-column"><%= game.point_spread %></td>
+            <td><%= game.over_under %></td>
+            <td><%= game.home_team_money_line %></td>
             <td class="left-column"><%= prediction.predicted_point_spread %></td>
             <td><%= prediction.predicted_over_under %></td>
             <td><%= prediction.predicted_moneyline %></td>
@@ -91,8 +91,8 @@
                 N/A
               <% end %></td>
             <td class="left-column"><%= link_to "Details", prediction %></td>
-          <% end %>
-        </tr>
+          </tr>
+        <% end %>
       <% end %>
       <tr class="total-row">
         <th>Totals</th>
