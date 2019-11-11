@@ -16,58 +16,107 @@
       <% end %>
     </h1>
     <div class="prediction-details col-xs-12">
-      <div class="left-column col-md-6">
-        <h3>Basic Info</h3>
+      <div class="row">
+        <div class="left-column col-md-6">
+          <h3>Basic Info</h3>
+          <table class="table">
+            <tr>
+              <th>Predicted Score</th>
+              <td><%= @game.away_team_name + @prediction.away_team_prediction.to_s  + " - " + @game.home_team_name + @prediction.home_team_prediction.to_s%></td>
+            </tr>
+            <tr>
+              <th>Predicted Point Spread</th>
+              <td><%= @game.home_team_name + " " %><%= @prediction.predicted_point_spread %></td>
+            </tr>
+            <tr>
+              <th>Predicted O/U</th>
+              <td><%= @prediction.predicted_over_under %></td>
+            </tr>
+            <tr>
+              <th>Predicted Moneyline</th>
+              <td><%= @game.home_team_name + " " %><%= @prediction.predicted_moneyline %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="right-column col-md-6">
+          <h3>Matchup Info</h3>
+          <table class="table">
+            <tr>
+              <th>Home Advantage</th>
+              <td><%= @prediction.home_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>Defensive Style Advantage</th>
+              <td><%= @prediction.defense_advantage %></td>
+            </tr>
+            <tr>
+              <th>Ball Movement Advantage</th>
+              <td><%= @prediction.assists_advantage %></td>
+            </tr>
+            <tr>
+              <th>3PT Advantage</th>
+              <td><%= @prediction.three_pointers_advantage %></td>
+            </tr>
+            <tr>
+              <th>Pace Advantage</th>
+              <td><%= @prediction.pace_advantage %></td>
+            </tr>
+            <tr>
+              <th>Injury Advantage</th>
+              <td><%= @prediction.injury_advantage %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <h3>Style Details</h3>
         <table class="table">
-          <tr>
-            <th>Predicted Score</th>
-            <td><%= @game.away_team_name + @prediction.away_team_prediction.to_s  + " - " + @game.home_team_name + @prediction.home_team_prediction.to_s%></td>
-          </tr>
-          <tr>
-            <th>Predicted Point Spread</th>
-            <td><%= @game.home_team_name + " " %><%= @prediction.predicted_point_spread %></td>
-          </tr>
-          <tr>
-            <th>Predicted O/U</th>
-            <td><%= @prediction.predicted_over_under %></td>
-          </tr>
-          <tr>
-            <th>Predicted Moneyline</th>
-            <td><%= @game.home_team_name + " " %><%= @prediction.predicted_moneyline %></td>
-          </tr>
+          <thead>
+            <tr>
+              <th></th>
+              <th><% if @game.away_team %><%= @game.away_team.school %><% else %><%= @game.away_team_name %><% end %></th>
+              <th><% if @game.home_team %><%= @game.home_team.school %><% else %><%= @game.home_team_name %><% end %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Adj Pace</th>
+            </tr>
+          </tbody>
         </table>
       </div>
-      <div class="right-column col-md-6">
-        <h3>Matchup Info</h3>
-        <table class="table">
-          <tr>
-            <th>Home Advantage</th>
-            <td><%= @prediction.home_advantage.to_s + " points" %></td>
-          </tr>
-          <tr>
-            <th>Defensive Style Advantage</th>
-            <td><%= @prediction.defense_advantage %></td>
-          </tr>
-          <tr>
-            <th>Ball Movement Advantage</th>
-            <td><%= @prediction.assists_advantage %></td>
-          </tr>
-          <tr>
-            <th>3PT Advantage</th>
-            <td><%= @prediction.three_pointers_advantage %></td>
-          </tr>
-          <tr>
-            <th>Pace Advantage</th>
-            <td><%= @prediction.pace_advantage %></td>
-          </tr>
-          <tr>
-            <th>Injury Advantage</th>
-            <td><%= @prediction.injury_advantage %></td>
-          </tr>
-        </table>
+      <div class="row">
+        <h3>Team Leaders</h3>
+        <div class="left-column col-md-6">
+          <% if @game.away_team %>
+            <h4><%= @game.away_team.school %></h4>
+            <table>
+              <tr>
+                <th>Scoring</th>
+                <td></td>
+              </tr>
+            </table>
+          <% end %>
+        </div>
+        <div class="right-column col-md-6">
+          <% if @game.home_team %>
+            <h4><%= @game.home_team.school %></h4>
+            <table>
+              <tr>
+                <th>Scoring</th>
+                <td></td>
+              </tr>
+            </table>
+          <% end %>
+        </div>
       </div>
-      <h3>Description</h3>
-      <p><%= @prediction.description %></p>
+      <div class="row">
+        <h3>Matchup Description</h3>
+        <p><%= @prediction.description %></p>
+      </div>
+      <div class="row">
+        <h3>Betting Advice</h3>
+      </div>
     </div>
   </div>
 </div>

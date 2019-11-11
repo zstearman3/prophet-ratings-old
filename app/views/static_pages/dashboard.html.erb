@@ -9,11 +9,12 @@
               <th>Game</th>
               <th>Time</th>
               <th>Line</th>
+              <th>Predictions</th>
             </tr>
             <% @games.first(10).each do |game| %>
               <tr>
                 <% if game.away_team && game.home_team %>
-                  <td><%= game.away_team.school + " @ " + game.home_team.school %></td>
+                  <td><%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
                   <% unless game.point_spread.nil? %>
                     <% if game.point_spread < 0 %>
@@ -21,7 +22,10 @@
                     <% else %>
                       <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
                     <% end %>
+                  <% else %>
+                    <td></td>
                   <% end %>
+                  <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
                 <% else %>
                   <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
@@ -32,6 +36,7 @@
                       <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
                     <% end %>
                   <% end %>
+                  <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
                 <% end %>
               </tr>
             <% end %>

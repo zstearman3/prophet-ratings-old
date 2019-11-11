@@ -1067,8 +1067,9 @@ namespace :daily do
             predicted_home_efficiency += home_advantage / 2.0
             predicted_away_efficiency += home_advantage / -2.0
           else
-            predicted_home_efficiency += 2.5
-            predicted_away_efficiency += -2.5
+            home_advantage = 2.5
+            predicted_home_efficiency += 1.75
+            predicted_away_efficiency += -1.75
           end
         end
         if home_team_season.defensive_style_advantage && away_team_season.defensive_style_advantage
@@ -1154,6 +1155,7 @@ namespace :daily do
               prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
             end
           end
+          prediction.description = "Please stay tuned for detailed descriptions. Matchup specific modifiers will not be applied until each team has played at least 10 games in the season."
           prediction.save
         rescue StandardError => e
           puts e.full_message

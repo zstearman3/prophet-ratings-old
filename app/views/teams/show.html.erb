@@ -64,6 +64,7 @@
               <% else %>
                 <td><%= game.away_team_name %></td>
               <% end %>
+              <td colspan="3"><% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %></td>
             </tr>
           <% else %>
             <tr>
@@ -73,6 +74,7 @@
               <% else %>
                 <td><%= "@ " + game.home_team_name %></td>
               <% end %>
+              <td colspan="3"><% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %></td>
             </tr>
           <% end %>
         <% end %>

@@ -1,7 +1,5 @@
 <% provide(:title, 'Games') %>
-
-<h1>Games</h1>
-
+<h1>Daily Schedule - <%= @date.strftime('%d/%m/%Y') %></h1>
 <% previous_day = (@date - 1.day).strftime('%Y%m%d') %>
 <% next_day = (@date + 1.day).strftime('%Y%m%d') %>
 <%= link_to "Previous Day", games_path(date: previous_day) %>
