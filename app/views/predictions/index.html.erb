@@ -139,6 +139,7 @@
         <th>O/U</th>
         <th>ML</th>
         <th class="left-column">Spread</th>
+        <th class="hidden-small">Confidence</th>
         <th class="hidden-small">Expected Value</th>
         <th>O/U</th>
         <th class="hidden-small">Expected Value</th>
@@ -172,15 +173,14 @@
             <td><%= prediction.predicted_over_under %></td>
             <td><%= prediction.predicted_moneyline %></td>
             <td class="left-column">
-              <% if prediction.win_point_spread == true %>
-                WIN
-              <% elsif prediction.win_point_spread == false %>
-                LOSS
-              <% else %>
-                N/A
+              <% if prediction.prediction_difference_point_spread && prediction.prediction_difference_point_spread < 0 %>
+                <%= game.home_team_name %>
+              <% elsif prediction.prediction_difference_point_spread && prediction.prediction_difference_point_spread > 0 %>
+                <%= game.away_team_name %>
               <% end %>
             </td>
-            <td class="hidden-small"><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
+            <td class="hidden-small"><%= (prediction.confidence_point_spread).round(2) if prediction.confidence_point_spread%></td>
+            <td class="hidden-small"><%= number_to_currency(prediction.expected_value_point_spread) if prediction.expected_value_point_spread %></td>
             <td>
               <% if prediction.win_over_under == true %>
                 WIN
@@ -190,7 +190,7 @@
                 N/A
               <% end %>
             </td>
-            <td class="hidden-small"><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
+            <td class="hidden-small"><%= number_to_currency(prediction.expected_value_point_spread) if prediction.expected_value_point_spread %></td>
             <td>              
               <% if prediction.win_moneyline == true %>
                 WIN
