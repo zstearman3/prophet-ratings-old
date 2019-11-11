@@ -793,7 +793,6 @@ namespace :daily do
         team.adjem_rank = season.adjem_rank
         team.save
       end
-    end
     team_seasons.reload
     current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
     current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
@@ -801,7 +800,8 @@ namespace :daily do
     current_season.home_advantage = team_seasons.average(:home_advantage)
     current_season.consistency = team_seasons.average(:consistency)
     current_season.save
-    
+    end
+
     TeamSeason.where(year: current_year).each do |season|
       season.adjem_rank = TeamSeason.where(year: current_year).order(adj_efficiency_margin: :desc).pluck(:id).index(season.id) + 1
       season.save
@@ -1059,7 +1059,7 @@ namespace :daily do
         predicted_tempo = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
         predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
         predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
-        
+        predicted_pace = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
         # Matchup Specific Modifiers
         if game.home_team.stadium == game.stadium
           if home_team_season.home_advantage && away_team_season.home_advantage
@@ -1155,6 +1155,25 @@ namespace :daily do
               prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
             end
           end
+          ############## RECOMMENDED BETS ###########################
+          if prediction.point_spread && prediction.predicted_point_spread
+            prediction.predicted_difference_point_spread = prediction.predicted_point_spread - prediction.point_spread
+            predicted_home_efficiency_diff = prediction.point_spread * (100.0 / predicted_pace)
+            if prediction.predicted_point_spread < 0
+              home_cover_z_score = (predicted_home_efficiency_diff - mean) / std_dev
+              prediction.confidence_point_spread = getProbability(home_cover_z_score)
+              prediction.expected_value_point_spread = (90.9 * prediction.confidence_point_spread) - (100.0 * (1- prediction.confidence_point_spread))
+            else
+              
+            end
+            
+            
+          end
+          
+          
+          
+          
+          ############# PREDICTION DESCRIPTION ############################
           prediction.description = "Please stay tuned for detailed descriptions. Matchup specific modifiers will not be applied until each team has played at least 10 games in the season."
           prediction.save
         rescue StandardError => e
