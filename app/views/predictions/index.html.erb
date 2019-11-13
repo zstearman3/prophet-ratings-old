@@ -167,11 +167,9 @@
             </td>
             <td class="hidden-large">
               <% if game.away_team && game.home_team %>
-                <% description = game.away_team.school + " " + game.away_team_score.to_s + " @ " + game.home_team.school + " " + game.home_team_score.to_s %>
-                <% short_description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
+                <%= link_to game.away_team_name, game.away_team %> @ <%= link_to game.home_team_name, game.home_team %>
               <% else %>
-                <% description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
-                <% short_description = game.away_team_name + " " + game.away_team_score.to_s + " @ " + game.home_team_name + " " + game.home_team_score.to_s %>
+                <%= game.away_team_name + " @ " + game.home_team_name %>
               <% end %>
             </td>
             <td class="left-column"><%= game.point_spread %></td>
