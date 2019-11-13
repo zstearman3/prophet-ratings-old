@@ -368,7 +368,7 @@ namespace :daily do
             game.save
           end
           rescue Exception => e
-            puts e.full_messages
+            puts e.full_message
           end
         end
       end
