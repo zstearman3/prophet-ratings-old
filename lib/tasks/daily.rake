@@ -229,7 +229,7 @@ namespace :daily do
               thrill_score = 350.0
             end
             if game.prediction
-              thrill_score += -(game.prediction.predicted_point_spread ** 1.80)
+              thrill_score += -((game.prediction.predicted_point_spread ** 2) / 1.3)
             end
           end
           game.thrill_score = (thrill_score / 1000.0).round(3)

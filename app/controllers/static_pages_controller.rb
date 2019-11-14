@@ -17,6 +17,6 @@ class StaticPagesController < ApplicationController
   def dashboard
     @seasons = TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).first(50)
     @blog_posts = BlogPost.where(published: true).order(date: :desc).first(5)
-    @games = Game.where(day: Date.today).order(date_time: :asc)
+    @games = Game.where(day: Date.today).order(thrill_score: :desc)
   end
 end
