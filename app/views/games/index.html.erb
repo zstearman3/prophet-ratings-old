@@ -59,11 +59,12 @@
   <table class="table table-sm">
     <tr>
       <th>Matchup</th>
-      <th>Time</th>
+      <th><%= sort_link "date_time", "Time", "asc" %></th>
       <th>Spread</th>
       <th>O/U</th>
       <th>Prediction</th>
       <th>Predicted O/U</th>
+      <th><%= sort_link "thrill_score", "Thrill", "desc" %></th>
     </tr>
     <% @games.each do |game| %>
       <% prediction = game.prediction %>
@@ -108,6 +109,7 @@
           <td></td>
           <td></td>
         <% end %>
+        <td><%= game.thrill_score %></td>
       </tr>
     <% end %>
   </table>

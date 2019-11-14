@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191112185852) do
+ActiveRecord::Schema.define(version: 20191114162252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20191112185852) do
     t.boolean "is_completed"
     t.integer "player_of_the_game_id"
     t.boolean "locked", default: false
+    t.float "thrill_score"
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["player_of_the_game_id"], name: "index_games_on_player_of_the_game_id"
