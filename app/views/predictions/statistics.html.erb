@@ -37,5 +37,29 @@
       <td><%= (100.0 * @moneyline_wins.to_f / (@moneyline_wins + @moneyline_losses)).round(1).to_s + "%" %></td>
       <td><%= number_to_currency(@predictions.sum(:winnings_moneyline), unit: '$') %></td>
     </tr>
+    <tr>
+      <th>Lean Favorite ATS</th>
+      <td><%= @favorite_wins.to_s + "-" + @favorite_losses.to_s %></td>
+      <td><%= (100.0 * @favorite_wins.to_f / (@favorite_wins + @favorite_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @favorite_wins) - (100.0 * @favorite_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Underdog ATS</th>
+      <td><%= @underdog_wins.to_s + "-" + @underdog_losses.to_s %></td>
+      <td><%= (100.0 * @underdog_wins.to_f / (@underdog_wins + @underdog_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @underdog_wins) - (100.0 * @underdog_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Fast Pace ATS</th>
+      <td><%= @fast_pace_wins.to_s + "-" + @favorite_losses.to_s %></td>
+      <td><%= (100.0 * @fast_pace_wins.to_f / (@fast_pace_wins + @fast_pace_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @fast_pace_wins) - (100.0 * @fast_pace_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Fast Pace ATS</th>
+      <td><%= @slow_pace_wins.to_s + "-" + @slow_pace_losses.to_s %></td>
+      <td><%= (100.0 * @slow_pace_wins.to_f / (@slow_pace_wins + @slow_pace_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @slow_pace_wins) - (100.0 * @slow_pace_losses)) %></td>
+    </tr>
   </tbody>
 </table>

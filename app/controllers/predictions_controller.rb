@@ -9,6 +9,51 @@ class PredictionsController < ApplicationController
   def show
     @prediction = Prediction.find(params[:id])
     @game = @prediction.game
+    @home_team_season = TeamSeason.find_by(team: @game.home_team, season: @game.season)
+    @away_team_season = TeamSeason.find_by(team: @game.away_team, season: @game.season)
+    away_player_season_ids = []
+    home_player_season_ids = []
+    year = @game.year
+    if @game.away_team
+      @game.away_team.player_seasons.where(year: year).each do |player|
+        away_player_season_ids << player.id
+      end
+    end
+    if @game.home_team
+      @game.home_team.player_seasons.where(year: year).each do |player|
+        home_player_season_ids << player.id
+      end
+    end
+    @away_player_seasons = PlayerSeason.find(away_player_season_ids)
+    @home_player_seasons = PlayerSeason.find(home_player_season_ids)
+    if @away_player_seasons.count > 0
+      begin
+        away_max_minutes = @away_player_seasons.sort_by(&:minutes).reverse.first.minutes
+        away_min_minutes = away_max_minutes * 0.4
+        away_qualified_players = @away_player_seasons.select {|qualified| qualified["minutes"] > away_min_minutes}
+        @away_points_leader = away_qualified_players.max_by{|z| z[:points_per_game]}
+        @away_assists_leader = away_qualified_players.max_by{|y| y[:assists]}
+        @away_rebounds_leader = away_qualified_players.max_by{|x| x[:rebounds_per_game]}
+        @away_prate_leader = away_qualified_players.max_by{|u| u[:prophet_rating]}
+      rescue
+      
+      end
+    end
+    if @home_player_seasons. count > 0
+      begin
+        home_max_minutes = @home_player_seasons.sort_by(&:minutes).reverse.first.minutes
+        home_min_minutes = home_max_minutes * 0.4
+        home_qualified_players = @home_player_seasons.select {|qualified| qualified["minutes"] > home_min_minutes}
+        @home_points_leader = home_qualified_players.max_by{|z| z[:points_per_game]}
+        @home_assists_leader = home_qualified_players.max_by{|y| y[:assists]}
+        @home_rebounds_leader = home_qualified_players.max_by{|x| x[:rebounds_per_game]}
+        @home_prate_leader = home_qualified_players.max_by{|u| u[:prophet_rating]}
+      rescue
+      
+      end
+    end
+    
+
   end
   
   def statistics
@@ -27,6 +72,14 @@ class PredictionsController < ApplicationController
     @moneyline_losses = @predictions.where(win_moneyline: false).count
     @straight_up_wins = @predictions.where(win_straight_up: true).count
     @straight_up_losses = @predictions.where(win_straight_up: false).count
+    @favorite_wins = @predictions.where(favorite_favorite: true, win_moneyline: true).count
+    @favorite_losses = @predictions.where(favorite_favorite: true, win_moneyline: false).count
+    @underdog_wins = @predictions.where(favorite_favorite: false, win_moneyline: true).count
+    @underdog_losses = @predictions.where(favorite_favorite: false, win_moneyline: false).count
+    @fast_pace_wins = @predictions.where(pace_favorite: true, win_moneyline: true).count
+    @fast_pace_losses = @predictions.where(pace_favorite: true, win_moneyline: false).count
+    @slow_pace_wins = @predictions.where(pace_favorite: false, win_moneyline: true).count
+    @slow_pace_losses = @predictions.where(pace_favorite: false, win_moneyline: false).count
   end
   
   private

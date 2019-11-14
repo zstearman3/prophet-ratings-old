@@ -4,13 +4,13 @@
       
     <h1>
       <% if @game.away_team %>
-        <%= link_to @game.away_team.school, @game.away_team %>
+       <small><%= @game.away_team.adjem_rank %></small><%= link_to @game.away_team.school, @game.away_team %>
       <% else %>
         <%= @game.away_team_name %>
       <% end %>
       <%= " @ " %>
       <% if @game.home_team %>
-        <%= link_to @game.home_team.school, @game.home_team %>
+        <small><%= @game.home_team.adjem_rank %></small><%= link_to @game.home_team.school, @game.home_team %>
       <% else %>
         <%= @game.home_team_name %>
       <% end %>
@@ -36,6 +36,10 @@
               <th>Predicted Moneyline</th>
               <td><%= @game.home_team_name + " " %><%= @prediction.predicted_moneyline %></td>
             </tr>
+            <tr>
+              <th>Thrill Score</th>
+              <td><%= @game.thrill_score %></td>
+            </tr>
           </table>
         </div>
         <div class="right-column col-md-6">
@@ -47,43 +51,133 @@
             </tr>
             <tr>
               <th>Defensive Style Advantage</th>
-              <td><%= @prediction.defense_advantage %></td>
+              <td><%= @prediction.defense_advantage.to_s + " points" %></td>
             </tr>
             <tr>
               <th>Ball Movement Advantage</th>
-              <td><%= @prediction.assists_advantage %></td>
+              <td><%= @prediction.assists_advantage.to_s + " points" %></td>
             </tr>
             <tr>
               <th>3PT Advantage</th>
-              <td><%= @prediction.three_pointers_advantage %></td>
+              <td><%= @prediction.three_pointers_advantage.to_s + " points" %></td>
             </tr>
             <tr>
               <th>Pace Advantage</th>
-              <td><%= @prediction.pace_advantage %></td>
+              <td><%= @prediction.pace_advantage.to_s + " points" %></td>
             </tr>
             <tr>
               <th>Injury Advantage</th>
-              <td><%= @prediction.injury_advantage %></td>
+              <td><%= @prediction.injury_advantage.to_s + " points" %></td>
             </tr>
           </table>
         </div>
       </div>
       <div class="row">
-        <h3>Style Details</h3>
-        <table class="table">
-          <thead>
+        <div class="left-column col-md-6">
+          <h3>Style Details</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th><% if @game.away_team %><%= @game.away_team.school %><% else %><%= @game.away_team_name %><% end %></th>
+                <th><% if @game.home_team %><%= @game.home_team.school %><% else %><%= @game.home_team_name %><% end %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Adj Efficiency Margin</th>
+                <td><%= @away_team_season.adj_efficiency_margin %></td>
+                <td><%= @home_team_season.adj_efficiency_margin %></td>
+              </tr>
+              <tr>
+                <th>Adj OEff</th>
+                <td><%= @away_team_season.adj_offensive_efficiency %></td>
+                <td><%= @home_team_season.adj_offensive_efficiency %></td>
+              </tr>
+              <tr>
+                <th>Adj DEff</th>
+                <td><%= @away_team_season.adj_defensive_efficiency %></td>
+                <td><%= @home_team_season.adj_defensive_efficiency %></td>
+              </tr>
+              <tr>
+                <th>Adj Tempo</th>
+                <td><%= @away_team_season.adj_tempo %></td>
+                <td><%= @home_team_season.adj_tempo %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="left-column col-md-6">
+          <h3>Betting Advice</h3>
+          <table>
             <tr>
-              <th></th>
-              <th><% if @game.away_team %><%= @game.away_team.school %><% else %><%= @game.away_team_name %><% end %></th>
-              <th><% if @game.home_team %><%= @game.home_team.school %><% else %><%= @game.home_team_name %><% end %></th>
+              <th>Vegas Line</th>
+              <td><%= @game.home_team_name + " " + @game.point_spread.to_s if @game.point_spread%></td>
+              <th>Vegas O/U</th>
+              <td><%= @prediction.over_under %></td>
             </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Adj Pace</th>
-            </tr>
-          </tbody>
-        </table>
+          </table>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Pick</th>
+                <th>Confidence</th>
+                <th>EV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>ATS</th>
+                <td>
+                  <% if @prediction.prediction_difference_point_spread &&  @prediction.prediction_difference_point_spread < 0.5 %>
+                    <%= @game.home_team_name %>
+                  <% elsif  @prediction.prediction_difference_point_spread &&  @prediction.prediction_difference_point_spread > 0.5 %>
+                    <%= @game.away_team_name %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td><%= (@prediction.confidence_point_spread * 100).round(1).to_s + "%" if @prediction.confidence_point_spread%></td>
+                <td><%= number_to_currency(@prediction.expected_value_point_spread) if @prediction.expected_value_point_spread %></td>
+              </tr>
+              <tr>
+                <th>O/U</th>
+                <td>
+                  <% if @prediction.predicted_over_under && @prediction.over_under %>
+                    <% if @prediction.predicted_over_under > @prediction.over_under %>
+                      OVER
+                    <% elsif @prediction.predicted_over_under < @prediction.over_under %>
+                      UNDER
+                    <% end %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td><%= (@prediction.confidence_over_under * 100).round(1).to_s + "%" if @prediction.confidence_over_under%></td>
+                <td><%= number_to_currency(@prediction.expected_value_over_under) if @prediction.expected_value_over_under %></td>
+              </tr>
+              <tr>
+                <th>Moneyline</th>
+                <td>
+                  <% if @prediction.predicted_moneyline && @prediction.moneyline && @prediction.home_moneyline_bet %>
+                    <% if @prediction.home_moneyline_bet == 'HOME' %>
+                      <%= @game.home_team_name %>
+                    <% elsif @prediction.home_moneyline_bet == 'AWAY' %>
+                      <%= @gmae.away_team_name %>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td><%= (@prediction.confidence_moneyline * 100).round(1).to_s + "%" if @prediction.confidence_moneyline%></td>
+                <td><%= number_to_currency(@prediction.expected_value_moneyline) if @prediction.expected_value_moneyline %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="row">
         <h3>Team Leaders</h3>
@@ -93,7 +187,23 @@
             <table>
               <tr>
                 <th>Scoring</th>
-                <td></td>
+                <td><%= link_to @away_points_leader.name, @away_points_leader.player if @away_points_leader %></td>
+                <td><% if @away_points_leader %><%= @away_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>Assists</th>
+                <td><%= link_to @away_assists_leader.name, @away_assists_leader.player if @away_assists_leader %></td>
+                <td><% if @away_assists_leader %><%= @away_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>Rebounds</th>
+                <td><%= link_to @away_rebounds_leader.name, @away_rebounds_leader.player if @away_rebounds_leader %></td>
+                <td><% if @away_rebounds_leader %><%= @away_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>PRate</th>
+                <td><%= link_to @away_prate_leader.name, @away_prate_leader.player if @away_prate_leader %></td>
+                <td><% if @away_prate_leader %><%= @away_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
               </tr>
             </table>
           <% end %>
@@ -104,7 +214,23 @@
             <table>
               <tr>
                 <th>Scoring</th>
-                <td></td>
+                <td><%= link_to @home_points_leader.name, @home_points_leader.player if @home_points_leader %></td>
+                <td><% if @home_points_leader %><%= @home_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>Assists</th>
+                <td><%= link_to @home_assists_leader.name, @home_assists_leader.player if @home_assists_leader %></td>
+                <td><% if @home_assists_leader %><%= @home_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>Rebounds</th>
+                <td><%= link_to @home_rebounds_leader.name, @home_rebounds_leader.player if @home_rebounds_leader %></td>
+                <td><% if @home_rebounds_leader %><%= @home_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
+              </tr>
+              <tr>
+                <th>PRate</th>
+                <td><%= link_to @home_prate_leader.name, @home_prate_leader.player if @home_prate_leader %></td>
+                <td><% if @home_prate_leader %><%= @home_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
               </tr>
             </table>
           <% end %>
@@ -113,9 +239,6 @@
       <div class="row">
         <h3>Matchup Description</h3>
         <p><%= @prediction.description %></p>
-      </div>
-      <div class="row">
-        <h3>Betting Advice</h3>
       </div>
     </div>
   </div>
