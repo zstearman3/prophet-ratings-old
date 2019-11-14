@@ -174,7 +174,7 @@
                 <%= game.away_team_name + " @ " + game.home_team_name %>
               <% end %>
             </td>
-            <td class="left-column"><%= game.date_time.strftime("%I:%M %p") %></td>
+            <td class="left-column"><%= game.date_time.strftime("%I:%M %p") if game.date_time %></td>
             <td><%= game.thrill_score %></td>
             <td class="left-column"><%= game.point_spread %></td>
             <td><%= game.over_under %></td>
