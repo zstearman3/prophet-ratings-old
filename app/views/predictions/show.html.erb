@@ -3,18 +3,19 @@
   <div class="prediction-container col-xs-12">
       
     <h1>
-      <% if @game.away_team %>
-       <small><%= @game.away_team.adjem_rank %></small><%= link_to @game.away_team.school, @game.away_team %>
+      <% if @game.away_team && @away_team_season %>
+       <small><%= @away_team_season.adjem_rank %></small><%= link_to @game.away_team.school, @game.away_team %>
       <% else %>
         <%= @game.away_team_name %>
       <% end %>
       <%= " @ " %>
-      <% if @game.home_team %>
-        <small><%= @game.home_team.adjem_rank %></small><%= link_to @game.home_team.school, @game.home_team %>
+      <% if @game.home_team && @home_team_season %>
+        <small><%= @home_team_season.adjem_rank %></small><%= link_to @game.home_team.school, @game.home_team %>
       <% else %>
         <%= @game.home_team_name %>
       <% end %>
     </h1>
+    <h4><% if @game.date_time %><%= link_to(@game.date_time.strftime("%B %d, %Y %I:%M%p"), games_path(date: @game.date_time.strftime("%Y%m%d"))) %><% end %></h4>
     <div class="prediction-details col-xs-12">
       <div class="row">
         <div class="left-column col-md-6">
