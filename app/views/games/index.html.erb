@@ -64,7 +64,7 @@
       <th>O/U</th>
       <th>Prediction</th>
       <th>Predicted O/U</th>
-      <th><%= sort_link "thrill_score", "Thrill", "desc" %></th>
+      <th><%= sort_link "thrill_score", "Thrill", "desc", nil, nil, @date.strftime('%Y%m%d')  %></th>
     </tr>
     <% @games.each do |game| %>
       <% prediction = game.prediction %>
