@@ -4,17 +4,19 @@
     <div class="blog-container row">
       <div class="col-xs-12 blog-inner-container">
         <% if @games.count > 0 %>
-          <table>
+          <table class="table table-sm">
             <tr>
               <th>Game</th>
               <th>Time</th>
               <th>Line</th>
-              <th>Predictions</th>
+              <th>Thrill</th>
+              <th>Prediction</th>
             </tr>
             <% @games.first(10).each do |game| %>
               <tr>
                 <% if game.away_team && game.home_team %>
-                  <td><%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %></td>
+                  <td class="hidden-small"><%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %></td>
+                  <td class="hidden-large"><%= link_to game.away_team_name, game.away_team %> @ <%= link_to game.home_team_name , game.home_team %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
                   <% unless game.point_spread.nil? %>
                     <% if game.point_spread < 0 %>
@@ -22,10 +24,7 @@
                     <% else %>
                       <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
                     <% end %>
-                  <% else %>
-                    <td></td>
                   <% end %>
-                  <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
                 <% else %>
                   <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
                   <td><%= game.date_time.strftime("%I:%M%p")%></td>
@@ -36,8 +35,9 @@
                       <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
                     <% end %>
                   <% end %>
-                  <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
                 <% end %>
+                <td> <%= game.thrill_score %></td>
+                <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
               </tr>
             <% end %>
           </table>
