@@ -1011,7 +1011,7 @@ namespace :daily do
                 ((free_throws_made * 0.5) * (1 + (1 - team_season.assists_percentage) + (0.6666 * team_season.assists_percentage))) - (vop * turnovers) - (vop * drbp * (field_goals_attempted - field_goals_made)) -
                 (vop * 0.44 * (0.44 + (0.56 * drbp)) * (free_throws_attempted - free_throws_made)) + (vop * (1 - drbp) * defensive_rebounds) +
                 (vop * drbp * offensive_rebounds) + (vop * steals) + (vop * drbp * blocked_shots) - (fouls * (0.8 - (0.44 * vop))))
-          season.aper = (current_season.adj_tempo / team_season.adj_tempo) * uper
+          season.aper = ((current_season.adj_tempo / team_season.adj_tempo) * uper).round(6)
           season.bpm = ((0.138 * (minutes.to_f / (game_count + 3))) + (0.1196 * season.offensive_rebounds_percentage) + (-0.1513 * season.defensive_rebounds_percentage) + (1.2556 * season.steals_percentage) + (0.5318 * season.blocks_percentage) +
                     (-0.3059 * season.assists_percentage) - (0.9213 * season.usage_rate * (season.turnovers_percentage / 100.0)) + ((0.7112 * season.usage_rate * (1 - (season.turnovers_percentage / 100.0))) * (2 * ((season.true_shooting_percentage / 100.0) - (team_season.true_shooting_percentage / 100.0)) +
                     (0.0170 * season.assists_percentage) + (0.2976 * ((three_pointers_attempted / (field_goals_attempted * 100.0)) - (current_season.three_pointers_rate / 100.0))) - 0.2135)) + (0.7259 * (Math.sqrt(season.assists_percentage * season.total_rebounds_percentage)))).round(1)

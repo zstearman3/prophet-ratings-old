@@ -125,7 +125,7 @@
   <table class="table table-sm">
     <thead>
       <tr>
-        <th></th>
+        <th colspan="3">Game Info</th>
         <th colspan="3" class="center">Vegas Lines</th>
         <th colspan="3" class="center">Prophet Lines</th>
         <th colspan="9" class="center hidden-small">Bet Advice</th>
@@ -135,6 +135,8 @@
       </tr>
       <tr>
         <th>Game</th>
+        <th class="left-column"><%= sort_link "date_time", "Time", "asc",  nil, nil, todays_date.strftime('%Y%m%d')  %></th>
+        <th><%= sort_link "thrill_score", "Thrill", "desc", nil, nil, todays_date.strftime('%Y%m%d') %></th>
         <th class="left-column">Spread</th>
         <th>O/U</th>
         <th>ML</th>
@@ -172,6 +174,8 @@
                 <%= game.away_team_name + " @ " + game.home_team_name %>
               <% end %>
             </td>
+            <td class="left-column"><%= game.date_time.strftime("%I:%M %p") %></td>
+            <td><%= game.thrill_score %></td>
             <td class="left-column"><%= game.point_spread %></td>
             <td><%= game.over_under %></td>
             <td><%= game.home_team_money_line %></td>
