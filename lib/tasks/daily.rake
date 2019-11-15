@@ -534,6 +534,7 @@ namespace :daily do
   ########## RATING CALC ###########################################
   ########## LONG SECTION #########################################
   
+    puts 'Beginning Ratings Calcs'
     current_season = Season.find_by(season: current_year)
     team_seasons = TeamSeason.where(season: current_season)
     error_count = 0
@@ -578,15 +579,13 @@ namespace :daily do
                 begin
                   if game.minutes > 0
                     actual_tempo = (200.0 / game.minutes) * game.game.possessions
-                    ## Margin of Victory capped at 30 points per 100 possessions
+                    ## Weight adjusted after Margin of Victory > 0.3 ppp
                     if actual_ortg - actual_drtg > 30
-                      actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) + 15
-                      actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) - 15
+                      weight += (-0.015 * weight * (actual_ortg - actual_drtg - 30))
                     end
-                    ## Margin of Defeat capped at 30 points per 100 possessions
+                    ## Weight adjusted after Margin of Defeat > 0.3 ppp
                     if actual_drtg - actual_ortg > 30
-                      actual_ortg = ((actual_ortg + actual_drtg)/ 2 ) - 15
-                      actual_drtg = ((actual_ortg + actual_drtg)/ 2 ) + 15
+                      weight += (-0.015 * weight * (actual_drtg - actual_ortg - 30))
                     end
                     adj_ortg_error += weight * (actual_ortg - expected_ortg)
                     adj_drtg_error += weight * (actual_drtg - expected_drtg)
@@ -622,6 +621,7 @@ namespace :daily do
       current_season.save
       current_season.reload
       error_fraction = Math.sqrt(((oeff_error - old_oerror) / oeff_error) ** 2.0) 
+      puts error_fraction
       x += 1
     end
     puts "Calculating game by game advantages"
@@ -646,17 +646,17 @@ namespace :daily do
             pace = game.game.possessions * 40 / (game.minutes / 5)
             performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) *( pace / 100 )
             
-            if actual_ortg - actual_drtg > 30
-              if performance > 15
-                performance = 15
-              end
-            end
-                  ## Performance capped at 10 over 30 points per 100 possessions
-            if actual_drtg - actual_ortg > 30
-              if performance < -15
-                performance = -15
-              end
-            end
+            # if actual_ortg - actual_drtg > 30
+            #   if performance > 15
+            #     performance = 15
+            #   end
+            # end
+            #       ## Performance capped at 10 over 30 points per 100 possessions
+            # if actual_drtg - actual_ortg > 30
+            #   if performance < -15
+            #     performance = -15
+            #   end
+            # end
             if game.game.stadium == game.team.stadium
               home = true
             elsif game.game.stadium == opponent_season.team.stadium

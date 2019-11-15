@@ -1,7 +1,7 @@
 <% previous_season = @season.season - 1 %>
 <% next_season = @season.season + 1 %>
 <%= link_to 'Previous Season', predictions_statistics_path(season: previous_season) %>
-<%= link_to "Next Season", predictions_statistics_path(date: next_season), class: 'align-right' %>
+<%= link_to "Next Season", predictions_statistics_path(season: next_season), class: 'align-right' %>
 <h1><%= @season.season.to_s + " Predictions Statistics" %></h1>
 <table class="table table-striped">
   <thead>

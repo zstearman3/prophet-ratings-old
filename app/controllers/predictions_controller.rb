@@ -72,14 +72,14 @@ class PredictionsController < ApplicationController
     @moneyline_losses = @predictions.where(win_moneyline: false).count
     @straight_up_wins = @predictions.where(win_straight_up: true).count
     @straight_up_losses = @predictions.where(win_straight_up: false).count
-    @favorite_wins = @predictions.where(favorite_favorite: true, win_moneyline: true).count
-    @favorite_losses = @predictions.where(favorite_favorite: true, win_moneyline: false).count
-    @underdog_wins = @predictions.where(favorite_favorite: false, win_moneyline: true).count
-    @underdog_losses = @predictions.where(favorite_favorite: false, win_moneyline: false).count
-    @fast_pace_wins = @predictions.where(pace_favorite: true, win_moneyline: true).count
-    @fast_pace_losses = @predictions.where(pace_favorite: true, win_moneyline: false).count
-    @slow_pace_wins = @predictions.where(pace_favorite: false, win_moneyline: true).count
-    @slow_pace_losses = @predictions.where(pace_favorite: false, win_moneyline: false).count
+    @favorite_wins = @predictions.where(favorite_favorite: true, win_point_spread: true).count
+    @favorite_losses = @predictions.where(favorite_favorite: true, win_point_spread: false).count
+    @underdog_wins = @predictions.where(favorite_favorite: false, win_point_spread: true).count
+    @underdog_losses = @predictions.where(favorite_favorite: false, win_point_spread: false).count
+    @fast_pace_wins = @predictions.where(pace_favorite: true, win_point_spread: true).count
+    @fast_pace_losses = @predictions.where(pace_favorite: true, win_point_spread: false).count
+    @slow_pace_wins = @predictions.where(pace_favorite: false, win_point_spread: true).count
+    @slow_pace_losses = @predictions.where(pace_favorite: false, win_point_spread: false).count
   end
   
   private
