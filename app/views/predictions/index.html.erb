@@ -15,7 +15,7 @@
   <table class="table table-sm">
     <thead>
       <tr>
-        <th></th>
+        <th colspan="2"></th>
         <th colspan="3" class="center">Vegas Lines</th>
         <th colspan="3" class="center">Prophet Lines</th>
         <th colspan="6" class="center hidden-small">Bet Outcomes</th>
@@ -25,6 +25,7 @@
       </tr>
       <tr>
         <th>Game</th>
+        <th class="left-column">Result</th>
         <th class="left-column">Spread</th>
         <th>O/U</th>
         <th>ML</th>
@@ -46,18 +47,24 @@
         <% prediction = game.prediction %>
         <% if prediction %>
           <tr>
-              <% if game.away_team && game.home_team %>
-                <% description = game.away_team.school + " @ " + game.home_team.school %>
-                <% short_description = game.away_team_name + " @ " + game.home_team_name %>
-              <% else %>
-                <% short_description = description =  game.away_team_name + " @ " + game.home_team_name %>
-              <% end %>
             <td class="hidden-small">
-              <%= link_to description, game %>
+              <% if game.home_team && game.away_team %>
+                <%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %>
+              <% else %>
+                <%= game.away_team_name %> @ <%= game.home_team_name %>
+              <% end %>
             </td>
             <td class="hidden-large">
-              <%= link_to short_description, game %>
+              <% if game.home_team && game.away_team %>
+                <%= link_to game.away_team_name, game.away_team %> @ <%= link_to game.home_team_name, game.home_team %>
+              <% else %>
+                <%= game.away_team_name %> @ <%= game.home_team_name %>
+              <% end %>
             </td>
+            <% if game.away_team_score && game.home_team_score %>
+              <% description = game.away_team_name + " " + game.away_team_score.to_s + " - " + game.home_team_name + " " + game.home_team_score.to_s %>
+            <% end %>
+            <td class="left-column"><%= link_to description, game %></td>
             <td class="left-column"><%= game.point_spread %></td>
             <td><%= game.over_under %></td>
             <td><%= game.home_team_money_line %></td>
@@ -108,6 +115,7 @@
       <% end %>
       <tr class="total-row">
         <th>Totals</th>
+        <th class="left-column"></th>
         <th colspan="3" class="left-column"></th>
         <th colspan="3" class="left-column"></th>
         <th class="left-column"><%= @predictions.where(win_point_spread: true).count.to_s + "-" + @predictions.where(win_point_spread: false).count.to_s %></th>

@@ -116,6 +116,8 @@
               <td><%= @game.home_team_name + " " + @game.point_spread.to_s if @game.point_spread%></td>
               <th>Vegas O/U</th>
               <td><%= @prediction.over_under %></td>
+              <th>Home ML</th>
+              <td><%= @prediction.moneyline %></td>
             </tr>
           </table>
           <table class="table">
