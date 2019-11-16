@@ -17,7 +17,7 @@
                 <% if game.away_team && game.home_team %>
                   <td class="hidden-small"><%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %></td>
                   <td class="hidden-large"><%= link_to game.away_team_name, game.away_team %> @ <%= link_to game.home_team_name , game.home_team %></td>
-                  <td><%= game.date_time.strftime("%I:%M%p")%></td>
+                  <td><%= game.date_time.strftime("%I:%M%p") if game.date_time %></td>
                   <% unless game.point_spread.nil? %>
                     <% if game.point_spread < 0 %>
                       <td><%= game.home_team_name + " " + game.point_spread.to_s %></td>
