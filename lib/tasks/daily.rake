@@ -296,7 +296,7 @@ namespace :daily do
           game.season = Season.find_by(season: item['Season'])
           begin
             team_season = TeamSeason.find_by(team: game.team, year: current_year)
-            game.rank = team_season.adjem_rank
+            game.rank = team_season.adjem_rank unless !game.rank.nil?
           rescue
             puts 'Error with team rank'
           end
