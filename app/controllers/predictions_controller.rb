@@ -80,6 +80,10 @@ class PredictionsController < ApplicationController
     @fast_pace_losses = @predictions.where(pace_favorite: true, win_point_spread: false).count
     @slow_pace_wins = @predictions.where(pace_favorite: false, win_point_spread: true).count
     @slow_pace_losses = @predictions.where(pace_favorite: false, win_point_spread: false).count
+    @over_wins = @predictions.where(over_under_bet: "OVER", win_over_under: true).count
+    @over_losses = @predictions.where(over_under_bet: "OVER", win_over_under: false).count
+    @under_wins = @predictions.where(over_under_bet: "UNDER", win_over_under: true).count
+    @under_losses = @predictions.where(over_under_bet: "UNDER", win_over_under: false).count
   end
   
   private

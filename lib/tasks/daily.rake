@@ -294,6 +294,12 @@ namespace :daily do
           game.opponent = Team.find_by(id: item['OpponentID'])
           game.game_id = item['GameID']
           game.season = Season.find_by(season: item['Season'])
+          begin
+            team_season = TeamSeason.find_by(team: game.team, year: current_year)
+            game.rank = team_season.adjem_rank
+          rescue
+            puts 'Error with team rank'
+          end
           game.save
         end
       end
@@ -1306,6 +1312,7 @@ namespace :daily do
             ### OVER/UNDER OUTCOME ###
             if prediction.predicted_over_under > (prediction.over_under + 1)
               # over bet
+              game.over_under_bet = "OVER"
               if (game.away_team_score + game.home_team_score) > prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1318,7 +1325,8 @@ namespace :daily do
                 prediction.win_over_under = nil
               end
             elsif prediction.predicted_over_under < (prediction.over_under - 1)
-            # under bet
+              # under bet
+              game.over_under_bet = "UNDER"
               if (game.away_team_score + game.home_team_score) < prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1332,6 +1340,7 @@ namespace :daily do
               end
             else
               # no bet
+              game.over_under_bet = nil
               prediction.win_over_under = nil
             end
           end

@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :edit, :update, :destroy]
+  before_action :set_team, only: [:show, :edit, :update, :destroy, :rank_history]
   before_action :logged_in_user, only: [:new, :create, :edit, :update, :destroy]
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy, :preseason]
   
@@ -71,6 +71,15 @@ class TeamsController < ApplicationController
         end
       end
     end
+  end
+  
+  def rank_history
+    if params[:year]
+      @season = Season.find_by(season: params[:year])
+    else
+      @season = current_season
+    end
+    @team_games = TeamGame.where(team: @team, season: @season).order(day: :asc)
   end
   
   private

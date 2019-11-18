@@ -37,6 +37,7 @@
       <td><%= (100.0 * @moneyline_wins.to_f / (@moneyline_wins + @moneyline_losses)).round(1).to_s + "%" %></td>
       <td><%= number_to_currency(@predictions.sum(:winnings_moneyline), unit: '$') %></td>
     </tr>
+    <tr><th colspan="4" class="center">SUCCESS BY BET TYPE</th></tr>
     <tr>
       <th>Lean Favorite ATS</th>
       <td><%= @favorite_wins.to_s + "-" + @favorite_losses.to_s %></td>
@@ -60,6 +61,18 @@
       <td><%= @slow_pace_wins.to_s + "-" + @slow_pace_losses.to_s %></td>
       <td><%= (100.0 * @slow_pace_wins.to_f / (@slow_pace_wins + @slow_pace_losses)).round(1).to_s + "%" %></td>
       <td><%= number_to_currency((90.90 * @slow_pace_wins) - (100.0 * @slow_pace_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Over</th>
+      <td><%= @over_wins.to_s + "-" + @over_losses.to_s %></td>
+      <td><%= (100.0 * @over_wins.to_f / (@over_wins + @over_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.9 * @over_wins) - (100.0 * @over_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Under</th>
+      <td><%= @under_wins.to_s + "-" + @under_losses.to_s %></td>
+      <td><%= (100.0 * @under_wins.to_f / (@under_wins + @under_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.9 * @under_wins) - (100.0 * @under_losses)) %></td>
     </tr>
   </tbody>
 </table>

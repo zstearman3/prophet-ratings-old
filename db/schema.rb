@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191114162252) do
+ActiveRecord::Schema.define(version: 20191118201001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 20191114162252) do
     t.decimal "pace_advantage"
     t.decimal "injury_advantage"
     t.string "home_moneyline_bet"
+    t.string "over_under_bet"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
   end
@@ -395,6 +396,7 @@ ActiveRecord::Schema.define(version: 20191114162252) do
     t.decimal "expected_drtg"
     t.integer "player_of_the_game_id"
     t.boolean "locked", default: false
+    t.integer "rank"
     t.index ["game_id"], name: "index_team_games_on_game_id"
     t.index ["opponent_id"], name: "index_team_games_on_opponent_id"
     t.index ["player_of_the_game_id"], name: "index_team_games_on_player_of_the_game_id"

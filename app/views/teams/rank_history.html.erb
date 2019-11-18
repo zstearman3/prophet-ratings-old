@@ -1,0 +1,10 @@
+<% provide(:title, @team.school + " " + @team.name) %>
+<div class="team-banner row center">
+  <div class="team-logo row">
+    <%= image_tag @team.team_logo_url if @team.team_logo_url%> 
+  </div>
+  <h1><%= @season.season.to_s + " " + @team.school + " " + @team.name + ' Rank History' %></h1>
+</div>
+
+<h3>AdjEM Rank History</h3>
+<%= line_chart @team_games.where(season: @season).pluck(:day, :rank) %>
