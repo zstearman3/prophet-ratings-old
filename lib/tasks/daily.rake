@@ -1312,7 +1312,7 @@ namespace :daily do
             ### OVER/UNDER OUTCOME ###
             if prediction.predicted_over_under > (prediction.over_under + 1)
               # over bet
-              game.over_under_bet = "OVER"
+              prediction.over_under_bet = "OVER"
               if (game.away_team_score + game.home_team_score) > prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1326,7 +1326,7 @@ namespace :daily do
               end
             elsif prediction.predicted_over_under < (prediction.over_under - 1)
               # under bet
-              game.over_under_bet = "UNDER"
+              prediction.over_under_bet = "UNDER"
               if (game.away_team_score + game.home_team_score) < prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1340,7 +1340,7 @@ namespace :daily do
               end
             else
               # no bet
-              game.over_under_bet = nil
+              prediction.over_under_bet = nil
               prediction.win_over_under = nil
             end
           end
@@ -1679,6 +1679,7 @@ namespace :daily do
             ### OVER/UNDER OUTCOME ###
             if prediction.predicted_over_under > (prediction.over_under + 1)
               # over bet
+              prediction.over_under_bet = "OVER"
               if (game.away_team_score + game.home_team_score) > prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1691,7 +1692,8 @@ namespace :daily do
                 prediction.win_over_under = nil
               end
             elsif prediction.predicted_over_under < (prediction.over_under - 1)
-            # under bet
+              # under bet
+              prediction.over_under_bet = "UNDER"
               if (game.away_team_score + game.home_team_score) < prediction.over_under
                 # winning bet
                 prediction.win_over_under = true
@@ -1705,6 +1707,7 @@ namespace :daily do
               end
             else
               # no bet
+              prediction.over_under_bet = nil
               prediction.win_over_under = nil
             end
           end
@@ -1789,6 +1792,6 @@ namespace :daily do
           prediction.save
         end
       end
-    end 
+    end  
   end
 end
