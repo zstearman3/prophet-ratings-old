@@ -85,7 +85,6 @@ class PredictionsController < ApplicationController
     @under_wins = @predictions.where(over_under_bet: "UNDER", win_over_under: true).count
     @under_losses = @predictions.where(over_under_bet: "UNDER", win_over_under: false).count
   end
-  
   private
     def sortable_columns
       ['date_time', 'thrill_score']

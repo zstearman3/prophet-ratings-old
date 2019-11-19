@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191118201001) do
+ActiveRecord::Schema.define(version: 20191119194437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -287,6 +287,9 @@ ActiveRecord::Schema.define(version: 20191118201001) do
     t.decimal "injury_advantage"
     t.string "home_moneyline_bet"
     t.string "over_under_bet"
+    t.string "best_bet"
+    t.decimal "best_bet_value"
+    t.boolean "top_play"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
   end
@@ -320,6 +323,12 @@ ActiveRecord::Schema.define(version: 20191118201001) do
     t.decimal "consistency"
     t.decimal "home_advantage"
     t.decimal "three_pointers_proficiency"
+    t.decimal "over_win_pct"
+    t.decimal "under_win_pct"
+    t.decimal "favorite_win_pct"
+    t.decimal "underdog_win_pct"
+    t.integer "best_bet_wins"
+    t.integer "best_bet_losses"
     t.index ["season"], name: "index_seasons_on_season", unique: true
   end
 

@@ -1261,6 +1261,103 @@ namespace :daily do
         end
       end
     end
+    
+puts "Getting best bets"
+    
+    @predictions = Prediction.where(season: current_season)
+    @point_spread_wins = @predictions.where(win_point_spread: true).count
+    @point_spread_losses = @predictions.where(win_point_spread: false).count
+    @over_under_wins = @predictions.where(win_over_under: true).count
+    @over_under_losses = @predictions.where(win_over_under: false).count
+    @moneyline_wins = @predictions.where(win_moneyline: true).count
+    @moneyline_losses = @predictions.where(win_moneyline: false).count
+    @straight_up_wins = @predictions.where(win_straight_up: true).count
+    @straight_up_losses = @predictions.where(win_straight_up: false).count
+    @favorite_wins = @predictions.where(favorite_favorite: true, win_point_spread: true).count
+    @favorite_losses = @predictions.where(favorite_favorite: true, win_point_spread: false).count
+    @underdog_wins = @predictions.where(favorite_favorite: false, win_point_spread: true).count
+    @underdog_losses = @predictions.where(favorite_favorite: false, win_point_spread: false).count
+    @fast_pace_wins = @predictions.where(pace_favorite: true, win_point_spread: true).count
+    @fast_pace_losses = @predictions.where(pace_favorite: true, win_point_spread: false).count
+    @slow_pace_wins = @predictions.where(pace_favorite: false, win_point_spread: true).count
+    @slow_pace_losses = @predictions.where(pace_favorite: false, win_point_spread: false).count
+    @over_wins = @predictions.where(over_under_bet: "OVER", win_over_under: true).count
+    @over_losses = @predictions.where(over_under_bet: "OVER", win_over_under: false).count
+    @under_wins = @predictions.where(over_under_bet: "UNDER", win_over_under: true).count
+    @under_losses = @predictions.where(over_under_bet: "UNDER", win_over_under: false).count
+    best_bets = @predictions.where(top_play: true)
+    best_bet_wins = 0
+    best_bet_losses = 0
+    best_bets.each do |bet|
+      if bet.best_bet == "ATS"
+        if bet.win_point_spread == true
+          best_bet_wins += 1
+        elsif bet.win_point_spread == false
+          best_bet_losses += 1
+        end
+      elsif bet.best_bet == "OU"
+        if bet.win_over_under == true
+          best_bet_wins += 1
+        elsif bet.win_over_under == false
+          best_bet_losses += 1
+        end
+      end
+    end
+    current_season.best_bet_wins = best_bet_wins
+    current_season.best_bet_losses = best_bet_losses
+    current_season.over_win_pct = (@over_wins.to_f / (@over_wins + @over_losses)).round(4)
+    current_season.under_win_pct = (@under_wins.to_f / (@under_wins + @under_losses)).round(4)
+    current_season.favorite_win_pct = (@favorite_wins.to_f / (@favorite_wins + @favorite_losses)).round(4)
+    current_season.underdog_win_pct = (@underdog_wins.to_f / (@underdog_wins + @underdog_losses)).round(4)
+    current_season.save
+    
+    predictions = Prediction.where(season: current_season).where("day > ?", Date.today - 1.day).where("day < ?", Date.today + 1.day)
+    predictions.each do |prediction|
+      point_spread_value = 0
+      over_under_value = 0
+      if prediction.point_spread && prediction.expected_value_point_spread && prediction.game.thrill_score
+        if prediction.point_spread < 0
+          if prediction.predicted_point_spread < prediction.point_spread
+            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          else
+            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          end
+        else
+          if prediction.predicted_point_spread < prediction.point_spread
+            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          else
+            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          end
+        end
+      end
+      if prediction.over_under && prediction.expected_value_over_under && prediction.game.thrill_score
+        if prediction.predicted_over_under > prediction.over_under
+          over_under_value = prediction.expected_value_over_under * (current_season.over_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+        else
+          over_under_value = prediction.expected_value_over_under * (current_season.under_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+        end
+      end
+      if point_spread_value > over_under_value
+        prediction.best_bet_value = point_spread_value
+        prediction.best_bet = "ATS"
+      else
+        prediction.best_bet_value = over_under_value
+        prediction.best_bet = "OU"
+      end
+      prediction.save
+    end
+    predictions = Prediction.where(day: Date.today).order(best_bet_value: :desc)
+    x = 0
+    predictions.each do |prediction|
+      if x < 5
+        prediction.top_play = true
+      else 
+        prediction.top_play = false
+      end
+      prediction.save
+      x += 1
+    end
+    
     puts "Begin inspecting prediction outcomes"
     season_games = Game.where(season: current_season).where("day < ? " ,  Date.today + 1.day)
     x = 0
@@ -1628,6 +1725,84 @@ namespace :daily do
         end
       end
     end
+    
+    puts "Getting best bets"
+    
+    @predictions = Prediction.where(season: current_season)
+    @point_spread_wins = @predictions.where(win_point_spread: true).count
+    @point_spread_losses = @predictions.where(win_point_spread: false).count
+    @over_under_wins = @predictions.where(win_over_under: true).count
+    @over_under_losses = @predictions.where(win_over_under: false).count
+    @moneyline_wins = @predictions.where(win_moneyline: true).count
+    @moneyline_losses = @predictions.where(win_moneyline: false).count
+    @straight_up_wins = @predictions.where(win_straight_up: true).count
+    @straight_up_losses = @predictions.where(win_straight_up: false).count
+    @favorite_wins = @predictions.where(favorite_favorite: true, win_point_spread: true).count
+    @favorite_losses = @predictions.where(favorite_favorite: true, win_point_spread: false).count
+    @underdog_wins = @predictions.where(favorite_favorite: false, win_point_spread: true).count
+    @underdog_losses = @predictions.where(favorite_favorite: false, win_point_spread: false).count
+    @fast_pace_wins = @predictions.where(pace_favorite: true, win_point_spread: true).count
+    @fast_pace_losses = @predictions.where(pace_favorite: true, win_point_spread: false).count
+    @slow_pace_wins = @predictions.where(pace_favorite: false, win_point_spread: true).count
+    @slow_pace_losses = @predictions.where(pace_favorite: false, win_point_spread: false).count
+    @over_wins = @predictions.where(over_under_bet: "OVER", win_over_under: true).count
+    @over_losses = @predictions.where(over_under_bet: "OVER", win_over_under: false).count
+    @under_wins = @predictions.where(over_under_bet: "UNDER", win_over_under: true).count
+    @under_losses = @predictions.where(over_under_bet: "UNDER", win_over_under: false).count
+    current_season.over_win_pct = (@over_wins.to_f / (@over_wins + @over_losses)).round(4)
+    current_season.under_win_pct = (@under_wins.to_f / (@under_wins + @under_losses)).round(4)
+    current_season.favorite_win_pct = (@favorite_wins.to_f / (@favorite_wins + @favorite_losses)).round(4)
+    current_season.underdog_win_pct = (@underdog_wins.to_f / (@underdog_wins + @underdog_losses)).round(4)
+    current_season.save
+    
+    predictions = Prediction.where(season: current_season).where("day > ?", Date.today - 1.day).where("day < ?", Date.today + 1.day)
+    expected_values = []
+    predictions.each do |prediction|
+      point_spread_value = 0
+      over_under_value = 0
+      if prediction.point_spread && prediction.expected_value_point_spread && prediction.game.thrill_score
+        if prediction.point_spread < 0
+          if prediction.predicted_point_spread < prediction.point_spread
+            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          else
+            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          end
+        else
+          if prediction.predicted_point_spread < prediction.point_spread
+            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          else
+            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+          end
+        end
+      end
+      if prediction.over_under && prediction.expected_value_over_under && prediction.game.thrill_score
+        if prediction.predicted_over_under > prediction.over_under
+          over_under_value = prediction.expected_value_over_under * (current_season.over_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+        else
+          over_under_value = prediction.expected_value_over_under * (current_season.under_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
+        end
+      end
+      if point_spread_value > over_under_value
+        prediction.best_bet_value = point_spread_value
+        prediction.best_bet = "ATS"
+      else
+        prediction.best_bet_value = over_under_value
+        prediction.best_bet = "OU"
+      end
+      prediction.save
+    end
+    predictions = Prediction.where(day: Date.today).order(best_bet_value: :desc)
+    x = 0
+    predictions.each do |prediction|
+      if x < 5
+        prediction.top_play = true
+      else 
+        prediction.top_play = false
+      end
+      prediction.save
+      x += 1
+    end
+    
     puts "Begin inspecting prediction outcomes"
     season_games = Game.where(season: current_season).where("day < ? " ,  Date.today + 1.day)
     x = 0

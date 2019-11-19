@@ -35,3 +35,23 @@
     }
   }
 }
+
+.top-play{
+  background-color: $prophet-blue;
+  color: white;
+  a {
+    color: white;
+  }
+}
+
+.play-ats {
+  .ats {
+    font-weight: bold;
+  }
+}
+
+.play-ou {
+  .ou {
+    font-weight: bold;
+  }
+}

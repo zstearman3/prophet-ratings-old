@@ -57,6 +57,12 @@
             <td><%= game.performance.round(1) if game.performance %></td>
           </tr>
         <% end %>
+        <tr>
+          <td>Date</td>
+          <td>Game</td>
+          <td>Win %</td>
+          <td colspan="2">Preview</td>
+        </tr>
         <% @games.each do |game| %>
           <% if game.home_team == @team %>
             <tr>
@@ -66,7 +72,11 @@
               <% else %>
                 <td><%= game.away_team_name %></td>
               <% end %>
-              <td colspan="3"><% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %></td>
+              <td>
+                <% if game.prediction %>
+                  <% if game.prediction.home_win_probability %><%= game.prediction.home_win_probability %><% end %>
+                <% end %></td>
+              <td colspan="2"><% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %></td>
             </tr>
           <% else %>
             <tr>
@@ -76,7 +86,14 @@
               <% else %>
                 <td><%= "@ " + game.home_team_name %></td>
               <% end %>
-              <td colspan="3"><% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %></td>
+              <td>
+                <% if game.prediction %>
+                  <% if game.prediction.home_win_probability %><%= 100.0 - game.prediction.home_win_probability %><% end %>
+                <% end %>
+              </td>
+              <td colspan="2">
+                <% if game.prediction %><%= link_to 'Preview', game.prediction %><% end %>
+              </td>
             </tr>
           <% end %>
         <% end %>

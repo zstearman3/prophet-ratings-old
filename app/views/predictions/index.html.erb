@@ -6,7 +6,7 @@
   <% todays_date = Date.today %>
 <% end %>
 <h1>Predictions - <%= todays_date.strftime('%m/%d/%Y') %></h1>
-
+<p>The Day's 5 Top Plays are highlighted in blue. Top plays will be tracked on the statistics page.</p>
 <% previous_day = (todays_date - 1.day).strftime('%Y%m%d') %>
 <% next_day = (todays_date + 1.day).strftime('%Y%m%d') %>
 <%= link_to "Previous Day", predictions_path(date: previous_day) %>
@@ -167,7 +167,13 @@
       <% @games.each do |game| %>
         <% prediction = game.prediction %>
         <% if prediction %>
-          <tr>
+          <% if prediction.top_play == true && prediction.best_bet == "ATS" %>
+            <tr class="top-play play-ats">
+          <% elsif prediction.top_play == true && prediction.best_bet == "OU" %>
+            <tr class="top-play play-ou">
+          <% else %>
+            <tr>
+          <% end %>
             <td class="hidden-small">
               <% if game.away_team && game.home_team %>
                 <%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %>
@@ -190,7 +196,7 @@
             <td class="left-column"><%= prediction.predicted_point_spread %></td>
             <td><%= prediction.predicted_over_under %></td>
             <td><%= prediction.predicted_moneyline %></td>
-            <td class="left-column">
+            <td class="left-column ats">
               <% if prediction.prediction_difference_point_spread && prediction.prediction_difference_point_spread < 0.5 %>
                 <%= game.home_team_name %>
               <% elsif prediction.prediction_difference_point_spread && prediction.prediction_difference_point_spread > 0.5 %>
@@ -199,9 +205,9 @@
                 N/A
               <% end %>
             </td>
-            <td class="hidden-small"><%= (prediction.confidence_point_spread).round(2) if prediction.confidence_point_spread%></td>
-            <td class="hidden-small"><%= number_to_currency(prediction.expected_value_point_spread) if prediction.expected_value_point_spread %></td>
-            <td>
+            <td class="hidden-small ats"><%= (prediction.confidence_point_spread).round(2) if prediction.confidence_point_spread%></td>
+            <td class="hidden-small ats"><%= number_to_currency(prediction.expected_value_point_spread) if prediction.expected_value_point_spread %></td>
+            <td class="ou">
               <% if prediction.predicted_over_under && prediction.over_under %>
                 <% if prediction.predicted_over_under > prediction.over_under %>
                   OVER
@@ -212,8 +218,8 @@
                 N/A
               <% end %>
             </td>
-            <td class="hidden-small"><%= (prediction.confidence_over_under).round(2) if prediction.confidence_over_under%></td>
-            <td class="hidden-small"><%= number_to_currency(prediction.expected_value_over_under) if prediction.expected_value_over_under %></td>
+            <td class="hidden-small ou"><%= (prediction.confidence_over_under).round(2) if prediction.confidence_over_under%></td>
+            <td class="hidden-small ou"><%= number_to_currency(prediction.expected_value_over_under) if prediction.expected_value_over_under %></td>
             <td>
               <% if prediction.predicted_moneyline && prediction.moneyline && prediction.home_moneyline_bet %>
                 <% if prediction.home_moneyline_bet == 'HOME' %>
