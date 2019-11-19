@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :teams
-  resources :seasons,             only: [:new, :create, :edit, :update]
+  resources :seasons,             only: [:new, :create, :edit, :update, :index]
   resources :stadia,              only: [:new, :create, :edit, :update]
   resources :players,             only: [:show, :new, :create]
   resources :team_seasons,        only: [:index]

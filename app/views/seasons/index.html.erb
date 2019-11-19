@@ -1,0 +1,32 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>AdjO</th>
+      <th>AdjD</th>
+      <th>AdjT</th>
+      <th>eFG%</th>
+      <th>TS%</th>
+      <th>TO%</th>
+      <th>FTRate</th>
+      <th>3PRate</th>
+      <th>AST%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @seasons.each do |season| %>
+      <tr>
+        <th><%= season.season %></th>
+        <td><%= season.adj_offensive_efficiency.round(1) %></td>
+        <td><%= season.adj_defensive_efficiency.round(1) %></td>
+        <td><%= season.adj_tempo.round(1) %></td>
+        <td><%= season.effective_field_goals_percentage.round(1) %></td>
+        <td><%= season.true_shooting_percentage.round(1) %></td>
+        <td><%= season.turnovers_percentage.round(1) %></td>
+        <td><%= season.free_throws_rate.round(1) %></td>
+        <td><%= season.three_pointers_rate.round(1) %></td>
+        <td><%= season.assists_percentage.round(1) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

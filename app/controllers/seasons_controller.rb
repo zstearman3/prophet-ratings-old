@@ -16,6 +16,10 @@ class SeasonsController < ApplicationController
     end
   end
   
+  def index
+    @seasons = Season.all.order(season: :desc)
+  end
+  
   private
     def season_params
       params.require(:season).permit(:season, :start_year, :end_year, :description, :regular_season_end_date, :regular_season_start_date)
