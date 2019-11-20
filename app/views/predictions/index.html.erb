@@ -46,7 +46,13 @@
       <% @games.each do |game| %>
         <% prediction = game.prediction %>
         <% if prediction %>
-          <tr>
+          <% if prediction.top_play == true && prediction.best_bet == "ATS" %>
+            <tr class="top-play play-ats">
+          <% elsif prediction.top_play == true && prediction.best_bet == "OU" %>
+            <tr class="top-play play-ou">
+          <% else %>
+            <tr>
+          <% end %>
             <td class="hidden-small">
               <% if game.home_team && game.away_team %>
                 <%= link_to game.away_team.school, game.away_team %> @ <%= link_to game.home_team.school, game.home_team %>
@@ -71,7 +77,7 @@
             <td class="left-column"><%= prediction.predicted_point_spread %></td>
             <td><%= prediction.predicted_over_under %></td>
             <td><%= prediction.predicted_moneyline %></td>
-            <td class="left-column">
+            <td class="left-column ats">
               <% if prediction.win_point_spread == true %>
                 WIN
               <% elsif prediction.win_point_spread == false %>
@@ -80,8 +86,8 @@
                 N/A
               <% end %>
             </td>
-            <td class="hidden-small"><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
-            <td>
+            <td class="hidden-small ats"><%= number_to_currency(prediction.winnings_point_spread) if prediction.winnings_point_spread %></td>
+            <td class="ou">
               <% if prediction.win_over_under == true %>
                 WIN
               <% elsif prediction.win_over_under == false %>
@@ -90,7 +96,7 @@
                 N/A
               <% end %>
             </td>
-            <td class="hidden-small"><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
+            <td class="hidden-small ou"><%= number_to_currency(prediction.winnings_over_under) if prediction.winnings_over_under %></td>
             <td>              
               <% if prediction.win_moneyline == true %>
                 WIN

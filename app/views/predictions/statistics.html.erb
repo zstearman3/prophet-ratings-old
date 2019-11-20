@@ -74,5 +74,11 @@
       <td><%= (100.0 * @under_wins.to_f / (@under_wins + @under_losses)).round(1).to_s + "%" %></td>
       <td><%= number_to_currency((90.9 * @under_wins) - (100.0 * @under_losses)) %></td>
     </tr>
+    <tr>
+      <th>Best Bets</th>
+      <td><%= @season.best_bet_wins.to_s + "-" + @season.best_bet_losses.to_s %></td>
+      <td><%= (100.0 * @season.best_bet_wins.to_f / (@season.best_bet_wins + @season.best_bet_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.9 * @season.best_bet_wins) - (100.0 * @season.best_bet_losses)) %></td>
+    </tr>
   </tbody>
 </table>
