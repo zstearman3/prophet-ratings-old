@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   post '/login',    to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get '/rankings',  to: 'team_seasons#rankings', as: :rankings
+  get '/new_simulation',  to: 'simulations#new_simulation'
+  post '/new_simulation', to: 'simulations#create_simulation'
   get '/team_shooting',      to: 'team_seasons#shooting',        as: :team_shooting
   get '/team_defense',       to: 'team_seasons#defense',         as: :team_defense
   get '/team_rebounding',    to: 'team_seasons#rebounding',      as: :team_rebounding
