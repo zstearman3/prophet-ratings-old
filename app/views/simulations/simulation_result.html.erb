@@ -1,0 +1,109 @@
+<h1>Prediction Details</h1>
+<div class="row">
+  <div class="prediction-container col-xs-12">
+      
+    <h1>
+      <small><%= @away_team_season.adjem_rank %></small><%= link_to @away_team.school, @away_team %>
+      <%= " @ " %>
+      <small><%= @home_team_season.adjem_rank %></small><%= link_to @home_team.school, @home_team %>
+    </h1>
+    <div class="prediction-details col-xs-12">
+      <div class="row">
+        <div class="left-column col-md-6">
+          <h3>Basic Info</h3>
+          <table class="table">
+            <tr>
+              <th>Predicted Score</th>
+              <td><%= @away_team.school + @prediction.away_team_prediction.to_s  + " - " + @home_team.school + @prediction.home_team_prediction.to_s%></td>
+            </tr>
+            <tr>
+              <th>Predicted Point Spread</th>
+              <td><%= @away_team.school + " " %><%= @prediction.predicted_point_spread %></td>
+            </tr>
+            <tr>
+              <th>Predicted O/U</th>
+              <td><%= @prediction.predicted_over_under %></td>
+            </tr>
+            <tr>
+              <th>Predicted Moneyline</th>
+              <td><%= @home_team.school + " " %><%= @prediction.predicted_moneyline %></td>
+            </tr>
+            <tr>
+              <th>Thrill Score</th>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+        <div class="right-column col-md-6">
+          <h3>Matchup Info</h3>
+          <table class="table">
+            <tr>
+              <th>Home Advantage</th>
+              <td><%= @prediction.home_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>Defensive Style Advantage</th>
+              <td><%= @prediction.defense_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>Ball Movement Advantage</th>
+              <td><%= @prediction.assists_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>3PT Advantage</th>
+              <td><%= @prediction.three_pointers_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>Pace Advantage</th>
+              <td><%= @prediction.pace_advantage.to_s + " points" %></td>
+            </tr>
+            <tr>
+              <th>Injury Advantage</th>
+              <td><%= @prediction.injury_advantage.to_s + " points" %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-column col-md-6">
+          <h3>Style Details</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th><%= @away_team.school %></th>
+                <th><%= @home_team.school %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Adj Efficiency Margin</th>
+                <td><%= @away_team_season.adj_efficiency_margin %></td>
+                <td><%= @home_team_season.adj_efficiency_margin %></td>
+              </tr>
+              <tr>
+                <th>Adj OEff</th>
+                <td><%= @away_team_season.adj_offensive_efficiency %></td>
+                <td><%= @home_team_season.adj_offensive_efficiency %></td>
+              </tr>
+              <tr>
+                <th>Adj DEff</th>
+                <td><%= @away_team_season.adj_defensive_efficiency %></td>
+                <td><%= @home_team_season.adj_defensive_efficiency %></td>
+              </tr>
+              <tr>
+                <th>Adj Tempo</th>
+                <td><%= @away_team_season.adj_tempo %></td>
+                <td><%= @home_team_season.adj_tempo %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <div class="row">
+        <h3>Matchup Description</h3>
+        <p><%= @prediction.description %></p>
+      </div>
+    </div>
+  </div>
+</div>
+

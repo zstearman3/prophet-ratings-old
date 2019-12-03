@@ -1,0 +1,16 @@
+<% provide :title, 'New Simulation' %>
+
+<h1>New Simulation</h1>
+<div class="row">
+  <div class = "prediction-container col-xs-12">
+    <%= form_tag({:controller => 'simulations', :action => 'simulation_result'}, {:method => 'get', :class => 'simulation_form'}) do %>
+      <%= label_tag :away_team, 'Away Team' %>
+      <%= collection_select :away_team, :id, @team_seasons, :id, :name %>
+      <%= label_tag :home_team, 'Home Team' %>
+      <%= collection_select :home_team, :id, @team_seasons, :id, :name %>
+      <%= label_tag :neutral, 'Neutral?' %>
+      <%= check_box_tag :neutral %>
+      <button type="submit" class="btn submitButton">Begin Simulation</button>
+    <% end %>
+  </div>
+</div>
