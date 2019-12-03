@@ -30,7 +30,7 @@
             </tr>
             <tr>
               <th>Thrill Score</th>
-              <td></td>
+              <td><%= @thrill_score %></td>
             </tr>
           </table>
         </div>
@@ -56,10 +56,6 @@
             <tr>
               <th>Pace Advantage</th>
               <td><%= @prediction.pace_advantage.to_s + " points" %></td>
-            </tr>
-            <tr>
-              <th>Injury Advantage</th>
-              <td><%= @prediction.injury_advantage.to_s + " points" %></td>
             </tr>
           </table>
         </div>

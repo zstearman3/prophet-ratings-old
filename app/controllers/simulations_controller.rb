@@ -117,6 +117,12 @@ class SimulationsController < ApplicationController
           end
         end
       end
+      @prediction.description = "Coming Soon!"
+      thrill_score = 1002.0
+      thrill_score += -@home_team_season.adjem_rank
+      thrill_score += -@away_team_season.adjem_rank
+      thrill_score += -((@prediction.predicted_point_spread ** 2) / 1.3)
+      @thrill_score = (thrill_score / 1000.0).round(3)
     else
       
     end
