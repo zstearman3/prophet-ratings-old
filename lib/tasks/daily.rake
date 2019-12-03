@@ -16,7 +16,7 @@ namespace :daily do
     obj = JSON.parse(json_res)
     obj.each do |conf|
       conf['Teams'].each do |item|
-        team= Team.find_by(id: item['TeamID'])
+        team= Team.find_or_create_by(id: item['TeamID'])
         unless team.locked
           team.ap_rank = item['ApRank']
           team.wins = item['Wins']
