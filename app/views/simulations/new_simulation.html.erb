@@ -7,11 +7,11 @@
       <div class="row">
         <%= form_tag({:controller => 'simulations', :action => 'simulation_result'}, {:method => 'get', :class => 'simulation_form'}) do %>
           <div class="col-md-10 col-xs-12">
-            <div class="form-group col-xs-6">
+            <div class="form-group col-md-6 col-xs-12">
               <%= label_tag :away_team, 'Away Team'%>
               <%= collection_select :away_team, :id, @team_seasons, :id, :name %>
             </div>
-            <div class="form-group col-xs-6">
+            <div class="form-group col-md-6 col-xs-12">
               <%= label_tag :home_team, 'Home Team' %>
               <%= collection_select :home_team, :id, @team_seasons, :id, :name %>
             </div>  

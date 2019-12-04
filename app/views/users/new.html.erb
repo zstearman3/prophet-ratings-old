@@ -1,6 +1,12 @@
 <% provide(:title, 'Sign up') %>
 <% provide(:button_text, 'Create my account') %>
 <h1>Create an Account</h1>
+<p>ProphetRatings is meant to predict the outcome of college basketball games by using advanced, matchup based metrics. A prediction is made for each game and compared to the Vegas line to find the best value plays of the day.
+New features are being added constantly, so stay tuned! The goal is for ProphetRatings to become the gold standard in predicting the outcome of games.</p>
+<div class="prediction-container">
+  <div class="signup-form">
+    <%= render 'form', user: @user %>
+  </div>
+</div>
 
-<%= render 'form', user: @user %>
 

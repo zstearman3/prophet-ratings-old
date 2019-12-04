@@ -2,6 +2,10 @@
   padding: 5px;
   .form-group{
     padding: 10px 0px;
+    text-align: center;
+    @media (min-width: 1200px) {
+     text-align: left; 
+    }
     label{
       width: 100%;
     }

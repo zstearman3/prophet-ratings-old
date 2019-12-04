@@ -29,6 +29,21 @@
   }
 }
 
+.btn-header {
+  background-color: $prophet-blue;
+  color: white !important;
+  border: 2px white;
+  font-weight: bold;
+  transition: transform 200ms ease,
+              box-shadow 200ms ease;
+  &:hover {
+    transform: translate(0px, -1px);
+    box-shadow: 2px 1px $prophet-blue;
+    background-color: white;
+    color: $prophet-blue;
+  }
+}
+
 .btn-wide {
   width: 100%;
 }

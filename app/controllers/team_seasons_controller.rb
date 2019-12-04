@@ -1,5 +1,5 @@
 class TeamSeasonsController < ApplicationController
-  before_action :logged_in_user
+  before_action :logged_in_user, only: [:shooting, :defense, :rebounding, :miscellaneous]
   helper_method :sort_column, :sort_direction
   
   def shooting
