@@ -24,6 +24,8 @@
                     <% else %>
                       <td><%= game.away_team_name + " -" + game.point_spread.to_s %></td>
                     <% end %>
+                  <% else %>
+                    <td>N/A</td>
                   <% end %>
                 <% else %>
                   <td><%= game.away_team_name + " @ " + game.home_team_name %></td>
@@ -36,8 +38,16 @@
                     <% end %>
                   <% end %>
                 <% end %>
-                <td> <%= game.thrill_score %></td>
-                <td><% if game.prediction %><%= link_to 'View', game.prediction %><% end %></td>
+                <td><%= game.thrill_score %></td>
+                <td>
+                  <% if game.prediction %>
+                    <% if game.prediction.predicted_point_spread < 0 %>
+                      <%= link_to game.home_team_name + " " + game.prediction.predicted_point_spread.to_s, game.prediction %>
+                    <% else %>
+                      <%= link_to game.away_team_name + " -" + game.prediction.predicted_point_spread.to_s, game.prediction %>
+                    <% end %>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </table>

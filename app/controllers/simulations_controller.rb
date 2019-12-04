@@ -89,8 +89,8 @@ class SimulationsController < ApplicationController
         @prediction.assists_advantage = assists_advantage.round(1)
         @prediction.three_pointers_advantage = three_pointers_advantage.round(1)
         @prediction.pace_advantage = pace_advantage.round(1)
-        predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
-        predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
+        predicted_home_score = predicted_home_efficiency * predicted_tempo / 100.0
+        predicted_away_score = predicted_away_efficiency * predicted_tempo / 100.0
         @prediction.home_team_prediction = predicted_home_score.round
         @prediction.away_team_prediction = predicted_away_score.round
         @prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
@@ -117,7 +117,33 @@ class SimulationsController < ApplicationController
           end
         end
       end
-      @prediction.description = "Coming Soon!"
+      ##### Description Section #################################
+      @prediction.description = '<p style="font-weight:bold;">Overview</p>'
+      if @prediction.home_team_prediction > @prediction.away_team_prediction
+        if predicted_home_score - predicted_away_score < 5.0
+          if @prediction.home_advantage > 0
+            @prediction.description += '<p> This looks like a competitive contest where home court advantage could come into play. ' + @home_team.school + ' is favored by a small margin, but an upset
+            would not be surprising. </p>'
+          else
+            @prediction.description += '<p>' + @home_team.school + ' is expected to have a slight advantage on a neutral court. This will be a competitive matchup, and an upset would not be surprising.'
+          end
+        else
+          @prediction.description += '<p>' + @home_team.school + ' is favored by a fairly large margin. An upset looks to be unlikely. </p>'
+        end
+      else
+        if predicted_away_score - predicted_home_score < 5.0
+          if @prediction.home_advantage > 0
+            @prediction.description += '<p> This looks like a competitive contest, but ' + @away_team.school + ' is expected to pull off the road victory. Still, an upset would not be surprising, especially
+            when considering home court advantage.</p>'
+          else
+            @prediction.description += '<p>' + @away_team.school + ' is expected to have a slight advantage on a neutral court. This will be a competitive matchup, and an upset would not be surprising.'
+          end
+        else
+          @prediction.description += '<p>' + @away_team.school + ' is favored by a fairly large margin. An upset looks to be unlikely. </p>'
+        end
+      end
+      
+      ###########################################################
       thrill_score = 1002.0
       thrill_score += -@home_team_season.adjem_rank
       thrill_score += -@away_team_season.adjem_rank
