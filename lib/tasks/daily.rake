@@ -133,6 +133,7 @@ namespace :daily do
         player_season.player = player
         player_season.team_season = TeamSeason.find_by(year: item['Season'], team_id: item['TeamID'])
         player_season.season_id = Season.find_by(season: item['Season']).id
+        player_season.conference_id = player_season.team_season.conference_id if player_season.team_season
         player_season.year = item['Season']
         player_season.season_type = item['SeasonType']
         player_season.name = item['Name']
