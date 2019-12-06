@@ -109,7 +109,7 @@ namespace :setup do
     obj = JSON.parse(json_res)
     obj.each do |item|
       team_season = TeamSeason.find_or_create_by(team_id: item['TeamID'], year: year_input)
-      unless team_season.locked
+      unless team_season.locked || team_season.team.nil?
         if team_input.nil? || team_season.team.id == team_input
           team_season.id = item['StatID']
           team_season.team_id = item['TeamID']
