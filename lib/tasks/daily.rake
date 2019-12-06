@@ -23,6 +23,7 @@ namespace :daily do
           team.losses = item['Losses']
           team.conference_wins = item['ConferenceWins']
           team.conference_losses = item['ConferenceLosses']
+          team.team_logo_url = item['TeamLogoUrl']
           team.save
         end
       end
@@ -95,7 +96,7 @@ namespace :daily do
         team_season.rebounds = item['Rebounds']
         # team_season.offensive_rebounds_percentage = item['OffensiveReboundsPercentage']
         # team_season.defensive_rebounds_percentage = item['DefensiveReboundsPercentage']
-        team_season.total_rebounds_percentage = item['TotalReboundsPercentage']
+        # team_season.total_rebounds_percentage = item['TotalReboundsPercentage']
         team_season.assists = item['Assists']
         team_season.steals = item['Steals']
         team_season.blocked_shots = item['BlockedShots']
