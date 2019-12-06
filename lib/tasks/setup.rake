@@ -359,7 +359,7 @@ namespace :setup do
           game.opponent = Team.find_by(id: item['OpponentID'])
           game.game_id = item['GameID']
           game.season = Season.find_by(season: item['Season'])
-          if team_input.nil? || game.team.id == team_input
+          if team_input.nil? || game.team_id == team_input
             game.save
           end
         end
