@@ -110,7 +110,7 @@ namespace :setup do
     obj.each do |item|
       team_season = TeamSeason.find_or_create_by(team_id: item['TeamID'], year: year_input)
       unless team_season.locked
-        if team_input.nil || team_season.team.id == team_input
+        if team_input.nil? || team_season.team.id == team_input
           team_season.id = item['StatID']
           team_season.team_id = item['TeamID']
           team_season.season_id = Season.find_by(season: item['Season']).id
@@ -359,7 +359,7 @@ namespace :setup do
           game.opponent = Team.find_by(id: item['OpponentID'])
           game.game_id = item['GameID']
           game.season = Season.find_by(season: item['Season'])
-          if team_input.nil || game.team.id == team_input
+          if team_input.nil? || game.team.id == team_input
             game.save
           end
         end
