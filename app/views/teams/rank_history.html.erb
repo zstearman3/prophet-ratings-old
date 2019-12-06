@@ -7,4 +7,4 @@
 </div>
 
 <h3>AdjEM Rank History</h3>
-<%= line_chart @team_games.where(season: @season).pluck(:day, :rank), library: {scales: {yAxes: [{ticks: {reverse: true}}]}} %>
+<%= line_chart @rank_history, library: {scales: {yAxes: [{ticks: {reverse: true}}]}} %>

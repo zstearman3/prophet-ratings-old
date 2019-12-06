@@ -80,6 +80,9 @@ class TeamsController < ApplicationController
       @season = current_season
     end
     @team_games = TeamGame.where(team: @team, season: @season).order(day: :asc)
+    @team_season = TeamSeason.find_by(team: @team, season: @season)
+    @rank_history = @team_games.where(season: @season).pluck(:day, :rank)
+    @rank_history << [Date.today, @team_season.adjem_rank]
   end
   
   private
