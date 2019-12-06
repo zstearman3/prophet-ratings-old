@@ -97,6 +97,8 @@ namespace :setup do
   task get_team_seasons: :environment do
     puts("Please Input Year:")
     year_input = STDIN.gets.chomp.to_i
+    puts("Please Input Desired Team ID:")
+    team_input = STDIN.gets.chomp.to_i
     url = URI.parse('https://api.fantasydata.net/api/cbb/odds/json/TeamSeasonStats/' + year_input.to_s + '?key='+ api_key)
     puts url
     req = Net::HTTP::Get.new(url.to_s)
@@ -108,44 +110,46 @@ namespace :setup do
     obj.each do |item|
       team_season = TeamSeason.find_or_create_by(team_id: item['TeamID'], year: year_input)
       unless team_season.locked
-        team_season.id = item['StatID']
-        team_season.team_id = item['TeamID']
-        team_season.season_id = Season.find_by(season: item['Season']).id
-        team_season.year = item['Season']
-        team_season.season_type = item['SeasonType']
-        team_season.name = item['Name']
-        team_season.team_abbreviation = item['Team']
-        team_season.wins = item['Wins']
-        team_season.losses = item['Losses']
-        team_season.conference_wins = item['ConferenceWins']
-        team_season.conference_losses = item['ConferenceLosses']
-        team_season.games = item['Games']
-        team_season.minutes = item['Minutes']
-        team_season.field_goals_made = item['FieldGoalsMade']
-        team_season.field_goals_attempted = item['FieldGoalsAttempted']
-        team_season.field_goals_percentage = item['FieldGoalsPercentage']
-        team_season.two_pointers_made = item['TwoPointersMade']
-        team_season.two_pointers_attempted = item['TwoPointersAttempted']
-        team_season.two_pointers_percentage = item['TwoPointersPercentage']
-        team_season.three_pointers_made = item['ThreePointersMade']
-        team_season.three_pointers_attempted = item['ThreePointersAttempted']
-        team_season.three_pointers_percentage = item['ThreePointersPercentage']
-        team_season.free_throws_made = item['FreeThrowsMade']
-        team_season.free_throws_attempted = item['FreeThrowsAttempted']
-        team_season.free_throws_percentage = item['FreeThrowsPercentage']
-        team_season.offensive_rebounds = item['OffensiveRebounds']
-        team_season.defensive_rebounds = item['DefensiveRebounds']
-        team_season.rebounds = item['Rebounds']
-        team_season.offensive_rebounds_percentage = item['OffensiveReboundsPercentage']
-        team_season.defensive_rebounds_percentage = item['DefensiveReboundsPercentage']
-        team_season.total_rebounds_percentage = item['TotalReboundsPercentage']
-        team_season.assists = item['Assists']
-        team_season.steals = item['Steals']
-        team_season.blocked_shots = item['BlockedShots']
-        team_season.turnovers = item['Turnovers']
-        team_season.personal_fouls = item['PersonalFouls']
-        team_season.points = item['Points']
-        team_season.save
+        if team_input.nil || team_season.team.id == team_input
+          team_season.id = item['StatID']
+          team_season.team_id = item['TeamID']
+          team_season.season_id = Season.find_by(season: item['Season']).id
+          team_season.year = item['Season']
+          team_season.season_type = item['SeasonType']
+          team_season.name = item['Name']
+          team_season.team_abbreviation = item['Team']
+          team_season.wins = item['Wins']
+          team_season.losses = item['Losses']
+          team_season.conference_wins = item['ConferenceWins']
+          team_season.conference_losses = item['ConferenceLosses']
+          team_season.games = item['Games']
+          team_season.minutes = item['Minutes']
+          team_season.field_goals_made = item['FieldGoalsMade']
+          team_season.field_goals_attempted = item['FieldGoalsAttempted']
+          team_season.field_goals_percentage = item['FieldGoalsPercentage']
+          team_season.two_pointers_made = item['TwoPointersMade']
+          team_season.two_pointers_attempted = item['TwoPointersAttempted']
+          team_season.two_pointers_percentage = item['TwoPointersPercentage']
+          team_season.three_pointers_made = item['ThreePointersMade']
+          team_season.three_pointers_attempted = item['ThreePointersAttempted']
+          team_season.three_pointers_percentage = item['ThreePointersPercentage']
+          team_season.free_throws_made = item['FreeThrowsMade']
+          team_season.free_throws_attempted = item['FreeThrowsAttempted']
+          team_season.free_throws_percentage = item['FreeThrowsPercentage']
+          team_season.offensive_rebounds = item['OffensiveRebounds']
+          team_season.defensive_rebounds = item['DefensiveRebounds']
+          team_season.rebounds = item['Rebounds']
+          team_season.offensive_rebounds_percentage = item['OffensiveReboundsPercentage']
+          team_season.defensive_rebounds_percentage = item['DefensiveReboundsPercentage']
+          team_season.total_rebounds_percentage = item['TotalReboundsPercentage']
+          team_season.assists = item['Assists']
+          team_season.steals = item['Steals']
+          team_season.blocked_shots = item['BlockedShots']
+          team_season.turnovers = item['Turnovers']
+          team_season.personal_fouls = item['PersonalFouls']
+          team_season.points = item['Points']
+          team_season.save
+        end
       end
     end
   end
@@ -227,6 +231,8 @@ namespace :setup do
   task get_games: :environment do
     puts("Please Input Year:")
     year_input = STDIN.gets.chomp.to_i
+    puts("Please Input Desired Team ID:")
+    team_input = STDIN.gets.chomp.to_i
     season = Season.find_by(season: year_input)
     puts("Number of Days (Leave Blank if All):")
     days = STDIN.gets.chomp.to_i
@@ -290,6 +296,8 @@ namespace :setup do
     puts("Please Input Year:")
     year_input = STDIN.gets.chomp.to_i
     season = Season.find_by(season: year_input)
+    puts("Please Input Desired Team ID:")
+    team_input = STDIN.gets.chomp.to_i
     puts("Number of Days (Leave Blank if All):")
     days = STDIN.gets.chomp.to_i
     if days == 0
@@ -351,7 +359,9 @@ namespace :setup do
           game.opponent = Team.find_by(id: item['OpponentID'])
           game.game_id = item['GameID']
           game.season = Season.find_by(season: item['Season'])
-          game.save
+          if team_input.nil || game.team.id == team_input
+            game.save
+          end
         end
       end
     end
