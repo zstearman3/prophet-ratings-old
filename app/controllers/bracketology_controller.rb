@@ -74,5 +74,29 @@ class BracketologyController < ApplicationController
     @sixtysix = TeamSeason.find(@bracketology.tournament_field[65])
     @sixtyseven = TeamSeason.find(@bracketology.tournament_field[66])
     @sixtyeight = TeamSeason.find(@bracketology.tournament_field[67])
+    
+    # Last Four Byes 
+    @bye_one = TeamSeason.find(@bracketology.last_four_byes[0])
+    @bye_two = TeamSeason.find(@bracketology.last_four_byes[1])
+    @bye_three = TeamSeason.find(@bracketology.last_four_byes[2])
+    @bye_four = TeamSeason.find(@bracketology.last_four_byes[3])
+    
+    # Last Four In 
+    @last_one = TeamSeason.find(@bracketology.last_four_in[0])
+    @last_two = TeamSeason.find(@bracketology.last_four_in[1])
+    @last_three = TeamSeason.find(@bracketology.last_four_in[2])
+    @last_four = TeamSeason.find(@bracketology.last_four_in[3])
+    
+    # First Four Out
+    @first_one = TeamSeason.find(@bracketology.first_four_out[0])
+    @first_two = TeamSeason.find(@bracketology.first_four_out[1])
+    @first_three = TeamSeason.find(@bracketology.first_four_out[2])
+    @first_four = TeamSeason.find(@bracketology.first_four_out[3])
+    
+    # Next Four Out
+    @next_one = TeamSeason.find(@bracketology.next_four_out[0])
+    @next_two = TeamSeason.find(@bracketology.next_four_out[1])
+    @next_three = TeamSeason.find(@bracketology.next_four_out[2])
+    @next_four = TeamSeason.find(@bracketology.next_four_out[3])
   end
 end

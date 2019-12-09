@@ -1,5 +1,5 @@
 <h1>ProphetRatings Bracketology</h1>
-<h4><%= @bracketology.date %></h4>
+<h4>Updated <%= @bracketology.date.strftime("%B %d, %Y") %></h4>
 <div class="row">
   <div class="left-brackets col-md-6 col-xs-12">
     <div class="top-region col-xs-12">
@@ -12,22 +12,42 @@
         <tr><td>9 <%= @thirtythree.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>5 <%= @seventeen.team.school %></td></tr>
-        <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+        <% if @fortyeight == @last_one %>
+          <tr><td>12 <%= @fortyeight.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortyeight == @last_two %>
+          <tr><td>12 <%= @fortyeight.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortyeight.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+          <% else %>
+            <tr><td>12 <%= @fifty.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>4 <%= @sixteen.team.school %></td></tr>
-        <tr><td>13 <%= @fortynine.team.school %></td></tr>
+        <tr><td>13 <%= @fiftyone.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>6 <%= @twentyfour.team.school %></td></tr>
-        <tr><td>11 <%= @fortyone.team.school %></td></tr>
+        <% if @fortyone == @last_one %>
+          <tr><td>11 <%= @fortyone.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortyone == @last_two %>
+          <tr><td>11 <%= @fortyone.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortyone.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>11 <%= @fortyone.team.school %></td></tr>
+          <% else %>
+            <tr><td>11 <%= @fortythree.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>3 <%= @nine.team.school %></td></tr>
-        <tr><td>14 <%= @fiftysix.team.school %></td></tr>
+        <tr><td>14 <%= @fiftyeight.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>7 <%= @twentyfive.team.school %></td></tr>
         <tr><td>10 <%= @forty.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>2 <%= @eight.team.school %></td></tr>
-        <tr><td>15 <%= @fiftyseven.team.school %></td></tr>
+        <tr><td>15 <%= @fiftynine.team.school %></td></tr>
         <tr><td></td></tr>
       </table>
     </div>
@@ -35,28 +55,48 @@
       <h3>West Region</h3>
       <table class="table bracketology">
         <tr><td>1 <%= @four.team.school %></td></tr>
-        <tr><td>16 <%= @sixtyone.team.school %></td></tr>
+        <tr><td>16 <%= @sixtythree.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>8 <%= @twentynine.team.school %></td></tr>
         <tr><td>9 <%= @thirtysix.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>5 <%= @twenty.team.school %></td></tr>
-        <tr><td>12 <%= @fortyfive.team.school %></td></tr>
+        <% if @fortyfive == @last_one %>
+          <tr><td>12 <%= @fortyfive.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortyfive == @last_two %>
+          <tr><td>12 <%= @fortyfive.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortyfive.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>12 <%= @fortyfive.team.school %></td></tr>
+          <% else %>
+            <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>4 <%= @thirteen.team.school %></td></tr>
-        <tr><td>13 <%= @fiftytwo.team.school %></td></tr>
+        <tr><td>13 <%= @fiftyfour.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>6 <%= @twentyone.team.school %></td></tr>
-        <tr><td>11 <%= @fortyfour.team.school %></td></tr>
+        <% if @fortyfour == @last_one %>
+          <tr><td>11 <%= @fortyfour.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortyfour == @last_two %>
+          <tr><td>11 <%= @fortyfour.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortyfour.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>11 <%= @fortyfour.team.school %></td></tr>
+          <% else %>
+            <tr><td>11 <%= @fortysix.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>3 <%= @twelve.team.school %></td></tr>
-        <tr><td>14 <%= @fiftythree.team.school %></td></tr>
+        <tr><td>14 <%= @fiftyfive.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>7 <%= @twentyeight.team.school %></td></tr>
         <tr><td>10 <%= @thirtyseven.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>2 <%= @five.team.school %></td></tr>
-        <tr><td>15 <%= @sixty.team.school %></td></tr>
+        <tr><td>15 <%= @sixtytwo.team.school %></td></tr>
         <tr><td></td></tr>
       </table>
     </div>
@@ -72,22 +112,42 @@
         <tr><td>9 <%= @thirtyfour.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>5 <%= @eighteen.team.school %></td></tr>
-        <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+        <% if @fortyseven == @last_one %>
+          <tr><td>12 <%= @fortyseven.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortyseven == @last_two %>
+          <tr><td>12 <%= @fortyseven.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortyseven.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+          <% else %>
+            <tr><td>12 <%= @fortynine.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>4 <%= @fifteen.team.school %></td></tr>
-        <tr><td>13 <%= @fifty.team.school %></td></tr>
+        <tr><td>13 <%= @fiftytwo.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>6 <%= @twentythree.team.school %></td></tr>
-        <tr><td>11 <%= @fortytwo.team.school %></td></tr>
+        <% if @fortytwo == @last_one %>
+          <tr><td>11 <%= @fortytwo.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortytwo == @last_two %>
+          <tr><td>11 <%= @fortytwo.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortytwo.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>11 <%= @fortytwo.team.school %></td></tr>
+          <% else %>
+            <tr><td>11 <%= @fortyfour.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>3 <%= @ten.team.school %></td></tr>
-        <tr><td>14 <%= @fiftyfive.team.school %></td></tr>
+        <tr><td>14 <%= @fiftyseven.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>7 <%= @twentysix.team.school %></td></tr>
         <tr><td>10 <%= @thirtynine.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>2 <%= @seven.team.school %></td></tr>
-        <tr><td>15 <%= @fiftyeight.team.school %></td></tr>
+        <tr><td>15 <%= @sixty.team.school %></td></tr>
         <tr><td></td></tr>
       </table>
     </div>
@@ -95,30 +155,88 @@
       <h3>East Region</h3>
       <table class="table bracketology">
         <tr><td>1 <%= @three.team.school %></td></tr>
-        <tr><td>16 <%= @sixtytwo.team.school %></td></tr>
+        <tr><td>16 <%= @sixtyfour.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>8 <%= @thirty.team.school %></td></tr>
         <tr><td>9 <%= @thirtyfive.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>5 <%= @nineteen.team.school %></td></tr>
-        <tr><td>12 <%= @fortysix.team.school %></td></tr>
+        <% if @fortysix == @last_one %>
+          <tr><td>12 <%= @fortysix.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortysix == @last_two %>
+          <tr><td>12 <%= @fortysix.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortysix.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>12 <%= @fortysix.team.school %></td></tr>
+          <% else %>
+            <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>4 <%= @fourteen.team.school %></td></tr>
-        <tr><td>13 <%= @fiftyone.team.school %></td></tr>
+        <tr><td>13 <%= @fiftythree.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>6 <%= @twentytwo.team.school %></td></tr>
-        <tr><td>11 <%= @fortythree.team.school %></td></tr>
+        <% if @fortythree == @last_one %>
+          <tr><td>11 <%= @fortythree.team.school %>/<%= @last_four.team.school %></td></tr>
+        <% elsif @fortythree == @last_two %>
+          <tr><td>11 <%= @fortythree.team.school %>/<%= @last_three.team.school %></td></tr>
+        <% else %>
+          <% if @fortythree.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+            <tr><td>11 <%= @fortythree.team.school %></td></tr>
+          <% else %>
+            <tr><td>11 <%= @fortyfive.team.school %></td></tr>
+          <% end %>
+        <% end %>
         <tr><td></td></tr>
         <tr><td>3 <%= @eleven.team.school %></td></tr>
-        <tr><td>14 <%= @fiftyfour.team.school %></td></tr>
+        <tr><td>14 <%= @fiftysix.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>7 <%= @twentyseven.team.school %></td></tr>
         <tr><td>10 <%= @thirtyeight.team.school %></td></tr>
         <tr><td></td></tr>
         <tr><td>2 <%= @six.team.school %></td></tr>
-        <tr><td>15 <%= @fiftynine.team.school %></td></tr>
+        <tr><td>15 <%= @sixtyone.team.school %></td></tr>
         <tr><td></td></tr>
       </table>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 col-xs-6">
+    <h4>Last Four Byes</h4>
+    <table class="table">
+      <tr><td><%= @bye_one.team.school %></td></tr>
+      <tr><td><%= @bye_two.team.school %></td></tr>
+      <tr><td><%= @bye_three.team.school %></td></tr>
+      <tr><td><%= @bye_four.team.school %></td></tr>
+    </table>
+  </div>
+  <div class="col-md-3 col-xs-6">
+    <h4>Last Four In</h4>
+    <table class="table">
+      <tr><td><%= @last_one.team.school %></td></tr>
+      <tr><td><%= @last_two.team.school %></td></tr>
+      <tr><td><%= @last_three.team.school %></td></tr>
+      <tr><td><%= @last_four.team.school %></td></tr>
+    </table>
+  </div>
+  <div class="col-md-3 col-xs-6">
+    <h4>First Four Out</h4>
+    <table class="table">
+      <tr><td><%= @first_one.team.school %></td></tr>
+      <tr><td><%= @first_two.team.school %></td></tr>
+      <tr><td><%= @first_three.team.school %></td></tr>
+      <tr><td><%= @first_four.team.school %></td></tr>
+    </table>
+  </div>
+  <div class="col-md-3 col-xs-6">
+    <h4>Next Four Out</h4>
+    <table class="table">
+      <tr><td><%= @next_one.team.school %></td></tr>
+      <tr><td><%= @next_two.team.school %></td></tr>
+      <tr><td><%= @next_three.team.school %></td></tr>
+      <tr><td><%= @next_four.team.school %></td></tr>
+    </table>
   </div>
 </div>

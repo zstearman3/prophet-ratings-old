@@ -2094,19 +2094,49 @@ puts "Getting best bets"
         puts conference.name
       end
     end
-    
+    n = 0
+    next_four_out = []
+    first_four_out = []
+    last_four_in = []
+    last_four_byes =[]
     TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).each do |team_season|
-      tourney_field |= [team_season]
-      break if tourney_field.count == 68
+      if tourney_field.count < 68
+        tourney_field |= [team_season]
+      else
+        unless conference_champions.include? team_season.id
+          n += 1
+          if n < 5
+            first_four_out << team_season.id
+          elsif n < 9
+            next_four_out << team_season.id
+          end
+        end
+      end
+      break if n >= 9
     end
     tourney_field = tourney_field.sort_by{ |team_season| team_season.adj_efficiency_margin}.reverse!
     tourney_field.each do |team_season|
-      puts team_season.team.school
       tournament_field << team_season.id
+    end
+    n = 0
+    tournament_field.reverse.each do |team_season_id|
+      unless conference_champions.include? team_season_id
+        if n < 4
+          last_four_in << team_season_id
+          n += 1
+        elsif n < 8
+          last_four_byes << team_season_id
+          n += 1
+        end
+      end
     end
     bracketology = Bracketology.find_or_create_by(date: Date.today)
     bracketology.tournament_field = tournament_field
     bracketology.conference_winners = conference_champions
+    bracketology.next_four_out = next_four_out
+    bracketology.first_four_out = first_four_out
+    bracketology.last_four_byes = last_four_byes.reverse
+    bracketology.last_four_in = last_four_in.reverse
     bracketology.save
   end
 end
