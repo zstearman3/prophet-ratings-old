@@ -1977,12 +1977,14 @@ puts "Getting best bets"
     tourney_field = []
     tournament_field = []
     conference_champions = []
-    Conference.all.each do |conference|
+    Conference.where(id: 4).each do |conference|
       top_conference_wins = 0.0
       conference_champ = nil
       conference.teams.each do |team|
         team_season = TeamSeason.find_by(team: team, season: current_season)
         if team_season
+          puts team_season.team.school
+          x = 0
           current_conference_wins = team_season.conference_wins.to_f
           games = Game.where(home_team: team, season: current_season, home_team_score: nil)
           away_games = Game.where(away_team: team, season: current_season, away_team_score: nil)
@@ -1990,6 +1992,7 @@ puts "Getting best bets"
           all_games.each do |game|
             if game.home_team && game.away_team
               if game.home_team.conference == game.away_team.conference
+                x += 1
                 home_advantage = 0.0
                 defensive_advantage = 0.0
                 assists_advantage = 0.0
@@ -2073,6 +2076,8 @@ puts "Getting best bets"
               end
             end
           end
+          puts current_conference_wins
+          puts x
           if current_conference_wins > top_conference_wins
             top_conference_wins = current_conference_wins
             conference_champ = team_season
@@ -2080,7 +2085,7 @@ puts "Getting best bets"
         end
       end
       begin
-        if top_conference_wins < 4
+        if top_conference_wins < 7.5
           conf_team_seasons = []
           conference.teams.each do |team|
             conf_team_seasons << TeamSeason.find_by(season: current_season, team: team)
