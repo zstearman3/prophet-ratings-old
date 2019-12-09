@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   post '/login',    to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   get '/rankings',  to: 'team_seasons#rankings', as: :rankings
+  get 'bracketology',       to: 'bracketology#show'
   get '/new_simulation',    to: 'simulations#new_simulation'
   post '/new_simulation',   to: 'simulations#create_simulation'
   get '/simulation_result', to: 'simulations#simulation_result'

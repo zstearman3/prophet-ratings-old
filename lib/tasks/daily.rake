@@ -1971,4 +1971,140 @@ puts "Getting best bets"
       end
     end  
   end
+  
+  task bracketology: :environment do
+    current_season = Season.find_by(season: current_year)
+    tourney_field = []
+    tournament_field = []
+    conference_champions = []
+    Conference.all.each do |conference|
+      top_conference_wins = 0.0
+      conference_champ = nil
+      conference.teams.each do |team|
+        team_season = TeamSeason.find_by(team: team, season: current_season)
+        current_conference_wins = team_season.conference_wins.to_f
+        games = Game.where(home_team: team, season: current_season, home_team_score: nil)
+        away_games = Game.where(away_team: team, season: current_season, away_team_score: nil)
+        games.merge(away_games)
+        games.each do |game|
+          if game.home_team && game.away_team
+            if game.home_team.conference == game.away_team.conference
+              home_advantage = 0.0
+              defensive_advantage = 0.0
+              assists_advantage = 0.0
+              three_pointers_advantage = 0.0
+              pace_advantage = 0.0
+              @home_team_season = TeamSeason.find_by(team: game.home_team, season: current_season)
+              @away_team_season = TeamSeason.find_by(team: game.away_team, season: current_season)
+              if @home_team_season && @away_team_season
+                predicted_tempo = (@home_team_season.adj_tempo - current_season.adj_tempo) + (@away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
+                predicted_home_efficiency = (@home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (@away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
+                predicted_away_efficiency = (@away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (@home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
+                if @home_team_season.home_advantage && @away_team_season.home_advantage
+                  home_advantage = (((4.0 * current_season.home_advantage) + @home_team_season.home_advantage + @away_team_season.home_advantage)/ 6.0).round(1)
+                  predicted_home_efficiency += home_advantage / 2.0
+                  predicted_away_efficiency += home_advantage / -2.0
+                end
+                if @home_team_season.defensive_style_advantage && @away_team_season.defensive_style_advantage
+                  if @home_team_season.r_defensive_style > 0.1
+                    defensive_advantage += @home_team_season.defensive_style_advantage * (@home_team_season.r_defensive_style / 0.15) * (@away_team_season.defensive_aggression / 10.0)
+                  end
+                  
+                  if @away_team_season.r_defensive_style > 0.1
+                    defensive_advantage += -@away_team_season.defensive_style_advantage * (@away_team_season.r_defensive_style / 0.15) * (@home_team_season.defensive_aggression / 10.0)
+                  end
+                  
+                  if @home_team_season.r_assists > 0.1
+                    assists_advantage += @home_team_season.assists_advantage * (@home_team_season.r_assists / 0.15) * ((@away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+                  end
+                  
+                  if @away_team_season.r_assists > 0.1
+                    assists_advantage += -@away_team_season.assists_advantage * (@away_team_season.r_assists / 0.15) * ((@home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+                  end
+                  
+                  if @home_team_season.r_three_pointers > 0.1
+                    three_pointers_advantage += @home_team_season.three_pointers_advantage * (@home_team_season.r_three_pointers / 0.15) * ((@away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+                  end
+                  
+                  if @away_team_season.r_three_pointers > 0.1
+                    three_pointers_advantage += -@away_team_season.three_pointers_advantage * (@away_team_season.r_three_pointers / 0.15) * ((@home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+                  end
+                  
+                  if @home_team_season.r_pace > 0.1
+                    pace_advantage += @home_team_season.pace_advantage * (@home_team_season.r_pace   / 0.15) * ((@away_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+                  end
+                  
+                  if @away_team_season.r_pace > 0.1
+                    pace_advantage += -@away_team_season.pace_advantage * (@away_team_season.r_pace  / 0.15) * ((@home_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+                  end
+                  defensive_advantage = 6.5 if defensive_advantage > 6.5
+                  assists_advantage = 6.5 if assists_advantage > 6.5
+                  three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+                  pace_advantage = 6.5 if pace_advantage > 6.5
+                  defensive_advantage = -6.5 if defensive_advantage < -6.5
+                  assists_advantage = -6.5 if assists_advantage < -6.5
+                  three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+                  pace_advantage = -6.5 if pace_advantage < -6.5
+                  predicted_home_efficiency += defensive_advantage / 2.0
+                  predicted_away_efficiency += defensive_advantage / -2.0
+                  predicted_home_efficiency += assists_advantage / 2.0
+                  predicted_away_efficiency += assists_advantage / -2.0
+                  predicted_home_efficiency += three_pointers_advantage / 2.0
+                  predicted_away_efficiency += three_pointers_advantage / -2.0
+                  predicted_home_efficiency += pace_advantage / 2.0
+                  predicted_away_efficiency += pace_advantage / -2.0
+                end
+                
+                begin
+                  mean = predicted_home_efficiency - predicted_away_efficiency
+                  std_dev = Math.sqrt(2 * current_season.consistency ** 2) 
+                  home_win_z_score = (0.0 - mean) / std_dev
+                  home_win_probability = getProbability(home_win_z_score).to_f
+                  if team == game.home_team
+                    current_conference_wins += home_win_probability
+                  elsif team == game.away_team
+                    current_conference_wins += (1 - home_win_probability)
+                  end
+                end
+              end
+            end
+          end
+        end
+        if current_conference_wins > top_conference_wins
+          top_conference_wins = current_conference_wins
+          conference_champ = team_season
+        end
+      end
+      begin
+        if top_conference_wins < 4
+          conf_team_seasons = []
+          conference.teams.each do |team|
+            conf_team_seasons << TeamSeason.find_by(season: current_season, team: team)
+          end
+           conf_team_seasons = conf_team_seasons.sort_by{ |team_season| team_season.adj_efficiency_margin}.reverse!
+           conference_champ = conf_team_seasons.first
+        end
+        puts conference_champ.team.school
+        puts top_conference_wins
+        tourney_field << conference_champ
+        conference_champions << conference_champ.id
+      rescue StandardError => e
+        puts conference.name
+      end
+    end
+    
+    TeamSeason.where(season: current_season).order(adj_efficiency_margin: :desc).each do |team_season|
+      tourney_field |= [team_season]
+      break if tourney_field.count == 68
+    end
+    tourney_field = tourney_field.sort_by{ |team_season| team_season.adj_efficiency_margin}.reverse!
+    tourney_field.each do |team_season|
+      puts team_season.team.school
+      tournament_field << team_season.id
+    end
+    bracketology = Bracketology.find_or_create_by(date: Date.today)
+    bracketology.tournament_field = tournament_field
+    bracketology.conference_winners = conference_champions
+    bracketology.save
+  end
 end
