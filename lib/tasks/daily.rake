@@ -1986,8 +1986,8 @@ puts "Getting best bets"
           current_conference_wins = team_season.conference_wins.to_f
           games = Game.where(home_team: team, season: current_season, home_team_score: nil)
           away_games = Game.where(away_team: team, season: current_season, away_team_score: nil)
-          games.merge(away_games)
-          games.each do |game|
+          all_games = games.or(away_games)
+          all_games.each do |game|
             if game.home_team && game.away_team
               if game.home_team.conference == game.away_team.conference
                 home_advantage = 0.0
@@ -1998,7 +1998,6 @@ puts "Getting best bets"
                 @home_team_season = TeamSeason.find_by(team: game.home_team, season: current_season)
                 @away_team_season = TeamSeason.find_by(team: game.away_team, season: current_season)
                 if @home_team_season && @away_team_season
-                  predicted_tempo = (@home_team_season.adj_tempo - current_season.adj_tempo) + (@away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
                   predicted_home_efficiency = (@home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (@away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
                   predicted_away_efficiency = (@away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (@home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
                   if @home_team_season.home_advantage && @away_team_season.home_advantage
