@@ -2004,6 +2004,9 @@ puts "Getting best bets"
                     home_advantage = (((4.0 * current_season.home_advantage) + @home_team_season.home_advantage + @away_team_season.home_advantage)/ 6.0).round(1)
                     predicted_home_efficiency += home_advantage / 2.0
                     predicted_away_efficiency += home_advantage / -2.0
+                  else
+                    predicted_home_efficiency += 1.75
+                    predicted_away_efficiency += -1.75
                   end
                   if @home_team_season.defensive_style_advantage && @away_team_season.defensive_style_advantage
                     if @home_team_season.r_defensive_style > 0.1
