@@ -2007,7 +2007,7 @@ puts "Getting best bets"
         end
       end
       begin
-        if top_conference_wins < 7.5
+        if top_conference_wins < 8.5
           conf_team_seasons = []
           conference.teams.each do |team|
             conf_team_seasons << TeamSeason.find_by(season: current_season, team: team)
