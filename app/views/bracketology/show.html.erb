@@ -21,7 +21,11 @@
             <tr><td>12 <%= @fortyeight.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>12 <%= @fifty.team.school %> 50</td></tr>
+              <% if 47 > @last_two_spot %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[47 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[47 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>12 <%= @fifty.team.school %></td></tr>
             <% end %>
@@ -41,7 +45,11 @@
             <tr><td>11 <%= @fortyone.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>11 <%= @fortythree.team.school %> 43</td></tr>
+              <% if 40 > @last_two_spot %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[40 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[40 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>11 <%= @fortythree.team.school %></td></tr>
             <% end %>
@@ -78,7 +86,11 @@
             <tr><td>12 <%= @fortyfive.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>12 <%= @fortyseven.team.school %> 47</td></tr>
+              <% if 44 > @last_two_spot %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[44 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[44 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>12 <%= @fortyseven.team.school %></td></tr>
             <% end %>
@@ -98,7 +110,11 @@
             <tr><td>11 <%= @fortyfour.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>11 <%= @fortysix.team.school %> 46</td></tr>
+              <% if 43 > @last_two_spot %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[43 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[43 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>11 <%= @fortysix.team.school %></td></tr>
             <% end %>
@@ -137,7 +153,11 @@
             <tr><td>12 <%= @fortyseven.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>12 <%= @fortynine.team.school %> 49</td></tr>
+              <% if 46 > @last_two_spot %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[46 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[46 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>12 <%= @fortynine.team.school %></td></tr>
             <% end %>
@@ -157,7 +177,11 @@
             <tr><td>11 <%= @fortytwo.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>11 <%= @fortyfour.team.school %> 44</td></tr>
+              <% if 41 > @last_two_spot %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[41 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[41 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>11 <%= @fortyfour.team.school %></td></tr>
             <% end %>
@@ -194,7 +218,11 @@
             <tr><td>12 <%= @fortysix.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>12 <%= @fortyeight.team.school %> 48</td></tr>
+              <% if 45 > @last_two_spot %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[45]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[45 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>12 <%= @fortyeight.team.school %></td></tr>
             <% end %>
@@ -214,7 +242,11 @@
             <tr><td>11 <%= @fortythree.team.school %></td></tr>
           <% else %>
             <% if @between_count > 1 %>
-              <tr><td>11 <%= @fortyfive.team.school %> 45</td></tr>
+              <% if 42 > @last_two_spot %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[42 - @last_one_spot - 2]).team.school %> 50</td></tr>
+              <% else %>
+                <tr><td>11 <%= TeamSeason.find(@eleven_twelve[42 - @last_one_spot - 1]).team.school %> 50</td></tr>
+              <% end %>
             <% else %>
               <tr><td>11 <%= @fortyfive.team.school %></td></tr>
             <% end %>

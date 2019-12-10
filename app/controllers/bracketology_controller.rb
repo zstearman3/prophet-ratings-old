@@ -100,7 +100,16 @@ class BracketologyController < ApplicationController
     @next_four = TeamSeason.find(@bracketology.next_four_out[3])
     
     @last_one_spot = @bracketology.tournament_field.index(@bracketology.last_four_in[0])
+    @last_two_spot = @bracketology.tournament_field.index(@bracketology.last_four_in[1])
     @last_four_spot = @bracketology.tournament_field.index(@bracketology.last_four_in[3])
     @between_count = @last_four_spot - @last_one_spot - 2
+    @eleven_twelve = []
+    x = 0
+    until @eleven_twelve.count == 10
+      unless @bracketology.last_four_in.index(@bracketology.tournament_field[@last_one_spot + x])
+        @eleven_twelve << @bracketology.tournament_field[@last_one_spot + x]
+      end
+      x += 1
+    end
   end
 end
