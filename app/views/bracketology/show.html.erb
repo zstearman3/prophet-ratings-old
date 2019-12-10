@@ -219,7 +219,7 @@
           <% else %>
             <% if @between_count > 1 %>
               <% if 45 > @last_two_spot %>
-                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[45]).team.school %> 50</td></tr>
+                <tr><td>12 <%= TeamSeason.find(@eleven_twelve[45 - @last_one_spot - 2]).team.school %> 50</td></tr>
               <% else %>
                 <tr><td>12 <%= TeamSeason.find(@eleven_twelve[45 - @last_one_spot - 1]).team.school %> 50</td></tr>
               <% end %>
