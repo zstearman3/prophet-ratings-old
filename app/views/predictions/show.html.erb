@@ -185,57 +185,65 @@
       <div class="row">
         <h3>Team Leaders</h3>
         <div class="left-column col-md-6">
-          <% if @game.away_team %>
-            <h4><%= @game.away_team.school %></h4>
-            <table>
-              <tr>
-                <th>Scoring</th>
-                <td><%= link_to @away_points_leader.name, @away_points_leader.player if @away_points_leader %></td>
-                <td><% if @away_points_leader %><%= @away_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>Assists</th>
-                <td><%= link_to @away_assists_leader.name, @away_assists_leader.player if @away_assists_leader %></td>
-                <td><% if @away_assists_leader %><%= @away_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>Rebounds</th>
-                <td><%= link_to @away_rebounds_leader.name, @away_rebounds_leader.player if @away_rebounds_leader %></td>
-                <td><% if @away_rebounds_leader %><%= @away_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>PRate</th>
-                <td><%= link_to @away_prate_leader.name, @away_prate_leader.player if @away_prate_leader %></td>
-                <td><% if @away_prate_leader %><%= @away_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
-              </tr>
-            </table>
-          <% end %>
+          <div class="col-xs-6">
+            <% if @game.away_team %>
+              <h4><%= @game.away_team.school %></h4>
+              <table>
+                <tr>
+                  <th>Scoring</th>
+                  <td><%= link_to @away_points_leader.name, @away_points_leader.player if @away_points_leader %></td>
+                  <td><% if @away_points_leader %><%= @away_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>Assists</th>
+                  <td><%= link_to @away_assists_leader.name, @away_assists_leader.player if @away_assists_leader %></td>
+                  <td><% if @away_assists_leader %><%= @away_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>Rebounds</th>
+                  <td><%= link_to @away_rebounds_leader.name, @away_rebounds_leader.player if @away_rebounds_leader %></td>
+                  <td><% if @away_rebounds_leader %><%= @away_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>PRate</th>
+                  <td><%= link_to @away_prate_leader.name, @away_prate_leader.player if @away_prate_leader %></td>
+                  <td><% if @away_prate_leader %><%= @away_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
+                </tr>
+              </table>
+            <% end %> 
+          </div>
+          <div class="col-xs-6">
+            <% if @game.home_team %>
+              <h4><%= @game.home_team.school %></h4>
+              <table>
+                <tr>
+                  <th>Scoring</th>
+                  <td><%= link_to @home_points_leader.name, @home_points_leader.player if @home_points_leader %></td>
+                  <td><% if @home_points_leader %><%= @home_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>Assists</th>
+                  <td><%= link_to @home_assists_leader.name, @home_assists_leader.player if @home_assists_leader %></td>
+                  <td><% if @home_assists_leader %><%= @home_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>Rebounds</th>
+                  <td><%= link_to @home_rebounds_leader.name, @home_rebounds_leader.player if @home_rebounds_leader %></td>
+                  <td><% if @home_rebounds_leader %><%= @home_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
+                </tr>
+                <tr>
+                  <th>PRate</th>
+                  <td><%= link_to @home_prate_leader.name, @home_prate_leader.player if @home_prate_leader %></td>
+                  <td><% if @home_prate_leader %><%= @home_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
+                </tr>
+              </table>
+            <% end %>
+          </div>
         </div>
         <div class="right-column col-md-6">
-          <% if @game.home_team %>
-            <h4><%= @game.home_team.school %></h4>
-            <table>
-              <tr>
-                <th>Scoring</th>
-                <td><%= link_to @home_points_leader.name, @home_points_leader.player if @home_points_leader %></td>
-                <td><% if @home_points_leader %><%= @home_points_leader.points_per_game.to_s + " ppg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>Assists</th>
-                <td><%= link_to @home_assists_leader.name, @home_assists_leader.player if @home_assists_leader %></td>
-                <td><% if @home_assists_leader %><%= @home_assists_leader.assists_per_game.to_s + " apg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>Rebounds</th>
-                <td><%= link_to @home_rebounds_leader.name, @home_rebounds_leader.player if @home_rebounds_leader %></td>
-                <td><% if @home_rebounds_leader %><%= @home_rebounds_leader.rebounds_per_game.to_s + " rpg" %><% end %></td>
-              </tr>
-              <tr>
-                <th>PRate</th>
-                <td><%= link_to @home_prate_leader.name, @home_prate_leader.player if @home_prate_leader %></td>
-                <td><% if @home_prate_leader %><%= @home_prate_leader.prophet_rating.to_s + " rating"%><% end %></td>
-              </tr>
-            </table>
+          <h3>Win Probabilites</h3>
+          <% if @game.home_team && @game.away_team %>
+            <%= pie_chart [[@game.home_team.school, @prediction.home_win_probability], [@game.away_team.school, (100.0 - @prediction.home_win_probability)]], colors: ['#005', '#999'] %>
           <% end %>
         </div>
       </div>
