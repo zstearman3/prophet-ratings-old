@@ -98,5 +98,9 @@ class BracketologyController < ApplicationController
     @next_two = TeamSeason.find(@bracketology.next_four_out[1])
     @next_three = TeamSeason.find(@bracketology.next_four_out[2])
     @next_four = TeamSeason.find(@bracketology.next_four_out[3])
+    
+    @last_one_spot = @bracketology.tournament_field.index(@bracketology.last_four_in[0])
+    @last_four_spot = @bracketology.tournament_field.index(@bracketology.last_four_in[3])
+    @between_count = @last_four_spot - @last_one_spot - 2
   end
 end

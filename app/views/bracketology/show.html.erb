@@ -17,10 +17,14 @@
         <% elsif @fortyeight == @last_two %>
           <tr><td>12 <%= @fortyeight.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortyeight.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 47 < @last_one_spot %>
             <tr><td>12 <%= @fortyeight.team.school %></td></tr>
           <% else %>
-            <tr><td>12 <%= @fifty.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fifty.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fifty.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -33,10 +37,14 @@
         <% elsif @fortyone == @last_two %>
           <tr><td>11 <%= @fortyone.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortyone.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 40 < @last_one_spot %>
             <tr><td>11 <%= @fortyone.team.school %></td></tr>
           <% else %>
-            <tr><td>11 <%= @fortythree.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortythree.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortythree.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -66,10 +74,14 @@
         <% elsif @fortyfive == @last_two %>
           <tr><td>12 <%= @fortyfive.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortyfive.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 44 < @last_one_spot %>
             <tr><td>12 <%= @fortyfive.team.school %></td></tr>
           <% else %>
-            <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortyseven.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -82,10 +94,14 @@
         <% elsif @fortyfour == @last_two %>
           <tr><td>11 <%= @fortyfour.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortyfour.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 43 < @last_one_spot %>
             <tr><td>11 <%= @fortyfour.team.school %></td></tr>
           <% else %>
-            <tr><td>11 <%= @fortysix.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortysix.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortysix.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -117,10 +133,14 @@
         <% elsif @fortyseven == @last_two %>
           <tr><td>12 <%= @fortyseven.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortyseven.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 46 < @last_one_spot %>
             <tr><td>12 <%= @fortyseven.team.school %></td></tr>
           <% else %>
-            <tr><td>12 <%= @fortynine.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortynine.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortynine.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -133,10 +153,14 @@
         <% elsif @fortytwo == @last_two %>
           <tr><td>11 <%= @fortytwo.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortytwo.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 41 < @last_one_spot %>
             <tr><td>11 <%= @fortytwo.team.school %></td></tr>
           <% else %>
-            <tr><td>11 <%= @fortyfour.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortyfour.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortyfour.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -166,10 +190,14 @@
         <% elsif @fortysix == @last_two %>
           <tr><td>12 <%= @fortysix.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortysix.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 45 < @last_one_spot %>
             <tr><td>12 <%= @fortysix.team.school %></td></tr>
           <% else %>
-            <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortyeight.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
@@ -182,10 +210,14 @@
         <% elsif @fortythree == @last_two %>
           <tr><td>11 <%= @fortythree.team.school %>/<%= @last_three.team.school %></td></tr>
         <% else %>
-          <% if @fortythree.adj_efficiency_margin > @last_one.adj_efficiency_margin %>
+          <% if 42 < @last_one_spot %>
             <tr><td>11 <%= @fortythree.team.school %></td></tr>
           <% else %>
-            <tr><td>11 <%= @fortyfive.team.school %></td></tr>
+            <% if @between_count > 1 %>
+              <tr><td>12 <%= @fortyfive.team.school %></td></tr>
+            <% else %>
+              <tr><td>12 <%= @fortyfive.team.school %></td></tr>
+            <% end %>
           <% end %>
         <% end %>
         <tr><td></td></tr>
