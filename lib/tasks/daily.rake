@@ -548,8 +548,8 @@ namespace :daily do
     error_count = 0
     oeff_error = 0
     error_fraction = 1
-    x = 0
-    while error_fraction > 0.05 && x < 6
+    y = 0
+    while error_fraction > 0.05 && y < 6
       old_oerror = oeff_error
       oeff_error = 0
       team_seasons.each do |season|
@@ -630,7 +630,7 @@ namespace :daily do
       current_season.reload
       error_fraction = Math.sqrt(((oeff_error - old_oerror) / oeff_error) ** 2.0) 
       puts error_fraction
-      x += 1
+      y += 1
     end
     puts "Calculating game by game advantages"
     team_seasons.each do |season|
@@ -821,8 +821,8 @@ namespace :daily do
     current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
     current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
     current_season.adj_tempo = team_seasons.average(:adj_tempo)
-    current_season.home_advantage = team_seasons.average(:home_advantage)
-    current_season.consistency = team_seasons.average(:consistency)
+    current_season.home_advantage = team_seasons.average(:home_advantage) unless team_seasons.average(:home_advantage).nan?
+    current_season.consistency = team_seasons.average(:consistency) unless team_seasons.average(:home_advantage).nan?
     if current_season.consistency.to_f.nan?
       current_season.consistency = 14.0
     end
@@ -1090,7 +1090,9 @@ namespace :daily do
         # Matchup Specific Modifiers
         if game.home_team.stadium == game.stadium
           if home_team_season.home_advantage && away_team_season.home_advantage
-            home_advantage = (((4.0 * current_season.home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
+            season_home_advantage = 3.0
+            season_home_advantage = current_season.home_advantage unless current_season.home_advantage.nan?
+            home_advantage = (((4.0 * season_home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
             predicted_home_efficiency += home_advantage / 2.0
             predicted_away_efficiency += home_advantage / -2.0
           else
@@ -1155,6 +1157,7 @@ namespace :daily do
           prediction.assists_advantage = assists_advantage.round(1)
           prediction.three_pointers_advantage = three_pointers_advantage.round(1)
           prediction.pace_advantage = pace_advantage.round(1)
+          prediction.injury_advantage = injury_advantage.round(1)
           predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
           predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
           prediction.home_team_prediction = predicted_home_score.round

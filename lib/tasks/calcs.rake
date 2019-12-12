@@ -476,8 +476,8 @@ namespace :calcs do
     current_season.adj_offensive_efficiency = team_seasons.average(:adj_offensive_efficiency)
     current_season.adj_defensive_efficiency = team_seasons.average(:adj_defensive_efficiency)
     current_season.adj_tempo = team_seasons.average(:adj_tempo)
-    current_season.home_advantage = team_seasons.average(:home_advantage)
-    current_season.consistency = team_seasons.average(:consistency)
+    current_season.home_advantage = team_seasons.average(:home_advantage) unless team_seasons.average(:home_advantage).nan?
+    current_season.consistency = team_seasons.average(:consistency) unless team_seasons.average(:consistency).nan?
     current_season.save
   end
   
@@ -756,60 +756,62 @@ namespace :calcs do
         predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
         predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
         
-        # Matchup Specific Modifiers
-        # if game.home_team.stadium == game.stadium
-        #   home_advantage = (((4.0 * current_season.home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
-        #   predicted_home_efficiency += home_advantage / 2.0
-        #   predicted_away_efficiency += home_advantage / -2.0
-        # end
+        # # Matchup Specific Modifiers
+        if game.home_team.stadium == game.stadium
+          season_home_advantage = 3.0
+          season_home_advantage = current_season.home_advantage unless current_season.home_advantage.nan?
+          home_advantage = (((4.0 * season_home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
+          predicted_home_efficiency += home_advantage / 2.0
+          predicted_away_efficiency += home_advantage / -2.0
+        end
         
-        # if home_team_season.r_defensive_style > 0.1
-        #   defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0)
-        # end
+        if home_team_season.r_defensive_style > 0.1
+          defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0)
+        end
         
-        # if away_team_season.r_defensive_style > 0.1
-        #   defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)
-        # end
+        if away_team_season.r_defensive_style > 0.1
+          defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)
+        end
         
-        # if home_team_season.r_assists > 0.1
-        #   assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
-        # end
+        if home_team_season.r_assists > 0.1
+          assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
         
-        # if away_team_season.r_assists > 0.1
-        #   assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
-        # end
+        if away_team_season.r_assists > 0.1
+          assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
         
-        # if home_team_season.r_three_pointers > 0.1
-        #   three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
-        # end
+        if home_team_season.r_three_pointers > 0.1
+          three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
         
-        # if away_team_season.r_three_pointers > 0.1
-        #   three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
-        # end
+        if away_team_season.r_three_pointers > 0.1
+          three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
         
-        # if home_team_season.r_pace > 0.1
-        #   pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace   / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
-        # end
+        if home_team_season.r_pace > 0.1
+          pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace   / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
         
-        # if away_team_season.r_pace > 0.1
-        #   pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace  / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
-        # end
-        # defensive_advantage = 6.5 if defensive_advantage > 6.5
-        # assists_advantage = 6.5 if assists_advantage > 6.5
-        # three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
-        # pace_advantage = 6.5 if pace_advantage > 6.5
-        # defensive_advantage = -6.5 if defensive_advantage < -6.5
-        # assists_advantage = -6.5 if assists_advantage < -6.5
-        # three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
-        # pace_advantage = -6.5 if pace_advantage < -6.5
-        # predicted_home_efficiency += defensive_advantage / 2.0
-        # predicted_away_efficiency += defensive_advantage / -2.0
-        # predicted_home_efficiency += assists_advantage / 2.0
-        # predicted_away_efficiency += assists_advantage / -2.0
-        # predicted_home_efficiency += three_pointers_advantage / 2.0
-        # predicted_away_efficiency += three_pointers_advantage / -2.0
-        # predicted_home_efficiency += pace_advantage / 2.0
-        # predicted_away_efficiency += pace_advantage / -2.0
+        if away_team_season.r_pace > 0.1
+          pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace  / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        predicted_home_efficiency += defensive_advantage / 2.0
+        predicted_away_efficiency += defensive_advantage / -2.0
+        predicted_home_efficiency += assists_advantage / 2.0
+        predicted_away_efficiency += assists_advantage / -2.0
+        predicted_home_efficiency += three_pointers_advantage / 2.0
+        predicted_away_efficiency += three_pointers_advantage / -2.0
+        predicted_home_efficiency += pace_advantage / 2.0
+        predicted_away_efficiency += pace_advantage / -2.0
         begin
           prediction.home_advantage = home_advantage.round(1)
           prediction.defense_advantage = defensive_advantage.round(1)

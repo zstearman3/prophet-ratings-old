@@ -33,6 +33,7 @@ class SimulationsController < ApplicationController
           predicted_away_efficiency += -1.75
         end
       end
+      puts home_advantage
       if @home_team_season.defensive_style_advantage && @away_team_season.defensive_style_advantage
         if @home_team_season.r_defensive_style > 0.1
           defensive_advantage += @home_team_season.defensive_style_advantage * (@home_team_season.r_defensive_style / 0.15) * (@away_team_season.defensive_aggression / 10.0)
@@ -73,6 +74,13 @@ class SimulationsController < ApplicationController
         assists_advantage = -6.5 if assists_advantage < -6.5
         three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
         pace_advantage = -6.5 if pace_advantage < -6.5
+        puts predicted_home_efficiency
+        puts predicted_away_efficiency
+        puts defensive_advantage
+        puts assists_advantage
+        puts three_pointers_advantage
+        puts pace_advantage
+        puts home_advantage
         predicted_home_efficiency += defensive_advantage / 2.0
         predicted_away_efficiency += defensive_advantage / -2.0
         predicted_home_efficiency += assists_advantage / 2.0
