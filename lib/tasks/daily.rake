@@ -652,7 +652,7 @@ namespace :daily do
             ortg_array.push(actual_ortg - expected_ortg)
             drtg_array.push(actual_drtg - expected_drtg)
             pace = game.game.possessions * 40 / (game.minutes / 5)
-            performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) *( pace / 100 )
+            performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) * ( pace / 100 )
             
             # if actual_ortg - actual_drtg > 30
             #   if performance > 15

@@ -38,6 +38,7 @@
         <thead>
           <tr>
             <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
             <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
             <th class="hidden-small">Conference</th>
             <th class="hidden-large">Conf</th>
@@ -53,6 +54,7 @@
           <% @team_seasons.each do |season| %>
             <tr>
               <td><%= x %></td>
+              <td><%= season.adjem_rank %></td>
               <% if year > current_season.season %>
                 <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
               <% else %>
@@ -69,6 +71,7 @@
             <% if x % 20 == 0 %>
               <tr>
                 <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
+                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
                 <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
                 <th class="hidden-small">Conference</th>
                 <th class="hidden-large">Conf</th>
