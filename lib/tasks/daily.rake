@@ -817,7 +817,7 @@ namespace :daily do
     current_season.home_advantage = team_seasons.average(:home_advantage) unless team_seasons.average(:home_advantage).nan?
     current_season.consistency = team_seasons.average(:consistency) unless team_seasons.average(:home_advantage).nan?
     if current_season.consistency.to_f.nan?
-      current_season.consistency = 12.0
+      current_season.consistency = 14.0
     end
     current_season.save
     end
@@ -1236,7 +1236,10 @@ namespace :daily do
               end
             end
             if prediction.over_under && prediction.predicted_over_under
-              pace_standard_dev = (predicted_tempo / 69.0) * 14.06
+              one_std_dev = Math.sqrt(2 * (current_season.consistency ** 2))
+              two_std_dev = Math.sqrt(2 * (one_std_dev ** 2))
+              scoring_std_dev = Math.sqrt(100 + (two_std_dev ** 2))
+              pace_standard_dev = (predicted_tempo / 69.0) * scoring_std_dev
               if prediction.predicted_over_under > prediction.over_under
                 over_z_score = (prediction.over_under - prediction.predicted_over_under) / pace_standard_dev
                 prediction.confidence_over_under = getProbability(over_z_score).round(5)
@@ -1554,7 +1557,7 @@ puts "Getting best bets"
             predicted_home_efficiency += home_advantage / 2.0
             predicted_away_efficiency += home_advantage / -2.0
           else
-            home_advantage = 2.5
+            home_advantage = 3.5
             predicted_home_efficiency += 1.75
             predicted_away_efficiency += -1.75
           end
