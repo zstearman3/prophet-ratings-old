@@ -649,27 +649,26 @@ namespace :daily do
             expected_drtg = (opponent_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_defensive_efficiency
             actual_ortg = 100 * game.points.to_f / game.game.possessions
             actual_drtg = 100 * opponent_game.points.to_f / game.game.possessions
-            ortg_array.push(actual_ortg - expected_ortg)
-            drtg_array.push(actual_drtg - expected_drtg)
-            pace = game.game.possessions * 40 / (game.minutes / 5)
-            performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) * ( pace / 100 )
-            
-            # if actual_ortg - actual_drtg > 30
-            #   if performance > 15
-            #     performance = 15
-            #   end
-            # end
-            #       ## Performance capped at 10 over 30 points per 100 possessions
-            # if actual_drtg - actual_ortg > 30
-            #   if performance < -15
-            #     performance = -15
-            #   end
-            # end
             if game.game.stadium == game.team.stadium
               home = true
             elsif game.game.stadium == opponent_season.team.stadium
               home = false
             end
+            if home == true
+              game.home_away_neutral = "home"
+              expected_ortg += 2.0
+              expected_drtg += -2.0
+            elsif home == false
+              game.home_away_neutral = "away"
+              expected_ortg += -2.0
+              expected_drtg += 2.0
+            else
+              game.home_away_neutral = "neutral"
+            end
+            ortg_array.push(actual_ortg - expected_ortg)
+            drtg_array.push(actual_drtg - expected_drtg)
+            pace = game.game.possessions * 40 / (game.minutes / 5)
+            performance = ((actual_ortg - expected_ortg) + (expected_drtg - actual_drtg)) * ( pace / 100 )
             defensive_style = opponent_season.defensive_aggression / 10.0
             three_pointers_advantage = ((opponent_season.three_pointers_rate * 2) + opponent_season.three_pointers_percentage) / 10.0
             pace_advantage = opponent_season.adj_tempo
@@ -678,13 +677,7 @@ namespace :daily do
                           "three_pointers" => three_pointers_advantage, "pace" => pace_advantage, "assists" => assists_advantage}
             games_array.push(game_hash)
             game.performance = performance.round(1)
-            if home == true
-              game.home_away_neutral = "home"
-            elsif home == false
-              game.home_away_neutral = "away"
-            else
-              game.home_away_neutral = "neutral"
-            end
+
             game.defensive_style_advantage = defensive_style
             game.three_pointers_advantage = three_pointers_advantage
             game.pace_advantage = pace_advantage
@@ -750,8 +743,8 @@ namespace :daily do
         end
               
         # Home Advantage Calc
-        home_advantage = home_games.sum { |game| game["performance"] } / home_games.size.to_f
-        away_advantage = away_games.sum { |game| game["performance"] } / away_games.size.to_f
+        home_advantage = (home_games.sum { |game| game["performance"] } / home_games.size.to_f) + 4.0
+        away_advantage = (away_games.sum { |game| game["performance"] } / away_games.size.to_f) - 4.0
         
         # Defensive Style Advantage Calc
         defensive_style_advantage = ((game_count * sum_product_defense) - (sum_defense * sum_performance.to_f)) / ((game_count * sum_defense_squared.to_f) - (sum_defense) ** 2)
@@ -824,7 +817,7 @@ namespace :daily do
     current_season.home_advantage = team_seasons.average(:home_advantage) unless team_seasons.average(:home_advantage).nan?
     current_season.consistency = team_seasons.average(:consistency) unless team_seasons.average(:home_advantage).nan?
     if current_season.consistency.to_f.nan?
-      current_season.consistency = 14.0
+      current_season.consistency = 12.0
     end
     current_season.save
     end
@@ -1096,7 +1089,7 @@ namespace :daily do
             predicted_home_efficiency += home_advantage / 2.0
             predicted_away_efficiency += home_advantage / -2.0
           else
-            home_advantage = 2.5
+            home_advantage = 3.5
             predicted_home_efficiency += 1.75
             predicted_away_efficiency += -1.75
           end
@@ -1630,7 +1623,8 @@ puts "Getting best bets"
           prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
           ##### MONEYLINE CALCS ######
           mean = predicted_home_efficiency - predicted_away_efficiency
-          std_dev = Math.sqrt(2 * current_season.consistency ** 2) 
+          single_std_dev = Math.sqrt(2 * (current_season.consistency ** 2)) ##### ONE TEAM ONLY #####
+          std_dev = Math.sqrt(2 * (single_std_dev ** 2))
           home_win_z_score = (0.0 - mean) / std_dev
           home_win_probability = getProbability(home_win_z_score)
           prediction.home_win_probability = (home_win_probability * 100.0).round(1)
@@ -1707,7 +1701,7 @@ puts "Getting best bets"
               end
             end
             if prediction.over_under && prediction.predicted_over_under
-              pace_standard_dev = (predicted_tempo / 69.0) * 14.06
+              pace_standard_dev = (predicted_tempo / 69.0) * 19.8
               if prediction.predicted_over_under > prediction.over_under
                 over_z_score = (prediction.over_under - prediction.predicted_over_under) / pace_standard_dev
                 prediction.confidence_over_under = getProbability(over_z_score).round(5)
