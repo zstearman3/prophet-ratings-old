@@ -64,6 +64,7 @@ class PredictionsController < ApplicationController
     end
     @predictions = Prediction.where(season: @season)
     @month_predictions = @predictions.where("day > ?", Date.today - 33.days)
+    @week_predictions = @predictions.where("day > ?", Date.today - 9.days)
     point_spread_wins = @predictions.where(win_point_spread: true)
     point_spread_losses = @predictions.where(win_point_spread: false)
     over_under_wins = @predictions.where(win_over_under: true)
@@ -124,6 +125,27 @@ class PredictionsController < ApplicationController
     @month_over_losses = over_losses.where("day > ?", Date.today - 33.days).count
     @month_under_wins = under_wins.where("day > ?", Date.today - 33.days).count
     @month_under_losses = under_losses.where("day > ?", Date.today - 33.days).count
+    @week_point_spread_wins = point_spread_wins.where("day > ?", Date.today - 9.days).count
+    @week_point_spread_losses = point_spread_losses.where("day > ?", Date.today - 9.days).count
+    @week_over_under_wins = over_under_wins.where("day > ?", Date.today - 9.days).count
+    @week_over_under_losses = over_under_losses.where("day > ?", Date.today - 9.days).count
+    @week_moneyline_wins = moneyline_wins.where("day > ?", Date.today - 9.days).count
+    @week_moneyline_losses = moneyline_losses.where("day > ?", Date.today - 9.days).count
+    @week_straight_up_wins = straight_up_wins.where("day > ?", Date.today - 9.days).count
+    @week_straight_up_losses = straight_up_losses.where("day > ?", Date.today - 9.days).count
+    @week_favorite_wins = favorite_wins.where("day > ?", Date.today - 9.days).count
+    @week_favorite_losses = favorite_losses.where("day > ?", Date.today - 9.days).count
+    @week_underdog_wins = underdog_wins.where("day > ?", Date.today - 9.days).count
+    @week_underdog_losses = underdog_losses.where("day > ?", Date.today - 9.days).count
+    @week_fast_pace_wins = fast_pace_wins.where("day > ?", Date.today - 9.days).count
+    @week_fast_pace_losses = fast_pace_losses.where("day > ?", Date.today - 9.days).count
+    @week_slow_pace_wins = slow_pace_wins.where("day > ?", Date.today - 9.days).count
+    @week_slow_pace_losses = slow_pace_losses.where("day > ?", Date.today - 9.days).count
+    @week_over_wins = over_wins.where("day > ?", Date.today - 9.days).count
+    @week_over_losses = over_losses.where("day > ?", Date.today - 9.days).count
+    @week_under_wins = under_wins.where("day > ?", Date.today - 9.days).count
+    @week_under_losses = under_losses.where("day > ?", Date.today - 9.days).count
+
   end
   private
     def sortable_columns

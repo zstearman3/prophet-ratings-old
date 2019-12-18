@@ -143,5 +143,66 @@
       <td><%= (100.0 * @month_under_wins.to_f / (@month_under_wins + @month_under_losses)).round(1).to_s + "%" %></td>
       <td><%= number_to_currency((90.9 * @month_under_wins) - (100.0 * @month_under_losses)) %></td>
     </tr>
+    <tr><th colspan="4" class="center">SUCCESS BY BET TYPE -- LAST 7 DAYS</th></tr>
+    <tr>
+      <th>Straight Up</th>
+      <td><%= @week_straight_up_wins.to_s + "-" + @week_straight_up_losses.to_s %></td>
+      <td><%= (100.0 * @week_straight_up_wins.to_f / (@week_straight_up_wins + @week_straight_up_losses)).round(1).to_s + "%" %></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>ATS</th>
+      <td><%= @week_point_spread_wins.to_s + "-" + @week_point_spread_losses.to_s %></td>
+      <td><%= (100.0 * @week_point_spread_wins.to_f / (@week_point_spread_wins + @week_point_spread_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_point_spread_wins) - (100.0 * @week_point_spread_losses)) %></td>
+    </tr>
+    <tr>
+      <th>O/U</th>
+      <td><%= @week_over_under_wins.to_s + "-" + @week_over_under_losses.to_s %></td>
+      <td><%= (100.0 * @week_over_under_wins.to_f / (@week_over_under_wins + @week_over_under_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_over_under_wins) - (100.0 * @week_over_under_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Moneyline</th>
+      <td><%= @week_moneyline_wins.to_s + "-" + @week_moneyline_losses.to_s %></td>
+      <td><%= (100.0 * @week_moneyline_wins.to_f / (@week_moneyline_wins + @week_moneyline_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency(@week_predictions.sum(:winnings_moneyline), unit: '$') %></td>
+    </tr>
+    <tr>
+      <th>Lean Favorite ATS</th>
+      <td><%= @week_favorite_wins.to_s + "-" + @week_favorite_losses.to_s %></td>
+      <td><%= (100.0 * @week_favorite_wins.to_f / (@week_favorite_wins + @week_favorite_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_favorite_wins) - (100.0 * @week_favorite_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Underdog ATS</th>
+      <td><%= @week_underdog_wins.to_s + "-" + @week_underdog_losses.to_s %></td>
+      <td><%= (100.0 * @week_underdog_wins.to_f / (@week_underdog_wins + @week_underdog_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_underdog_wins) - (100.0 * @week_underdog_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Fast Pace ATS</th>
+      <td><%= @week_fast_pace_wins.to_s + "-" + @week_fast_pace_losses.to_s %></td>
+      <td><%= (100.0 * @week_fast_pace_wins.to_f / (@week_fast_pace_wins + @week_fast_pace_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_fast_pace_wins) - (100.0 * @week_fast_pace_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Slow Pace ATS</th>
+      <td><%= @week_slow_pace_wins.to_s + "-" + @week_slow_pace_losses.to_s %></td>
+      <td><%= (100.0 * @week_slow_pace_wins.to_f / (@week_slow_pace_wins + @week_slow_pace_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.90 * @week_slow_pace_wins) - (100.0 * @week_slow_pace_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Over</th>
+      <td><%= @week_over_wins.to_s + "-" + @week_over_losses.to_s %></td>
+      <td><%= (100.0 * @week_over_wins.to_f / (@week_over_wins + @week_over_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.9 * @week_over_wins) - (100.0 * @week_over_losses)) %></td>
+    </tr>
+    <tr>
+      <th>Lean Under</th>
+      <td><%= @week_under_wins.to_s + "-" + @week_under_losses.to_s %></td>
+      <td><%= (100.0 * @week_under_wins.to_f / (@week_under_wins + @week_under_losses)).round(1).to_s + "%" %></td>
+      <td><%= number_to_currency((90.9 * @week_under_wins) - (100.0 * @week_under_losses)) %></td>
+    </tr>
   </tbody>
 </table>
