@@ -1086,6 +1086,7 @@ namespace :daily do
             season_home_advantage = 3.0
             season_home_advantage = current_season.home_advantage unless current_season.home_advantage.nan?
             home_advantage = (((4.0 * season_home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
+            home_advantage = 3.5 if home_advantage.nan?
             predicted_home_efficiency += home_advantage / 2.0
             predicted_away_efficiency += home_advantage / -2.0
           else
@@ -1258,7 +1259,12 @@ namespace :daily do
           prediction.description = "Please stay tuned for detailed descriptions. Matchup specific modifiers will not be applied until each team has played at least 10 games in the season."
           prediction.save
         rescue StandardError => e
-          puts e.full_message
+          puts predicted_home_efficiency
+          puts defensive_advantage
+          puts assists_advantage
+          puts pace_advantage
+          puts three_pointers_advantage
+          puts home_advantage
         end
       end
     end
