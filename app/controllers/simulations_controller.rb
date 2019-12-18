@@ -24,16 +24,18 @@ class SimulationsController < ApplicationController
       # Matchup Specific Modifiers
       unless params[:neutral] == '1'
         if @home_team_season.home_advantage && @away_team_season.home_advantage
-          home_advantage = (((4.0 * current_season.home_advantage) + @home_team_season.home_advantage + @away_team_season.home_advantage)/ 6.0).round(1)
+          season_home_advantage = 3.0
+          season_home_advantage = current_season.home_advantage unless current_season.home_advantage.nan?
+          home_advantage = (((4.0 * season_home_advantage) + @home_team_season.home_advantage + @away_team_season.home_advantage)/ 6.0).round(1)
+          home_advantage = 3.5 if home_advantage.nan?
           predicted_home_efficiency += home_advantage / 2.0
           predicted_away_efficiency += home_advantage / -2.0
         else
-          home_advantage = 2.5
+          home_advantage = 3.5
           predicted_home_efficiency += 1.75
           predicted_away_efficiency += -1.75
         end
       end
-      puts home_advantage
       if @home_team_season.defensive_style_advantage && @away_team_season.defensive_style_advantage
         if @home_team_season.r_defensive_style > 0.1
           defensive_advantage += @home_team_season.defensive_style_advantage * (@home_team_season.r_defensive_style / 0.15) * (@away_team_season.defensive_aggression / 10.0)
@@ -149,6 +151,12 @@ class SimulationsController < ApplicationController
         else
           @prediction.description += '<p>' + @away_team.school + ' is favored by a fairly large margin. An upset looks to be unlikely. </p>'
         end
+      end
+      
+      if defensive_advantage > 0
+        @prediction.description += '<p>' + @home_team.school + ' has an advantage based on the defensive schemes of each team.'
+      elsif defensive_advantage < 0
+        @prediction.description += '<p>' + @away_team.school + ' has an advantage based on the defensive schemes of each team.'
       end
       
       ###########################################################
