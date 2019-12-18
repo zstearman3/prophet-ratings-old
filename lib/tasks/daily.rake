@@ -1215,21 +1215,21 @@ namespace :daily do
             end
             if prediction.moneyline
               if prediction.moneyline < 0 
-                away_probability = 1.0 - (prediction.moneyline / (prediction.moneyline - 100.0)) + 0.1
-                away_moneyline = ((1.0 - away_probability) / away_probability) * 100.0
-                home_win_value = ((prediction.home_win_probability / 100.0) * (100.0 / (prediction.moneyline / -100.0))) - (100.0 * (1 - (prediction.home_win_probability / 100.0)))
+                away_probability = 1.0 - (prediction.moneyline / (prediction.moneyline - 100.0)) + 0.05
+                away_moneyline = ((1.0 - (away_probability + 0.05)) / away_probability) * 100.0
+                home_win_value = ((prediction.home_win_probability / 100.0) * (100.0 / (prediction.moneyline / -100.0))) - (100.0 - prediction.home_win_probability)
                 away_win_value = ((1.0 - (prediction.home_win_probability / 100.0)) * away_moneyline) - (prediction.home_win_probability)
               else
-                away_probability = 1.0 - (100.0 / (prediction.moneyline + 100.0)) + 0.1
-                away_moneyline = (away_probability / (1.0 - away_probability)) * -100
-                home_win_value = (((prediction.home_win_probability / 100.0) * 100.0 * (prediction.moneyline / 100.0))) - (100.0 * (1 - (prediction.home_win_probability / 100.0)))
+                away_probability = 1.0 - (100.0 / (prediction.moneyline + 100.0)) + 0.05
+                away_moneyline = ((away_probability + 0.05) / (1.0 - (away_probability + 0.05))) * -100
+                home_win_value = (((prediction.home_win_probability / 100.0) * prediction.moneyline)) - (100.0 - prediction.home_win_probability)
                 away_win_value = ((1.0 - (prediction.home_win_probability / 100.0)) * (100.0 / (away_moneyline / -100.0))) - (prediction.home_win_probability)
               end
-              if home_win_value > 0
+              if home_win_value > 2.50
                 prediction.expected_value_moneyline = home_win_value
                 prediction.confidence_moneyline = (prediction.home_win_probability / 100.0)
                 prediction.home_moneyline_bet = 'HOME'
-              elsif away_win_value > 0
+              elsif away_win_value > 2.50
                 prediction.expected_value_moneyline = away_win_value
                 prediction.confidence_moneyline = (1.0 - (prediction.home_win_probability / 100.0)).round(4)
                 prediction.home_moneyline_bet = 'AWAY'
