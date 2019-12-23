@@ -1064,6 +1064,8 @@ namespace :daily do
       home_team_season = TeamSeason.find_by(season: current_season, team: game.home_team)
       away_team_season = TeamSeason.find_by(season: current_season, team: game.away_team)
       if home_team_season && away_team_season
+        home_team = home_team_season.team
+        away_team = away_team_season.team
         home_advantage = 0
         defensive_advantage = 0
         assists_advantage = 0
@@ -1256,7 +1258,147 @@ namespace :daily do
           
           
           ############# PREDICTION DESCRIPTION ############################
-          prediction.description = "Please stay tuned for detailed descriptions. Matchup specific modifiers will not be applied until each team has played at least 10 games in the season."
+          
+          prediction.description = '<p style="font-weight:bold;">Overview</p>'
+          if predicted_home_score > predicted_away_score
+            
+            ##### HOME TEAM WINS #####
+            if predicted_home_score - predicted_away_score < 5.0
+              
+              ###### CLOSE GAME #######
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This looks like a competitive contest where home court advantage could come into play. ' + home_team.school + ' is favored by a small margin, but an upset
+                would not be surprising. ' + home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
+                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
+              else
+                prediction.description += '<p>' + home_team.school + ' is expected to have a slight advantage on a neutral court. This will be a competitive matchup, and an upset would not be surprising. ' +
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.</p>'
+              end
+              
+            elsif predicted_home_score - predicted_away_score < 10.0
+            
+              ##### MODERATE WIN ######
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This looks like it will be a competitive game, but ' + home_team.school + ' should have the upper hand.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
+                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. ' + home_team.school + ' is expected to win this matchup ' +
+                home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p> This looks like it will be a competitive game, but ' + home_team.school + ' should have the upper hand on a neutral court.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.' + home_team.school + ' is expected to win this matchup ' +
+                home_win_probability.round(1) + '% of the time.</p>'
+              end
+              
+            elsif predicted_home_score - predicted_away_score < 20.0
+            
+              ##### BIG WIN ######
+              if prediction.home_advantage > 0
+                prediction.description += '<p>' + home_team.school + ' is favored by a double digits in this game, and they should be able to win the game at home.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
+                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p>' + home_team.school + ' is favored by a double digits in this game, and they should be able to win the game on a neutral floor.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset seems fairly unlikely as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+              end
+              
+            else
+              
+              ##### BLOWOUT WIN ######
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This should not be a close game at all as ' + home_team.school + ' is clearly the better team, and they are playing at home.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
+                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would be a major surprise as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p> This should not be a close game at all as ' + home_team.school + ' is clearly the better team on a neutral court.' + 
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
+                away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset would be a major surprise as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+              end
+            end
+          else
+            #### AWAY TEAM WINS #####
+            if predicted_away_score - predicted_home_score < 5.0
+              
+              ###### CLOSE GAME ###########
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on the road by a small margin. An upset
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
+                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
+              else
+                prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on a neutral court by a small margin. An upset
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
+              end
+              
+            elsif predicted_away_score - predicted_home_score  < 10.0
+            
+              ####### MODERATE WIN #########
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This looks like a fairly decent matchup when considering home court advantage, but' + away_team.school + ' is favored to pull off the victory on the road.' +
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would not be a shocking result, and ' + home_team.school +
+                ' is expected to win outright ' + home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p> This looks like a fairly competitive contest, but' + away_team.school + ' is should be able to take home the victory on a neutral court. An upset
+                would not be a huge shock, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
+              end
+            elsif predicted_away_score - predicted_home_score < 20.0
+            
+              ####### BIG WIN #########
+              if prediction.home_advantage > 0
+                prediction.description += '<p> These two teams do not appear to be evenly matched, and ' + away_team.school + ' is should win comfortably, even on the road.' +
+                home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely, as ' + home_team.school +
+                ' is only expected to win ' + home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p>' + away_team.school + ' is clearly the better team in this game, and they are favored to pull off the victory on a neutral court by double digits. 
+                An upset seems pretty unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
+              end
+            else
+              
+              ####### BLOWOUT WIN #########
+              if prediction.home_advantage > 0
+                prediction.description += '<p> This game will likely be ugly for the home team, as ' + away_team.school + ' should take care of business against an overmatched opponent on the road.' +
+                home_team.school + ' is currently only ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks much higher at ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                ' points per 100 possessions in this game, but it will not be nearly enough to make up the gap in skill. An upset seems extremely unlikely, as ' + home_team.school +
+                ' is only expected to win ' + home_win_probability.round(1) + '% of the time.</p>'
+              else
+                prediction.description += '<p>' + away_team.school + ' is the far superior better team in this game, and they are should comfortably cruise to victory on a neutral court. 
+                An upset seems extremely unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
+              end
+            end
+          end
+          
+          if defensive_advantage > 0
+            prediction.description += '<p>' + home_team.school + ' has an advantage based on the defensive schemes of each team.'
+          elsif defensive_advantage < 0
+            prediction.description += '<p>' + away_team.school + ' has an advantage based on the defensive schemes of each team.'
+          end
+      
+          
+          #################################################################
           prediction.save
         rescue StandardError => e
           puts predicted_home_efficiency
