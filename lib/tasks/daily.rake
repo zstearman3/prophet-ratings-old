@@ -1270,7 +1270,7 @@ namespace :daily do
                 prediction.description += '<p> This looks like a competitive contest where home court advantage could come into play. ' + home_team.school + ' is favored by a small margin, but an upset
                 would not be surprising. ' + home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
-                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
+                prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
               else
                 prediction.description += '<p>' + home_team.school + ' is expected to have a slight advantage on a neutral court. This will be a competitive matchup, and an upset would not be surprising. ' +
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
@@ -1284,13 +1284,13 @@ namespace :daily do
                 prediction.description += '<p> This looks like it will be a competitive game, but ' + home_team.school + ' should have the upper hand.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
-                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. ' + home_team.school + ' is expected to win this matchup ' +
-                home_win_probability.round(1) + '% of the time.</p>'
+                prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. ' + home_team.school + ' is expected to win this matchup ' +
+                home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p> This looks like it will be a competitive game, but ' + home_team.school + ' should have the upper hand on a neutral court.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.' + home_team.school + ' is expected to win this matchup ' +
-                home_win_probability.round(1) + '% of the time.</p>'
+                home_win_probability.round(1).to_s + '% of the time.</p>'
               end
               
             elsif predicted_home_score - predicted_away_score < 20.0
@@ -1300,13 +1300,13 @@ namespace :daily do
                 prediction.description += '<p>' + home_team.school + ' is favored by a double digits in this game, and they should be able to win the game at home.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
-                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+                prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + home_team.school + ' is favored by a double digits in this game, and they should be able to win the game on a neutral floor.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset seems fairly unlikely as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               end
               
             else
@@ -1316,13 +1316,13 @@ namespace :daily do
                 prediction.description += '<p> This should not be a close game at all as ' + home_team.school + ' is clearly the better team, and they are playing at home.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
-                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would be a major surprise as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+                prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would be a major surprise as' +
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p> This should not be a close game at all as ' + home_team.school + ' is clearly the better team on a neutral court.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset would be a major surprise as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1) + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               end
             end
           else
@@ -1332,13 +1332,13 @@ namespace :daily do
               ###### CLOSE GAME ###########
               if prediction.home_advantage > 0
                 prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on the road by a small margin. An upset
-                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
-                prediction.home_advantage.round(1) + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
+                prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
               else
                 prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on a neutral court by a small margin. An upset
-                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1349,12 +1349,12 @@ namespace :daily do
               if prediction.home_advantage > 0
                 prediction.description += '<p> This looks like a fairly decent matchup when considering home court advantage, but' + away_team.school + ' is favored to pull off the victory on the road.' +
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
-                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would not be a shocking result, and ' + home_team.school +
-                ' is expected to win outright ' + home_win_probability.round(1) + '% of the time.</p>'
+                ' is expected to win outright ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p> This looks like a fairly competitive contest, but' + away_team.school + ' is should be able to take home the victory on a neutral court. An upset
-                would not be a huge shock, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                would not be a huge shock, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1364,12 +1364,12 @@ namespace :daily do
               if prediction.home_advantage > 0
                 prediction.description += '<p> These two teams do not appear to be evenly matched, and ' + away_team.school + ' is should win comfortably, even on the road.' +
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
-                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely, as ' + home_team.school +
-                ' is only expected to win ' + home_win_probability.round(1) + '% of the time.</p>'
+                ' is only expected to win ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + away_team.school + ' is clearly the better team in this game, and they are favored to pull off the victory on a neutral court by double digits. 
-                An upset seems pretty unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                An upset seems pretty unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1379,12 +1379,12 @@ namespace :daily do
               if prediction.home_advantage > 0
                 prediction.description += '<p> This game will likely be ugly for the home team, as ' + away_team.school + ' should take care of business against an overmatched opponent on the road.' +
                 home_team.school + ' is currently only ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks much higher at ' + 
-                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1) + 
+                away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game, but it will not be nearly enough to make up the gap in skill. An upset seems extremely unlikely, as ' + home_team.school +
-                ' is only expected to win ' + home_win_probability.round(1) + '% of the time.</p>'
+                ' is only expected to win ' + home_win_probability.round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + away_team.school + ' is the far superior better team in this game, and they are should comfortably cruise to victory on a neutral court. 
-                An upset seems extremely unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1) + '% of the time.' + home_team.school + 
+                An upset seems extremely unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1407,6 +1407,9 @@ namespace :daily do
           puts pace_advantage
           puts three_pointers_advantage
           puts home_advantage
+          puts prediction.inspect
+          puts prediction.description
+          puts e.full_message
         end
       end
     end
@@ -1673,453 +1676,7 @@ puts "Getting best bets"
       end
     end  
   end
-  
-  task predictions: :environment do
-    puts "Beginning predictions"
-    current_season = Season.find_by(season: current_year)
-    season_games = Game.where(season: current_season).where("day > ?", Date.today - 1.day)
-    season_games.each do |game|
-      home_team_season = TeamSeason.find_by(season: current_season, team: game.home_team)
-      away_team_season = TeamSeason.find_by(season: current_season, team: game.away_team)
-      if home_team_season && away_team_season
-        home_advantage = 0
-        defensive_advantage = 0
-        assists_advantage = 0
-        three_pointers_advantage = 0
-        pace_advantage = 0
-        injury_advantage = 0
-        prediction = Prediction.find_or_create_by(game: game)
-        prediction.season = current_season
-        prediction.day = game.day
-        prediction.point_spread = game.point_spread
-        prediction.over_under = game.over_under
-        prediction.moneyline = game.home_team_money_line
-        predicted_tempo = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
-        predicted_home_efficiency = (home_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (away_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency
-        predicted_away_efficiency = (away_team_season.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (home_team_season.adj_defensive_efficiency - current_season.adj_defensive_efficiency) + current_season.adj_offensive_efficiency        
-        predicted_pace = (home_team_season.adj_tempo - current_season.adj_tempo) + (away_team_season.adj_tempo - current_season.adj_tempo) + current_season.adj_tempo
-        # Matchup Specific Modifiers
-        if game.home_team.stadium == game.stadium
-          if home_team_season.home_advantage && away_team_season.home_advantage
-            home_advantage = (((4.0 * current_season.home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
-            predicted_home_efficiency += home_advantage / 2.0
-            predicted_away_efficiency += home_advantage / -2.0
-          else
-            home_advantage = 3.5
-            predicted_home_efficiency += 1.75
-            predicted_away_efficiency += -1.75
-          end
-        end
-        if home_team_season.defensive_style_advantage && away_team_season.defensive_style_advantage
-          if home_team_season.r_defensive_style > 0.1
-            defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0)
-          end
-          
-          if away_team_season.r_defensive_style > 0.1
-            defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)
-          end
-          
-          if home_team_season.r_assists > 0.1
-            assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
-          end
-          
-          if away_team_season.r_assists > 0.1
-            assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
-          end
-          
-          if home_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
-          end
-          
-          if away_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
-          end
-          
-          if home_team_season.r_pace > 0.1
-            pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace   / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
-          end
-          
-          if away_team_season.r_pace > 0.1
-            pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace  / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
-          end
-          defensive_advantage = 6.5 if defensive_advantage > 6.5
-          assists_advantage = 6.5 if assists_advantage > 6.5
-          three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
-          pace_advantage = 6.5 if pace_advantage > 6.5
-          defensive_advantage = -6.5 if defensive_advantage < -6.5
-          assists_advantage = -6.5 if assists_advantage < -6.5
-          three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
-          pace_advantage = -6.5 if pace_advantage < -6.5
-          predicted_home_efficiency += defensive_advantage / 2.0
-          predicted_away_efficiency += defensive_advantage / -2.0
-          predicted_home_efficiency += assists_advantage / 2.0
-          predicted_away_efficiency += assists_advantage / -2.0
-          predicted_home_efficiency += three_pointers_advantage / 2.0
-          predicted_away_efficiency += three_pointers_advantage / -2.0
-          predicted_home_efficiency += pace_advantage / 2.0
-          predicted_away_efficiency += pace_advantage / -2.0
-        end
-        
-        begin
-          prediction.home_advantage = home_advantage.round(1)
-          prediction.defense_advantage = defensive_advantage.round(1)
-          prediction.assists_advantage = assists_advantage.round(1)
-          prediction.three_pointers_advantage = three_pointers_advantage.round(1)
-          prediction.pace_advantage = pace_advantage.round(1)
-          predicted_home_score = predicted_home_efficiency * predicted_tempo / 100
-          predicted_away_score = predicted_away_efficiency * predicted_tempo / 100
-          prediction.home_team_prediction = predicted_home_score.round
-          prediction.away_team_prediction = predicted_away_score.round
-          prediction.predicted_point_spread = (((predicted_away_score - predicted_home_score) * 2).round / 2.0)
-          prediction.predicted_over_under = (((predicted_away_score + predicted_home_score) * 2).round / 2.0)
-          ##### MONEYLINE CALCS ######
-          mean = predicted_home_efficiency - predicted_away_efficiency
-          single_std_dev = Math.sqrt(2 * (current_season.consistency ** 2)) ##### ONE TEAM ONLY #####
-          std_dev = Math.sqrt(2 * (single_std_dev ** 2))
-          home_win_z_score = (0.0 - mean) / std_dev
-          home_win_probability = getProbability(home_win_z_score)
-          prediction.home_win_probability = (home_win_probability * 100.0).round(1)
-          if home_win_probability > 0.5
-            predicted_moneyline = (- (home_win_probability / (1 - home_win_probability)) * 100.0).round
-            if predicted_moneyline < -10000
-              prediction.predicted_moneyline = nil
-            else
-              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-            end
-          else
-            predicted_moneyline = (((1 - home_win_probability) / home_win_probability) * 100.0).round
-            if predicted_moneyline > 10000
-              prediction.predicted_moneyline = nil
-            else
-              prediction.predicted_moneyline = (predicted_moneyline / 10.0).round * 10
-            end
-          end
-          ############## RECOMMENDED BETS ###########################
-          if prediction.point_spread && prediction.predicted_point_spread
-            prediction.prediction_difference_point_spread = prediction.predicted_point_spread - prediction.point_spread
-            predicted_home_efficiency_diff = prediction.point_spread * (100.0 / predicted_pace)
-            if prediction.prediction_difference_point_spread < 0.5
-              home_cover_z_score = -(mean + predicted_home_efficiency_diff) / std_dev
-              prediction.confidence_point_spread = getProbability(home_cover_z_score).round(5)
-              prediction.expected_value_point_spread = ((90.9 * prediction.confidence_point_spread) - (100.0 * (1- prediction.confidence_point_spread))).round(5)
-              prediction.home_favorite = true
-              if prediction.point_spread < 0
-                prediction.favorite_favorite = true
-              elsif prediction.point_spread > 0
-                prediction.favorite_favorite = false
-              end
-              if home_team_season.adj_tempo > away_team_season.adj_tempo
-                prediction.pace_favorite = true
-              elsif home_team_season.adj_tempo < away_team_season.adj_tempo
-                prediction.pace_favorite = false
-              end
-            elsif prediction.prediction_difference_point_spread > 0.5
-              away_cover_z_score = (predicted_home_efficiency_diff + mean) / std_dev
-              prediction.confidence_point_spread = getProbability(away_cover_z_score).round(5)
-              prediction.expected_value_point_spread = ((90.9 * prediction.confidence_point_spread) - (100.0 * (1- prediction.confidence_point_spread))).round(5)
-              prediction.home_favorite = false
-              if prediction.point_spread < 0
-                prediction.favorite_favorite = false
-              elsif prediction.point_spread > 0
-                prediction.favorite_favorite = true
-              end
-              if home_team_season.adj_tempo > away_team_season.adj_tempo
-                prediction.pace_favorite = false
-              elsif home_team_season.adj_tempo < away_team_season.adj_tempo
-                prediction.pace_favorite = true
-              end
-            end
-            if prediction.moneyline
-              if prediction.moneyline < 0 
-                away_probability = 1.0 - (prediction.moneyline / (prediction.moneyline - 100.0)) + 0.1
-                away_moneyline = ((1.0 - away_probability) / away_probability) * 100.0
-                home_win_value = ((prediction.home_win_probability / 100.0) * (100.0 / (prediction.moneyline / -100.0))) - (100.0 * (1 - (prediction.home_win_probability / 100.0)))
-                away_win_value = ((1.0 - (prediction.home_win_probability / 100.0)) * away_moneyline) - (prediction.home_win_probability)
-              else
-                away_probability = 1.0 - (100.0 / (prediction.moneyline + 100.0)) + 0.1
-                away_moneyline = (away_probability / (1.0 - away_probability)) * -100
-                home_win_value = (((prediction.home_win_probability / 100.0) * 100.0 * (prediction.moneyline / 100.0))) - (100.0 * (1 - (prediction.home_win_probability / 100.0)))
-                away_win_value = ((1.0 - (prediction.home_win_probability / 100.0)) * (100.0 / (away_moneyline / -100.0))) - (prediction.home_win_probability)
-              end
-              if home_win_value > 0
-                prediction.expected_value_moneyline = home_win_value
-                prediction.confidence_moneyline = (prediction.home_win_probability / 100.0)
-                prediction.home_moneyline_bet = 'HOME'
-              elsif away_win_value > 0
-                prediction.expected_value_moneyline = away_win_value
-                prediction.confidence_moneyline = (1.0 - (prediction.home_win_probability / 100.0)).round(4)
-                prediction.home_moneyline_bet = 'AWAY'
-              end
-            end
-            if prediction.over_under && prediction.predicted_over_under
-              pace_standard_dev = (predicted_tempo / 69.0) * 19.8
-              if prediction.predicted_over_under > prediction.over_under
-                over_z_score = (prediction.over_under - prediction.predicted_over_under) / pace_standard_dev
-                prediction.confidence_over_under = getProbability(over_z_score).round(5)
-              elsif prediction.predicted_over_under < prediction.over_under
-                under_z_score = (prediction.predicted_over_under - prediction.over_under) / pace_standard_dev
-                prediction.confidence_over_under = getProbability(under_z_score).round(5)
-              end
-              prediction.expected_value_over_under = (prediction.confidence_over_under * 90.0) - (100.0 * ( 1 - prediction.confidence_over_under)) if prediction.confidence_over_under
-            end
-          end
-          
-          
-          
-          
-          ############# PREDICTION DESCRIPTION ############################
-          prediction.description = "Please stay tuned for detailed descriptions. Matchup specific modifiers will not be applied until each team has played at least 10 games in the season."
-          prediction.save
-        rescue StandardError => e
-          puts e.full_message
-        end
-      end
-    end
-    
-    puts "Getting best bets"
-    
-    @predictions = Prediction.where(season: current_season)
-    @point_spread_wins = @predictions.where(win_point_spread: true).count
-    @point_spread_losses = @predictions.where(win_point_spread: false).count
-    @over_under_wins = @predictions.where(win_over_under: true).count
-    @over_under_losses = @predictions.where(win_over_under: false).count
-    @moneyline_wins = @predictions.where(win_moneyline: true).count
-    @moneyline_losses = @predictions.where(win_moneyline: false).count
-    @straight_up_wins = @predictions.where(win_straight_up: true).count
-    @straight_up_losses = @predictions.where(win_straight_up: false).count
-    @favorite_wins = @predictions.where(favorite_favorite: true, win_point_spread: true).count
-    @favorite_losses = @predictions.where(favorite_favorite: true, win_point_spread: false).count
-    @underdog_wins = @predictions.where(favorite_favorite: false, win_point_spread: true).count
-    @underdog_losses = @predictions.where(favorite_favorite: false, win_point_spread: false).count
-    @fast_pace_wins = @predictions.where(pace_favorite: true, win_point_spread: true).count
-    @fast_pace_losses = @predictions.where(pace_favorite: true, win_point_spread: false).count
-    @slow_pace_wins = @predictions.where(pace_favorite: false, win_point_spread: true).count
-    @slow_pace_losses = @predictions.where(pace_favorite: false, win_point_spread: false).count
-    @over_wins = @predictions.where(over_under_bet: "OVER", win_over_under: true).count
-    @over_losses = @predictions.where(over_under_bet: "OVER", win_over_under: false).count
-    @under_wins = @predictions.where(over_under_bet: "UNDER", win_over_under: true).count
-    @under_losses = @predictions.where(over_under_bet: "UNDER", win_over_under: false).count
-    current_season.over_win_pct = (@over_wins.to_f / (@over_wins + @over_losses)).round(4)
-    current_season.under_win_pct = (@under_wins.to_f / (@under_wins + @under_losses)).round(4)
-    current_season.favorite_win_pct = (@favorite_wins.to_f / (@favorite_wins + @favorite_losses)).round(4)
-    current_season.underdog_win_pct = (@underdog_wins.to_f / (@underdog_wins + @underdog_losses)).round(4)
-    current_season.save
-    
-    predictions = Prediction.where(season: current_season).where("day > ?", Date.today - 1.day).where("day < ?", Date.today + 1.day)
-    expected_values = []
-    predictions.each do |prediction|
-      point_spread_value = 0
-      over_under_value = 0
-      if prediction.point_spread && prediction.expected_value_point_spread && prediction.game.thrill_score
-        if prediction.point_spread < 0
-          if prediction.predicted_point_spread < prediction.point_spread
-            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-          else
-            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-          end
-        else
-          if prediction.predicted_point_spread < prediction.point_spread
-            point_spread_value = prediction.expected_value_point_spread * (current_season.underdog_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-          else
-            point_spread_value = prediction.expected_value_point_spread * (current_season.favorite_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-          end
-        end
-      end
-      if prediction.over_under && prediction.expected_value_over_under && prediction.game.thrill_score
-        if prediction.predicted_over_under > prediction.over_under
-          over_under_value = prediction.expected_value_over_under * (current_season.over_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-        else
-          over_under_value = prediction.expected_value_over_under * (current_season.under_win_pct) * ( 0.5 + (prediction.game.thrill_score / 2.0) )
-        end
-      end
-      if point_spread_value > over_under_value
-        prediction.best_bet_value = point_spread_value
-        prediction.best_bet = "ATS"
-      else
-        prediction.best_bet_value = over_under_value
-        prediction.best_bet = "OU"
-      end
-      prediction.save
-    end
-    predictions = Prediction.where(day: Date.today).order(best_bet_value: :desc)
-    x = 0
-    predictions.each do |prediction|
-      if x < 5
-        prediction.top_play = true
-      else 
-        prediction.top_play = false
-      end
-      prediction.save
-      x += 1
-    end
-    
-    puts "Begin inspecting prediction outcomes"
-    season_games = Game.where(season: current_season).where("day < ? " ,  Date.today + 1.day)
-    x = 0
-    season_games.each do |game|
-      x += 1
-      home_team_season = TeamSeason.find_by(season: current_season, team: game.home_team)
-      away_team_season = TeamSeason.find_by(season: current_season, team: game.away_team)
-      if home_team_season && away_team_season
-        prediction = Prediction.find_or_create_by(game: game)
-        prediction.point_spread = game.point_spread
-        prediction.over_under = game.over_under
-        prediction.moneyline = game.home_team_money_line
-        begin
-          if game.home_team_score && game.away_team_score && prediction.point_spread && prediction.predicted_point_spread
-            ### POINT SPREAD OUTCOME ####
-            if prediction.predicted_point_spread < (prediction.point_spread - 1)
-              # home team bet
-              if (game.away_team_score - game.home_team_score) < prediction.point_spread
-                # winning bet
-                prediction.win_point_spread = true
-                prediction.winnings_point_spread = 90.9
-              elsif (game.away_team_score - game.home_team_score) > prediction.point_spread
-                # losing bet
-                prediction.win_point_spread = false
-                prediction.winnings_point_spread = -100
-              else
-                prediction.win_point_spread = nil
-              end
-            elsif prediction.predicted_point_spread > (prediction.point_spread + 1)
-              if (game.away_team_score - game.home_team_score) > prediction.point_spread
-                # winning bet
-                prediction.win_point_spread = true
-                prediction.winnings_point_spread = 90.9
-              elsif (game.away_team_score - game.home_team_score) < prediction.point_spread
-                # losing bet
-                prediction.win_point_spread = false
-                prediction.winnings_point_spread = -100
-              else
-                prediction.win_point_spread = nil
-              end
-            else
-              # no bet
-              prediction.win_point_spread = nil
-            end
-          else
-          end
-        
-          if game.home_team_score && game.away_team_score && prediction.over_under && prediction.predicted_over_under
-            ### OVER/UNDER OUTCOME ###
-            if prediction.predicted_over_under > (prediction.over_under + 1)
-              # over bet
-              prediction.over_under_bet = "OVER"
-              if (game.away_team_score + game.home_team_score) > prediction.over_under
-                # winning bet
-                prediction.win_over_under = true
-                prediction.winnings_over_under = 90.9
-              elsif (game.away_team_score + game.home_team_score) < prediction.over_under
-                # losing bet
-                prediction.win_over_under = false
-                prediction.winnings_over_under = -100
-              else
-                prediction.win_over_under = nil
-              end
-            elsif prediction.predicted_over_under < (prediction.over_under - 1)
-              # under bet
-              prediction.over_under_bet = "UNDER"
-              if (game.away_team_score + game.home_team_score) < prediction.over_under
-                # winning bet
-                prediction.win_over_under = true
-                prediction.winnings_over_under = 90.9
-              elsif (game.away_team_score + game.home_team_score) > prediction.over_under
-                # losing bet
-                prediction.win_over_under = false
-                prediction.winnings_over_under = -100
-              else
-                prediction.win_over_under = nil
-              end
-            else
-              # no bet
-              prediction.over_under_bet = nil
-              prediction.win_over_under = nil
-            end
-          end
-        
-          ### STRAIGHT UP OUTCOME ###
-          if prediction.home_team_prediction && prediction.away_team_prediction && game.home_team_score && game.away_team_score
-            if prediction.home_team_prediction > (prediction.away_team_prediction + 1)
-              if game.home_team_score > game.away_team_score
-                prediction.win_straight_up = true
-              else
-                prediction.win_straight_up = false
-              end
-            elsif prediction.home_team_prediction < (prediction.away_team_prediction - 1)
-              if game.away_team_score > game.home_team_score
-                prediction.win_straight_up = true
-              else
-                prediction.win_straight_up = false
-              end
-            else
-              prediction.win_straight_up = nil
-            end
-          end
 
-        
-          ### MONEYLINE UP OUTCOME ###
-          if prediction.predicted_moneyline && prediction.moneyline && game.home_team_score && game.away_team_score
-            if prediction.moneyline < 0
-              ### HOME TEAM FAVORED ###
-              if prediction.predicted_moneyline < (prediction.moneyline * 1.2)
-                ### HOME TEAM BET ###
-                if game.home_team_score > game.away_team_score
-                  prediction.win_moneyline = true
-                  prediction.winnings_moneyline = (100.0 / (game.home_team_money_line / -100.0)).round(2)
-                else
-                  prediction.win_moneyline = false
-                  prediction.winnings_moneyline = -100.0
-                end
-              elsif prediction.predicted_moneyline > (prediction.moneyline / 1.2)
-                ### AWAY TEAM BET ###
-                if game.away_team_score > game.home_team_score
-                  prediction.win_moneyline = true
-                  prediction.winnings_moneyline = (100.0 * (game.away_team_money_line / 100.0)).round(2)
-                else
-                  prediction.win_moneyline = false
-                  prediction.winnings_moneyline = -100.0
-                end
-              else
-                prediction.win_moneyline = nil
-                prediction.winnings_moneyline = 0
-              end
-            else
-              ### AWAY TEAM FAVORED ###
-              if prediction.predicted_moneyline < (game.home_team_money_line / 1.2)
-                ### HOME TEAM BET ###
-                if game.home_team_score > game.away_team_score
-                  prediction.win_moneyline = true
-                  prediction.winnings_moneyline = (100.0 * (game.home_team_money_line / 100.0)).round(2)
-                else
-                  prediction.win_moneyline = false
-                  prediction.winnings_moneyline = -100.0
-                end
-              elsif prediction.predicted_moneyline > (game.home_team_money_line * 1.2)
-                ### AWAY TEAM BET ###
-                if game.away_team_score > game.home_team_score
-                  prediction.win_moneyline = true
-                  prediction.winnings_moneyline = (100.0 / (game.away_team_money_line / -100.0)).round(2)
-                else
-                  prediction.win_moneyline = false
-                  prediction.winnings_moneyline = -100.0
-                end
-              else
-                prediction.win_moneyline = nil
-                prediction.winnings_moneyline = 0
-              end
-            end
-          end
-        rescue
-          # Prediction calculations failed #
-        end
-        
-        if prediction.home_team_prediction && prediction.away_team_prediction && prediction.home_team_prediction > 0 && prediction.away_team_prediction > 0
-          prediction.save
-        end
-      end
-    end  
-  end
-  
   task bracketology: :environment do
     current_season = Season.find_by(season: current_year)
     tourney_field = []
