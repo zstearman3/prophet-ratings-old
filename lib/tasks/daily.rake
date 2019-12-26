@@ -1285,12 +1285,12 @@ namespace :daily do
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
                 prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. ' + home_team.school + ' is expected to win this matchup ' +
-                home_win_probability.round(1).to_s + '% of the time.</p>'
+                (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p> This looks like it will be a competitive game, but ' + home_team.school + ' should have the upper hand on a neutral court.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.' + home_team.school + ' is expected to win this matchup ' +
-                home_win_probability.round(1).to_s + '% of the time.</p>'
+                (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               end
               
             elsif predicted_home_score - predicted_away_score < 20.0
@@ -1301,12 +1301,12 @@ namespace :daily do
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
                 prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + home_team.school + ' is favored by a double digits in this game, and they should be able to win the game on a neutral floor.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset seems fairly unlikely as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               end
               
             else
@@ -1317,12 +1317,12 @@ namespace :daily do
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
                 prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would be a major surprise as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p> This should not be a close game at all as ' + home_team.school + ' is clearly the better team on a neutral court.' + 
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + 
                 away_team.school + ' only ranks ' + away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. An upset would be a major surprise as' +
-                home_team.school + ' is expected to win this matchup ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                home_team.school + ' is expected to win this matchup ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               end
             end
           else
@@ -1331,14 +1331,14 @@ namespace :daily do
               
               ###### CLOSE GAME ###########
               if prediction.home_advantage > 0
-                prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on the road by a small margin. An upset
-                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
+                prediction.description += '<p> This looks like a competitive contest, but ' + away_team.school + ' is favored to pull off the victory on the road by a small margin. An upset
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' +
                 prediction.home_advantage.round(1).to_s + ' points per 100 possessions in this game based upon how each team has performed so far this season.</p>'
               else
-                prediction.description += '<p> This looks like a competitive contest, but' + away_team.school + ' is favored to pull off the victory on a neutral court by a small margin. An upset
-                would not be surprising, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
+                prediction.description += '<p> This looks like a competitive contest, but ' + away_team.school + ' is favored to pull off the victory on a neutral court by a small margin. An upset
+                would not be surprising, as ' + home_team.school + ' is still expected to win ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1347,14 +1347,14 @@ namespace :daily do
             
               ####### MODERATE WIN #########
               if prediction.home_advantage > 0
-                prediction.description += '<p> This looks like a fairly decent matchup when considering home court advantage, but' + away_team.school + ' is favored to pull off the victory on the road.' +
+                prediction.description += '<p> This looks like a fairly decent matchup when considering home court advantage, but ' + away_team.school + ' is favored to pull off the victory on the road.' +
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset would not be a shocking result, and ' + home_team.school +
-                ' is expected to win outright ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                ' is expected to win outright ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
-                prediction.description += '<p> This looks like a fairly competitive contest, but' + away_team.school + ' is should be able to take home the victory on a neutral court. An upset
-                would not be a huge shock, as ' + home_team.school + ' is still expected to win ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
+                prediction.description += '<p> This looks like a fairly competitive contest, but ' + away_team.school + ' is should be able to take home the victory on a neutral court. An upset
+                would not be a huge shock, as ' + home_team.school + ' is still expected to win ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1366,10 +1366,10 @@ namespace :daily do
                 home_team.school + ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game based upon how each team has performed so far this season. An upset seems fairly unlikely, as ' + home_team.school +
-                ' is only expected to win ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                ' is only expected to win ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + away_team.school + ' is clearly the better team in this game, and they are favored to pull off the victory on a neutral court by double digits. 
-                An upset seems pretty unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
+                An upset seems pretty unlikely, as ' + home_team.school + ' is only expected to win the game ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
@@ -1381,10 +1381,10 @@ namespace :daily do
                 home_team.school + ' is currently only ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' ranks much higher at ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin. Home court advantage is expected to be worth ' + prediction.home_advantage.round(1).to_s + 
                 ' points per 100 possessions in this game, but it will not be nearly enough to make up the gap in skill. An upset seems extremely unlikely, as ' + home_team.school +
-                ' is only expected to win ' + home_win_probability.round(1).to_s + '% of the time.</p>'
+                ' is only expected to win ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.</p>'
               else
                 prediction.description += '<p>' + away_team.school + ' is the far superior better team in this game, and they are should comfortably cruise to victory on a neutral court. 
-                An upset seems extremely unlikely, as ' + home_team.school + ' is only expected to win the game ' + home_win_probability.round(1).to_s + '% of the time.' + home_team.school + 
+                An upset seems extremely unlikely, as ' + home_team.school + ' is only expected to win the game ' + (100.0 * home_win_probability).round(1).to_s + '% of the time.' + home_team.school + 
                 ' is currently ' + home_team_season.adjem_rank.ordinalize + ' in the nation in adjusted efficiency margin, while ' + away_team.school + ' has been much better so far this season, ranking ' + 
                 away_team_season.adjem_rank.ordinalize + ' in adjusted efficiency margin.'
               end
