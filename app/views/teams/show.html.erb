@@ -183,12 +183,12 @@
       <th colspan='3' class="center">Miscellaneous</th></tr>
       <tr><th></th><th class="center">Offense</th><th class="center">Defense</th></tr>
       <th>2P%</th>
-        <td class="center"><%= @team_season.two_pointers_percentage %> <small><%= TeamSeason.where(season: @season).order(two_pointers_percentage: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
-        <td class="center"><%= @team_season.two_pointers_percentage_allowed %> <small><%= TeamSeason.where(season: @season).order(two_pointers_percentage_allowed: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.two_pointers_percentage %> <small><%= TeamSeason.where(season: @season).order(two_pointers_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.two_pointers_percentage_allowed %> <small><%= TeamSeason.where(season: @season).order(two_pointers_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
       <th>3P%</th>
-        <td class="center"><%= @team_season.three_pointers_percentage %> <small><%= TeamSeason.where(season: @season).order(three_pointers_percentage: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
-        <td class="center"><%= @team_season.three_pointers_percentage_allowed %> <small><%= TeamSeason.where(season: @season).order(three_pointers_percentage_allowed: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.three_pointers_percentage %> <small><%= TeamSeason.where(season: @season).order(three_pointers_percentage: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
+        <td class="center"><%= @team_season.three_pointers_percentage_allowed %> <small><%= TeamSeason.where(season: @season).order(three_pointers_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
       <th>Blocks%</th>
         <td class="center"><%= @team_season.blocks_percentage_allowed %> <small><%= TeamSeason.where(season: @season).order(blocks_percentage_allowed: :asc).pluck(:id).index(@team_season.id) + 1 %></small></td>
