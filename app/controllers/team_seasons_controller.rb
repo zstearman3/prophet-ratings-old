@@ -114,7 +114,8 @@ class TeamSeasonsController < ApplicationController
        'home_advantage', 'two_pointers_percentage', 'true_shooting_percentage', 'offensive_efficiency', 'free_throws_percentage',
        'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'offensive_rebounds', 'defensive_rebounds',
        'rebounds', 'defensive_efficiency', 'steals_percentage', 'blocks_percentage', 'true_shooting_percentage_allowed', 'defensive_aggression',
-       'defensive_fingerprint', 'adj_efficiency_margin', 'consistency', 'conference_wins']
+       'defensive_fingerprint', 'adj_efficiency_margin', 'consistency', 'conference_wins', 'strength_of_schedule', 'ooc_strength_of_schedule',
+       'two_pointers_percentage_allowed', 'three_pointers_percentage_allowed']
     end
     
     def sort_column

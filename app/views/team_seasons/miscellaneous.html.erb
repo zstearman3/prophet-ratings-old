@@ -35,6 +35,8 @@
             <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
             <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
             <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+            <th><%= sort_link "strength_of_schedule", "SOS", "desc", year, conference_id %></th>
+            <th><%= sort_link "ooc_strength_of_schedule", "NC-SOS", "desc", year, conference_id %></th>
             <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year, conference_id %></th>
             <th><%= sort_link "assists_percentage", "AST%", "desc", year, conference_id %></th>
             <th><%= sort_link "turnovers_percentage", "TO%", "asc", year, conference_id %></th>
@@ -54,6 +56,8 @@
               <td><%= season.adjem_rank %></td>
               <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
               <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
+              <td><%= season.strength_of_schedule %></td>
+              <td><%= season.ooc_strength_of_schedule %></td>
               <td><%= season.adj_tempo %></td>
               <td><%= season.assists_percentage %></td>
               <td><%= season.turnovers_percentage %></td>
@@ -70,6 +74,8 @@
                 <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
                 <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
                 <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
+                <th><%= sort_link "strength_of_schedule", "SOS", "desc", year, conference_id %></th>
+                <th><%= sort_link "ooc_strength_of_schedule", "NC-SOS", "desc", year, conference_id %></th>
                 <th><%= sort_link "adj_tempo", "AdjTempo", "desc", year, conference_id %></th>
                 <th><%= sort_link "assists_percentage", "AST%", "desc", year, conference_id %></th>
                 <th><%= sort_link "turnovers_percentage", "TO%", "asc", year, conference_id %></th>

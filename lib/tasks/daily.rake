@@ -437,10 +437,23 @@ namespace :daily do
       season_field_goals = 0
       season_points = 0
       season_points_allowed = 0
+      opponent_wins = 0
+      opponent_losses = 0
+      ooc_opponent_wins = 0
+      ooc_opponent_losses = 0
       team_games = TeamGame.where(season: current_season, team: season.team)
       team_games.each do |game|
         if game.game.is_completed && game.game.possessions && game.minutes > 0
           opponent_game = game.game.team_games.find_by(team: game.opponent)
+          opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
+          if opponent_season
+            opponent_wins += opponent_season.wins
+            opponent_losses += opponent_season.losses
+            unless season.team.conference_id == opponent_season.team.conference_id
+              ooc_opponent_wins += opponent_season.wins
+              ooc_opponent_losses += opponent_season.losses
+            end
+          end
           season_efficiency_total += (100 * game.points.to_f / game.game.possessions)
           season_turnovers += game.turnovers
           season_possessions += game.game.possessions
@@ -484,24 +497,28 @@ namespace :daily do
         season.defensive_efficiency = (season_efficiency_allowed / season_games_allowed).round(1)
         season.effective_field_goals_percentage = (100 * ((season_field_goals.to_f + (0.5 * season_three_pointers)) / season_field_goals_attempted.to_f)).round(1)
         season.effective_field_goals_percentage_allowed = (100 * (season_field_goals_allowed + (0.5 * season_three_pointers_allowed)) / season_field_goals_attempted_allowed.to_f).round(1)
-        season.turnovers_percentage = (100 * season_turnovers.to_f / season_possessions).round(1)
-        season.turnovers_percentage_allowed = (100 * season_turnovers_allowed.to_f / season_possessions_allowed).round(1)
-        season.offensive_rebounds_percentage = (100 * season_offensive_rebounds.to_f / (season_offensive_rebounds + season_defensive_rebounds_allowed)).round(1)
-        season.defensive_rebounds_percentage = (100 * season_defensive_rebounds.to_f / (season_defensive_rebounds + season_offensive_rebounds_allowed)).round(1)
-        season.total_rebounds_percentage = (100 * (season_offensive_rebounds.to_f + season_defensive_rebounds) / (season_offensive_rebounds + season_defensive_rebounds + season_offensive_rebounds_allowed + season_defensive_rebounds_allowed)).round(1)
-        season.free_throws_rate = (100 * season_free_throws_made.to_f / season_field_goals_attempted).round(1)
-        season.free_throws_rate_allowed = (100 * season_free_throws_made_allowed / season_field_goals_attempted_allowed).round(1)
-        season.blocks_percentage = (100 * season_blocked_shots.to_f / season_two_pointers_attempted_allowed).round(1)
-        season.blocks_percentage_allowed = (100 * season_blocked_shots_allowed.to_f / season_two_pointers_attempted).round(1)
-        season.steals_percentage = (100 * season_steals.to_f / season_possessions_allowed).round(1)
+        season.turnovers_percentage = (100.0 * season_turnovers.to_f / season_possessions).round(1)
+        season.turnovers_percentage_allowed = (100.0 * season_turnovers_allowed.to_f / season_possessions_allowed).round(1)
+        season.offensive_rebounds_percentage = (100.0 * season_offensive_rebounds.to_f / (season_offensive_rebounds + season_defensive_rebounds_allowed)).round(1)
+        season.defensive_rebounds_percentage = (100.0 * season_defensive_rebounds.to_f / (season_defensive_rebounds + season_offensive_rebounds_allowed)).round(1)
+        season.total_rebounds_percentage = (100.0 * (season_offensive_rebounds.to_f + season_defensive_rebounds) / (season_offensive_rebounds + season_defensive_rebounds + season_offensive_rebounds_allowed + season_defensive_rebounds_allowed)).round(1)
+        season.free_throws_rate = (100.0 * season_free_throws_made.to_f / season_field_goals_attempted).round(1)
+        season.free_throws_rate_allowed = (100.0 * season_free_throws_made_allowed / season_field_goals_attempted_allowed).round(1)
+        season.blocks_percentage = (100.0 * season_blocked_shots.to_f / season_two_pointers_attempted_allowed).round(1)
+        season.blocks_percentage_allowed = (100.0 * season_blocked_shots_allowed.to_f / season_two_pointers_attempted).round(1)
+        season.steals_percentage = (100.0 * season_steals.to_f / season_possessions_allowed).round(1)
         season.steals_percentage_allowed = (100 * season_steals_allowed.to_f / season_possessions_allowed).round(1)
-        season.three_pointers_rate = (100 * season_three_pointers_attempted.to_f / season_field_goals_attempted).round(1)
-        season.three_pointers_rate_allowed = (100 * season_three_pointers_attempted_allowed.to_f / season_field_goals_attempted_allowed).round(1)
-        season.assists_percentage = (100 * season_assists.to_f / season_field_goals).round(1)
-        season.assists_percentage_allowed = (100 * season_assists_allowed.to_f / season_field_goals_allowed).round(1)
-        season.true_shooting_percentage = (100 * season_points / (2 * (season_field_goals_attempted + (0.44 * season_free_throws_attempted)))).round(1)
-        season.true_shooting_percentage_allowed = (100 * season_points_allowed / (2 * (season_field_goals_attempted_allowed + (0.44 * season_free_throws_attempted_allowed)))).round(1)
+        season.three_pointers_rate = (100.0 * season_three_pointers_attempted.to_f / season_field_goals_attempted).round(1)
+        season.three_pointers_rate_allowed = (100.0 * season_three_pointers_attempted_allowed.to_f / season_field_goals_attempted_allowed).round(1)
+        season.assists_percentage = (100.0 * season_assists.to_f / season_field_goals).round(1)
+        season.assists_percentage_allowed = (100.0 * season_assists_allowed.to_f / season_field_goals_allowed).round(1)
+        season.true_shooting_percentage = (100.0 * season_points / (2 * (season_field_goals_attempted + (0.44 * season_free_throws_attempted)))).round(1)
+        season.true_shooting_percentage_allowed = (100.0 * season_points_allowed / (2 * (season_field_goals_attempted_allowed + (0.44 * season_free_throws_attempted_allowed)))).round(1)
         season.three_pointers_proficiency = (((season.three_pointers_rate * 2) + season.three_pointers_percentage) / 10.0).round(1)
+        season.three_pointers_percentage_allowed = (100.0 * season_three_pointers_allowed / season_three_pointers_attempted_allowed).round(1)
+        season.two_pointers_percentage_allowed = (100.0 * (season_field_goals_allowed - season_three_pointers_allowed) / (season_field_goals_attempted_allowed - season_three_pointers_attempted_allowed)).round(1)
+        season.strength_of_schedule = (opponent_wins.to_f / (opponent_wins + opponent_losses)).round(3)
+        season.ooc_strength_of_schedule = (ooc_opponent_wins.to_f / (ooc_opponent_wins + ooc_opponent_losses)).round(3)
       end
       season.save
     end
@@ -1099,35 +1116,35 @@ namespace :daily do
         end
         if home_team_season.defensive_style_advantage && away_team_season.defensive_style_advantage
           if home_team_season.r_defensive_style > 0.1
-            defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0)
+            defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0) * (home_team_season.games / 32)
           end
           
           if away_team_season.r_defensive_style > 0.1
-            defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)
+            defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)* (away_team_season.games / 32)
           end
           
           if home_team_season.r_assists > 0.1
-            assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+            assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (home_team_season.games / 32)
           end
           
           if away_team_season.r_assists > 0.1
-            assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5)
+            assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (away_team_season.games / 32)
           end
           
           if home_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+            three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (home_team_season.games / 32)
           end
           
           if away_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+            three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (away_team_season.games / 32)
           end
           
           if home_team_season.r_pace > 0.1
-            pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace   / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+            pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (home_team_season.games / 32)
           end
           
           if away_team_season.r_pace > 0.1
-            pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace  / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1)
+            pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (away_team_season.games / 32)
           end
           defensive_advantage = 6.5 if defensive_advantage > 6.5
           assists_advantage = 6.5 if assists_advantage > 6.5
