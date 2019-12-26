@@ -1116,35 +1116,35 @@ namespace :daily do
         end
         if home_team_season.defensive_style_advantage && away_team_season.defensive_style_advantage
           if home_team_season.r_defensive_style > 0.1
-            defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0) * (home_team_season.games / 32)
+            defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0) * (home_team_season.games.to_f / 32)
           end
           
           if away_team_season.r_defensive_style > 0.1
-            defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)* (away_team_season.games / 32)
+            defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)* (away_team_season.games.to_f / 32)
           end
           
           if home_team_season.r_assists > 0.1
-            assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (home_team_season.games / 32)
+            assists_advantage += home_team_season.assists_advantage * (home_team_season.r_assists / 0.15) * ((away_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (home_team_season.games.to_f / 32)
           end
           
           if away_team_season.r_assists > 0.1
-            assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (away_team_season.games / 32)
+            assists_advantage += -away_team_season.assists_advantage * (away_team_season.r_assists / 0.15) * ((home_team_season.assists_percentage - current_season.assists_percentage) / 1.5) * (away_team_season.games.to_f / 32)
           end
           
           if home_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (home_team_season.games / 32)
+            three_pointers_advantage += home_team_season.three_pointers_advantage * (home_team_season.r_three_pointers / 0.15) * ((away_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (home_team_season.games.to_f / 32)
           end
           
           if away_team_season.r_three_pointers > 0.1
-            three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (away_team_season.games / 32)
+            three_pointers_advantage += -away_team_season.three_pointers_advantage * (away_team_season.r_three_pointers / 0.15) * ((home_team_season.three_pointers_proficiency - current_season.three_pointers_proficiency) / 0.9) * (away_team_season.games.to_f / 32)
           end
           
           if home_team_season.r_pace > 0.1
-            pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (home_team_season.games / 32)
+            pace_advantage += home_team_season.pace_advantage * (home_team_season.r_pace / 0.15) * ((away_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (home_team_season.games.to_f / 32)
           end
           
           if away_team_season.r_pace > 0.1
-            pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (away_team_season.games / 32)
+            pace_advantage += -away_team_season.pace_advantage * (away_team_season.r_pace / 0.15) * ((home_team_season.adj_tempo - current_season.adj_tempo) / 1.1) * (away_team_season.games.to_f / 32)
           end
           defensive_advantage = 6.5 if defensive_advantage > 6.5
           assists_advantage = 6.5 if assists_advantage > 6.5

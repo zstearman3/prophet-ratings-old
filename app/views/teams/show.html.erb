@@ -217,6 +217,7 @@
       <th>POS</th>
       <th class="hidden-small">GM</th>
       <th>MIN</th>
+      <th>USG%</th>
       <th>PTS</th>
       <th>AST</th>
       <th>REB</th>
@@ -237,6 +238,7 @@
           <td><%= player_season.position %></td>
           <td class="hidden-small"><%= player_season.games %>
           <td><%= (player_season.minutes.to_f / player_season.games).round(1) %></td>
+          <td><%= (player_season.usage_rate).round(1) %></td>
           <td><%= (player_season.points.to_f / player_season.games).round(1) %></td>
           <td><%= (player_season.assists.to_f / player_season.games).round(1) %></td>
           <td><%= (player_season.rebounds.to_f / player_season.games).round(1) %></td>
