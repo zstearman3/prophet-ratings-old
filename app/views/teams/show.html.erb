@@ -138,7 +138,7 @@
         <td colspan="2" class="center"><%= @team_season.adj_tempo %> <small><%= TeamSeason.where(season: @season).order(adj_tempo: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
       <tr>
-        <th>SOS</th>
+        <th>AdjSOS</th>
         <td colspan="2" class="center"><%= @team_season.strength_of_schedule %> <small><%= TeamSeason.where(season: @season).order(strength_of_schedule: :desc).pluck(:id).index(@team_season.id) + 1 %></small></td>
       </tr>
       <th colspan='3' class="center">Four Factors</th></tr>

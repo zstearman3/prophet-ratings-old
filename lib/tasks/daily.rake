@@ -447,11 +447,11 @@ namespace :daily do
           opponent_game = game.game.team_games.find_by(team: game.opponent)
           opponent_season = TeamSeason.find_by(team: game.opponent, season: current_season)
           if opponent_season
-            opponent_wins += opponent_season.wins
-            opponent_losses += opponent_season.losses
+            opponent_wins += (354 - opponent_season.adjem_rank)
+            opponent_losses += (353 - opponent_wins)
             unless season.team.conference_id == opponent_season.team.conference_id
-              ooc_opponent_wins += opponent_season.wins
-              ooc_opponent_losses += opponent_season.losses
+              ooc_opponent_wins += (354 - opponent_season.adjem_rank)
+              ooc_opponent_losses += (353 - opponent_wins)
             end
           end
           season_efficiency_total += (100 * game.points.to_f / game.game.possessions)
