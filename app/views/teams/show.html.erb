@@ -44,7 +44,14 @@
           <% end %>
           <tr>
             <td><%= game.day.strftime("%m/%d/%y") %></td>
-            <td><% if game.home_or_away == "AWAY" %>@<% end %><% if opponent_game && opponent_game.team %><%= link_to opponent_game.team.school, opponent_game.team %><% else %><%= game.opponent_name %><% end %></td>
+            <% opponent_season = TeamSeason.find_by(season: @season, team: opponent_game.team) %>
+            <td>
+              <% if game.home_or_away == "AWAY" %>@<% end %>
+              <% if opponent_game && opponent_game.team %><%= link_to opponent_game.team.school, opponent_game.team %><% else %><%= game.opponent_name %><% end %>
+              <% if opponent_season %>
+                <small><%= opponent_season.adjem_rank %></small>
+              <% end %>
+            </td>
             <% if game.wins + game.losses > 0 %>
               <% game_text = "" %>
               <% if game.wins == 1%><% game_text += "W "%><% else %><% game_text += "L "%><% end %>
@@ -68,7 +75,8 @@
             <tr>
               <td><%= game.day.strftime("%m/%d/%y") %></td>
               <% if game.away_team %>
-                <td><%= link_to game.away_team.school, game.away_team %></td>
+                <% opponent_season = TeamSeason.find_by(season: @season, team: game.away_team) %>
+                <td><%= link_to game.away_team.school, game.away_team %><% if opponent_season %><small><%= opponent_season.adjem_rank %></small><% end %></td>
               <% else %>
                 <td><%= game.away_team_name %></td>
               <% end %>
@@ -82,7 +90,8 @@
             <tr>
               <td><%= game.day.strftime("%m/%d/%y") %></td>
               <% if game.home_team %>
-                <td><%= link_to "@ " + game.home_team.school, game.home_team %></td>
+              <% opponent_season = TeamSeason.find_by(season: @season, team: game.home_team) %>
+                <td><%= link_to "@ " + game.home_team.school, game.home_team %><% if opponent_season %><small><%= opponent_season.adjem_rank %></small><% end %></td>
               <% else %>
                 <td><%= "@ " + game.home_team_name %></td>
               <% end %>
