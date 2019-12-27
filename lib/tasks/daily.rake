@@ -1089,6 +1089,8 @@ namespace :daily do
         three_pointers_advantage = 0
         pace_advantage = 0
         injury_advantage = 0
+        defensive_home = false
+        defensive_away = false
         prediction = Prediction.find_or_create_by(game: game)
         prediction.season = current_season
         prediction.day = game.day
@@ -1117,10 +1119,12 @@ namespace :daily do
         if home_team_season.defensive_style_advantage && away_team_season.defensive_style_advantage
           if home_team_season.r_defensive_style > 0.1
             defensive_advantage += home_team_season.defensive_style_advantage * (home_team_season.r_defensive_style / 0.15) * (away_team_season.defensive_aggression / 10.0) * (home_team_season.games.to_f / 32)
+            defensive_home = true
           end
           
           if away_team_season.r_defensive_style > 0.1
             defensive_advantage += -away_team_season.defensive_style_advantage * (away_team_season.r_defensive_style / 0.15) * (home_team_season.defensive_aggression / 10.0)* (away_team_season.games.to_f / 32)
+            defensive_away = true
           end
           
           if home_team_season.r_assists > 0.1
@@ -1408,12 +1412,66 @@ namespace :daily do
             end
           end
           
+          prediction.description += '<p style="font-weight:bold;">Matchup Advantages</p>'
+          
           if defensive_advantage > 0
-            prediction.description += '<p>' + home_team.school + ' has an advantage based on the defensive schemes of each team.'
+            prediction.description += '<p>' + home_team.school + ' has an advantage based on the defensive schemes of each team. '
+            if defensive_home == true
+              away_aggression = TeamSeason.where(season: current_season).order(defensive_aggression: :desc).pluck(:id).index(away_team_season.id) + 1 
+              if home_team_season.defensive_style_advantage > 0
+                prediction.description += home_team.school + ' has performed better against teams that utilize an aggressive man defensive scheme, and this game fits that description. ' +
+                away_team.school + ' is the ' + away_aggression.ordinalize + ' most aggressive defensive team in the nation this season. '
+              else
+                prediction.description += home_team.school + ' has performed better against teams that utilize a more passive zone scheme, and this game could play to their strengths. ' +
+                away_team.school + ' is the ' + away_aggression.ordinalize + ' most aggressive defensive team in the nation this season. ' 
+              end
+            end
+            if defensive_away == true
+              home_aggression = TeamSeason.where(season: current_season).order(defensive_aggression: :desc).pluck(:id).index(home_team_season.id) + 1 
+              if away_team_season.defensive_style_advantage > 0
+                prediction.description += away_team.school + ' prefers to play against teams that utilize an aggressive man defensive scheme, that will not work to their favor in this matchup. ' +
+                home_team.school + ' is only the ' + home_aggression.ordinalize + ' most aggressive defensive team in the nation this season, indicating their scheme is closer to a zone. '
+              else
+                prediction.description += away_team.school + ' has performed better against teams that utilize a more passive zone scheme, but ' +
+                home_team.school + ' will create problems by using a more aggressive man scheme. ' + home_team.school + ' is the ' + home_aggression.ordinalize + 
+                ' most aggressive defensive team in the nation this season. ' 
+              end
+            end
+            prediction.description += 'The defensive schemes give ' + home_team.school + ' an advantage of ' + defensive_advantage.round(1).to_s + ' points per 100 possessions in this prediction.'
           elsif defensive_advantage < 0
-            prediction.description += '<p>' + away_team.school + ' has an advantage based on the defensive schemes of each team.'
+            prediction.description += '<p>' + away_team.school + ' has an advantage based on the defensive schemes of each team. '
+            if defensive_home == true
+              away_aggression = TeamSeason.where(season: current_season).order(defensive_aggression: :desc).pluck(:id).index(away_team_season.id) + 1 
+              if home_team_season.defensive_style_advantage > 0
+                prediction.description += home_team.school + ' has performed better against teams that utilize an aggressive man defensive scheme, but this matchup will not play to their strengths. ' +
+                away_team.school + ' is only the ' + away_aggression.ordinalize + ' most aggressive defensive team in the nation this season, indicating their scheme is closer to a zone. '
+              else
+                prediction.description += home_team.school + ' has performed better against teams that utilize a more passive zone scheme, but ' +
+                away_team.school + ' will look to keep them off guard with a more aggressive man scheme. ' + away_team.school + ' is the ' + away_aggression.ordinalize + 
+                ' most aggressive defensive team in the nation this season. ' 
+              end
+            end
+            if defensive_away == true
+              home_aggression = TeamSeason.where(season: current_season).order(defensive_aggression: :desc).pluck(:id).index(home_team_season.id) + 1 
+              if away_team_season.defensive_style_advantage > 0
+                prediction.description += away_team.school + ' has performed better against teams that play an aggressive man style of defense, and this could work in their favor in this game. ' +
+                home_team.school + ' is the ' + home_aggression.ordinalize + ' most aggressive defensive team in the nation this season. '
+              else
+                prediction.description += away_team.school + ' has had their best performances against teams that utilize a more passive zone scheme, and this looks like it could be a good matchup for them. ' +
+                home_team.school + ' is only the ' + home_aggression.ordinalize + ' most aggressive defensive team in the nation this season, indicating their scheme resembles a zone defense. ' 
+              end
+            end
+            prediction.description += 'The defensive schemes give ' + away_team.school + ' an advantage of ' + (-1.0 * defensive_advantage).round(1).to_s + ' points per 100 possessions in this prediction.</p>'
           end
-      
+          if defensive_advantage == 0 
+            if assists_advantage == 0 && three_pointers_advantage == 0 && pace_advantage == 0
+              prediction.description += '<p>No advantages are being applied in this game. Either the teams have not played enough games for the advantages to be considered, or the algorithm does not see a 
+              specific scheme advantage for either side.</p>'
+            else
+              prediction.description += '<p>The matchup description section is still being modified. In the meantime, look in the matchup info section at the top right of the page to see what advantages are
+              being applied.</p>'
+            end
+          end
           
           #################################################################
           prediction.save

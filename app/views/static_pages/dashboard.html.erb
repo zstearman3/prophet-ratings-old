@@ -60,7 +60,7 @@
       <% else %>
         <% gamesdate = current_season.post_season_end_date.strftime("%Y%m%d") %>
       <% end %>
-      <%= link_to 'View Complete Schedule', games_path(date: gamesdate) %>
+      <%= link_to 'View All Predictions', predictions_path(date: gamesdate) %>
     </div>
     <h3>Latest Blog Posts</h3>
     <div class="blog-container row">
