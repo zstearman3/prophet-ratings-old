@@ -858,6 +858,7 @@ namespace :daily do
         opponent_season = TeamSeason.find_by(team: opponent_game.team, season: current_season)
         if team_season && opponent_season
           if game.minutes > 0 && team_game.minutes > 0
+            begin
               game.assists_percentage = ((100.0 * game.assists.to_f) / (((game.minutes / (team_game.minutes / 5.0)) * team_game.field_goals_made) - game.field_goals_made.to_f)).round(1)
               game.assists_percentage = 0.0 if game.assists_percentage.to_f.nan?
               game.assists_percentage = 100.0 if game.assists_percentage > 100.0
@@ -890,6 +891,9 @@ namespace :daily do
                 game.prophet_rating = 0
               end
               game.save
+            rescue
+              puts 'error with player game calculations'
+            end
           end
         end
       end
