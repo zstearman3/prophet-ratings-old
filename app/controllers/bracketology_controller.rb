@@ -1,4 +1,5 @@
 class BracketologyController < ApplicationController
+  include Gaussian
   
   def show
     if params[:id]
@@ -111,5 +112,39 @@ class BracketologyController < ApplicationController
       end
       x += 1
     end
+  end
+  
+  def simulate
+    if params[:id]
+      @bracketology = Bracketology.find_by(id: params[:id])
+    else
+      @bracketology = Bracketology.order(date: :desc).first
+    end
+    one_std_dev = Math.sqrt(2 * (current_season.consistency ** 2))
+    two_std_dev = Math.sqrt(2 * (one_std_dev ** 2))
+    scoring_std_dev = Math.sqrt(100 + (two_std_dev ** 2))
+    #### Play in Games ####
+    @bracketology.round_of_sixtyfour = []
+    @bracketology.round_of_sixtyfour << { favorite: @bracketology.tournament_field[0], underdog: @bracketology.tournament_field[65], favorite_score: 0, underdog_score: 0, winner: nil }
+    @bracketology.round_of_sixtyfour << { favorite: @bracketology.tournament_field[1], underdog: @bracketology.tournament_field[64], favorite_score: 0, underdog_score: 0, winner: nil }
+    
+    #### First Round ####
+    for x in 0..1
+      favorite = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:favorite])
+      underdog = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:underdog])
+      fav_p = rand()
+      fav_z = getZscore(fav_p)
+      und_z = getZscore(rand())
+      pace_z = getZscore(rand())
+      predicted_tempo = favorite.adj_tempo + underdog.adj_tempo - current_season.adj_tempo
+      pace_standard_dev = 9.0
+      favorite_efficiency = (favorite.adj_offensive_efficiency + underdog.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      underdog_efficiency = (favorite.adj_defensive_efficiency + underdog.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      tempo = predicted_tempo + (pace_z * pace_standard_dev)
+      @bracketology.round_of_sixtyfour[x][:favorite_score] = tempo * favorite_efficiency / 100
+      @bracketology.round_of_sixtyfour[x][:underdog_score] = tempo * underdog_efficiency / 100
+    end
+    
+    @bracketology.save
   end
 end

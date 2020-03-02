@@ -5,4 +5,6 @@ class Bracketology < ApplicationRecord
   serialize :last_four_in, Array
   serialize :first_four_out, Array
   serialize :next_four_out, Array
+  serialize :round_of_sixtyfour, Array
+  serialize :round_of_thirtytwo, Array
 end

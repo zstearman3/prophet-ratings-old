@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191226191504) do
+ActiveRecord::Schema.define(version: 20200302190235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(version: 20191226191504) do
     t.string "last_four_in"
     t.string "first_four_out"
     t.string "next_four_out"
+    t.string "round_of_sixtyfour"
+    t.string "round_of_thirtytwo"
+    t.string "round_of_sixteen"
+    t.string "round_of_eight"
+    t.string "round_of_four"
+    t.string "round_of_two"
+    t.integer "champion_id"
   end
 
   create_table "conferences", force: :cascade do |t|

@@ -1,0 +1,10 @@
+<table>
+  <tr>
+    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[0][:favorite]).team.school + " " + @bracketology.round_of_sixtyfour[0][:favorite_score].round.to_s %></td>
+    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[0][:underdog]).team.school + " " + @bracketology.round_of_sixtyfour[0][:underdog_score].round.to_s %></td>
+  </tr>
+  <tr>
+    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[1][:favorite]).team.school + " " + @bracketology.round_of_sixtyfour[1][:favorite_score].round.to_s %></td>
+    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[1][:underdog]).team.school + " " + @bracketology.round_of_sixtyfour[1][:underdog_score].round.to_s %></td>
+  </tr>
+</table>
