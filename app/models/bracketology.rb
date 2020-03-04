@@ -9,4 +9,6 @@ class Bracketology < ApplicationRecord
   serialize :round_of_thirtytwo, Array
   serialize :round_of_sixteen, Array
   serialize :round_of_eight, Array
+  serialize :round_of_four, Array
+  serialize :round_of_two, Array
 end

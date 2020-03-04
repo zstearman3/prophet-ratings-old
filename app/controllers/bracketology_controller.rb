@@ -278,6 +278,119 @@ class BracketologyController < ApplicationController
         end
       end
     end
+    ### Elite Eight ###
+    @bracketology.round_of_four = []
+    first_team = 0
+    first_seed = 0
+    for x in 0..3
+      top = TeamSeason.find(@bracketology.round_of_eight[x][:top])
+      bottom = TeamSeason.find(@bracketology.round_of_eight[x][:bottom])
+      fav_p = rand()
+      fav_z = getZscore(fav_p)
+      und_z = getZscore(rand())
+      pace_z = getZscore(rand())
+      predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      tempo = predicted_tempo + (pace_z * pace_standard_dev)
+      top_score = tempo * top_efficiency / 100
+      bottom_score = tempo * bottom_efficiency / 100
+      if top_score.round == bottom_score.round
+        if top_score > bottom_score
+          top_score += 1.0
+        else
+          bottom_score += 1.0
+        end
+      end
+      @bracketology.round_of_eight[x][:top_score] = top_score
+      @bracketology.round_of_eight[x][:bottom_score] = bottom_score
+      if (x + 1) % 2 == 0 
+        if top_score > bottom_score
+          @bracketology.round_of_four << { top: first_team, bottom: @bracketology.round_of_eight[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_eight[x][:top_seed] }
+        else
+          @bracketology.round_of_four << { top: first_team, bottom: @bracketology.round_of_eight[x][:bottom], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_eight[x][:bottom_seed] }
+        end
+      else
+        if top_score > bottom_score
+          first_team = @bracketology.round_of_eight[x][:top]
+          first_seed = @bracketology.round_of_eight[x][:top_seed]
+        else
+          first_team = @bracketology.round_of_eight[x][:bottom]
+          first_seed = @bracketology.round_of_eight[x][:bottom_seed]
+        end
+      end
+    end
+    ##### Final Four #####
+    @bracketology.round_of_two = []
+    first_team = 0
+    first_seed = 0
+    for x in 0..1
+      top = TeamSeason.find(@bracketology.round_of_four[x][:top])
+      bottom = TeamSeason.find(@bracketology.round_of_four[x][:bottom])
+      fav_p = rand()
+      fav_z = getZscore(fav_p)
+      und_z = getZscore(rand())
+      pace_z = getZscore(rand())
+      predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      tempo = predicted_tempo + (pace_z * pace_standard_dev)
+      top_score = tempo * top_efficiency / 100
+      bottom_score = tempo * bottom_efficiency / 100
+      if top_score.round == bottom_score.round
+        if top_score > bottom_score
+          top_score += 1.0
+        else
+          bottom_score += 1.0
+        end
+      end
+      @bracketology.round_of_four[x][:top_score] = top_score
+      @bracketology.round_of_four[x][:bottom_score] = bottom_score
+      if (x + 1) % 2 == 0 
+        if top_score > bottom_score
+          @bracketology.round_of_two << { top: first_team, bottom: @bracketology.round_of_four[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_four[x][:top_seed] }
+        else
+          @bracketology.round_of_two << { top: first_team, bottom: @bracketology.round_of_four[x][:bottom], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_four[x][:bottom_seed] }
+        end
+      else
+        if top_score > bottom_score
+          first_team = @bracketology.round_of_four[x][:top]
+          first_seed = @bracketology.round_of_four[x][:top_seed]
+        else
+          first_team = @bracketology.round_of_four[x][:bottom]
+          first_seed = @bracketology.round_of_four[x][:bottom_seed]
+        end
+      end
+    end
+    #### Championship #####
+    top = TeamSeason.find(@bracketology.round_of_two[0][:top])
+    bottom = TeamSeason.find(@bracketology.round_of_two[0][:bottom])
+    fav_p = rand()
+    fav_z = getZscore(fav_p)
+    und_z = getZscore(rand())
+    pace_z = getZscore(rand())
+    predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+    top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+    bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+    tempo = predicted_tempo + (pace_z * pace_standard_dev)
+    top_score = tempo * top_efficiency / 100
+    bottom_score = tempo * bottom_efficiency / 100
+    if top_score.round == bottom_score.round
+      if top_score > bottom_score
+        top_score += 1.0
+      else
+        bottom_score += 1.0
+      end
+    end
+    @bracketology.round_of_two[0][:top_score] = top_score
+    @bracketology.round_of_two[0][:bottom_score] = bottom_score
+    if top_score > bottom_score
+      @champion_seed = @bracketology.round_of_two[0][:top_seed]
+      @bracketology.champion_id = @bracketology.round_of_two[0][:top]
+    else
+      @champion_seed = @bracketology.round_of_two[0][:bottom_seed]
+      @bracketology.champion_id = @bracketology.round_of_two[0][:bottom]
+    end
     @bracketology.save
   end
 end

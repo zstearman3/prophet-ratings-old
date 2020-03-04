@@ -1,3 +1,37 @@
+.right-brackets{
+  text-align: right;
+}
+.round-two{
+  td{
+    padding-top: 40px !important;
+  }
+}
+.round-three{
+  td{
+    padding-top: 100px !important;
+  }
+}
+.round-four{
+  td{
+    padding-top: 250px !important;
+  }
+}
+.tourney-simulation{
+  td{
+    font-size: 0.65em !important;
+  }
+}
+.final-four{
+  td{
+    padding-top: 10px !important;
+    font-size: 0.8em !important;
+  }
+}
+.championship{
+  td{
+    padding-top: 25px !important;
+  }
+}
 @media (min-width: 1200px) {
   .right-brackets{
     text-align: right;
@@ -20,6 +54,17 @@
   .tourney-simulation{
     td{
       font-size: 0.9em !important;
+    }
+  }
+  .final-four{
+    td{
+      padding-top: 10px !important;
+      font-size: 1.2em !important;
+    }
+  }
+  .championship{
+    td{
+      padding-top: 25px !important;
     }
   }
 }
