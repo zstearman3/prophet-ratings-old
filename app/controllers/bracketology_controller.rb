@@ -136,9 +136,16 @@ class BracketologyController < ApplicationController
       elsif m <= last_one_in
         m += -1
       end
-      @bracketology.round_of_sixtyfour << { top: @bracketology.tournament_field[n], bottom: @bracketology.tournament_field[m], top_score: 0, bottom_score: 0, winner: nil }
+      if m > last_one_in
+        @bracketology.round_of_sixtyfour << { top: @bracketology.tournament_field[n], bottom: @bracketology.tournament_field[m], top_score: 0, bottom_score: 0, top_seed: ((n + 1) / 4.0).ceil, bottom_seed: ((m - 1) / 4.0).ceil }
+      else
+        @bracketology.round_of_sixtyfour << { top: @bracketology.tournament_field[n], bottom: @bracketology.tournament_field[m], top_score: 0, bottom_score: 0, top_seed: ((n + 1) / 4.0).ceil, bottom_seed: ((m + 1) / 4.0).ceil }
+      end
     end
     #### First Round ####
+    @bracketology.round_of_thirtytwo = []
+    thirty_two = []
+    thirty_two_seeds = []
     for x in 0..31
       top = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:top])
       bottom = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:bottom])
@@ -151,10 +158,84 @@ class BracketologyController < ApplicationController
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
-      @bracketology.round_of_sixtyfour[x][:top_score] = tempo * top_efficiency / 100
-      @bracketology.round_of_sixtyfour[x][:bottom_score] = tempo * bottom_efficiency / 100
+      top_score = tempo * top_efficiency / 100
+      bottom_score = tempo * bottom_efficiency / 100
+      if top_score.round == bottom_score.round
+        if top_score > bottom_score
+          top_score += 1.0
+        else
+          bottom_score += 1.0
+        end
+      end
+      @bracketology.round_of_sixtyfour[x][:top_score] = top_score
+      @bracketology.round_of_sixtyfour[x][:bottom_score] = bottom_score
+
+      if top_score > bottom_score
+        thirty_two << @bracketology.round_of_sixtyfour[x][:top]
+        thirty_two_seeds << @bracketology.round_of_sixtyfour[x][:top_seed]
+      else
+        thirty_two << @bracketology.round_of_sixtyfour[x][:bottom]
+        thirty_two_seeds << @bracketology.round_of_sixtyfour[x][:bottom_seed]
+      end
     end
-    
+    @bracketology.round_of_thirtytwo << { top: thirty_two[0], bottom: thirty_two[31], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[0], bottom_seed: thirty_two_seeds[31] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[16], bottom: thirty_two[15], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[16], bottom_seed: thirty_two_seeds[15] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[23], bottom: thirty_two[8], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[23], bottom_seed: thirty_two_seeds[8] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[24], bottom: thirty_two[7], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[24], bottom_seed: thirty_two_seeds[7] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[3], bottom: thirty_two[28], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[3], bottom_seed: thirty_two_seeds[28] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[19], bottom: thirty_two[12], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[19], bottom_seed: thirty_two_seeds[12] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[20], bottom: thirty_two[11], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[20], bottom_seed: thirty_two_seeds[11] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[24], bottom: thirty_two[4], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[24], bottom_seed: thirty_two_seeds[4] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[1], bottom: thirty_two[30], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[1], bottom_seed: thirty_two_seeds[30] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[17], bottom: thirty_two[14], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[17], bottom_seed: thirty_two_seeds[14] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[22], bottom: thirty_two[9], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[22], bottom_seed: thirty_two_seeds[9] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[25], bottom: thirty_two[6], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[25], bottom_seed: thirty_two_seeds[6]}
+    @bracketology.round_of_thirtytwo << { top: thirty_two[2], bottom: thirty_two[29], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[2], bottom_seed: thirty_two_seeds[29] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[18], bottom: thirty_two[13], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[18], bottom_seed: thirty_two_seeds[13] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[21], bottom: thirty_two[10], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[21], bottom_seed: thirty_two_seeds[10] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[26], bottom: thirty_two[5], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[26], bottom_seed: thirty_two_seeds[5] }
+    #### Second Round ####
+    @bracketology.round_of_sixteen = []
+    first_team = 0
+    first_seed = 0
+    for x in 0..15
+      top = TeamSeason.find(@bracketology.round_of_thirtytwo[x][:top])
+      bottom = TeamSeason.find(@bracketology.round_of_thirtytwo[x][:bottom])
+      fav_p = rand()
+      fav_z = getZscore(fav_p)
+      und_z = getZscore(rand())
+      pace_z = getZscore(rand())
+      predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      tempo = predicted_tempo + (pace_z * pace_standard_dev)
+      top_score = tempo * top_efficiency / 100
+      bottom_score = tempo * bottom_efficiency / 100
+      if top_score.round == bottom_score.round
+        if top_score > bottom_score
+          top_score += 1.0
+        else
+          bottom_score += 1.0
+        end
+      end
+      @bracketology.round_of_thirtytwo[x][:top_score] = top_score
+      @bracketology.round_of_thirtytwo[x][:bottom_score] = bottom_score
+      if (x + 1) % 2 == 0 
+        if top_score > bottom_score
+          @bracketology.round_of_sixteen << { top: first_team, bottom: @bracketology.round_of_thirtytwo[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_thirtytwo[x][:top_seed] }
+        else
+          @bracketology.round_of_sixteen << { top: first_team, bottom: @bracketology.round_of_thirtytwo[x][:bottom], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_thirtytwo[x][:bottom_seed] }
+        end
+      else
+        if top_score > bottom_score
+          first_team = @bracketology.round_of_thirtytwo[x][:top]
+          first_seed = @bracketology.round_of_thirtytwo[x][:top_seed]
+        else
+          first_team = @bracketology.round_of_thirtytwo[x][:bottom]
+          first_seed = @bracketology.round_of_thirtytwo[x][:bottom_seed]
+        end
+      end
+    end
     @bracketology.save
   end
 end
