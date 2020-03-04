@@ -236,6 +236,48 @@ class BracketologyController < ApplicationController
         end
       end
     end
+    #### Sweet 16 ####
+    @bracketology.round_of_eight = []
+    first_team = 0
+    first_seed = 0
+    for x in 0..7
+      top = TeamSeason.find(@bracketology.round_of_sixteen[x][:top])
+      bottom = TeamSeason.find(@bracketology.round_of_sixteen[x][:bottom])
+      fav_p = rand()
+      fav_z = getZscore(fav_p)
+      und_z = getZscore(rand())
+      pace_z = getZscore(rand())
+      predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      tempo = predicted_tempo + (pace_z * pace_standard_dev)
+      top_score = tempo * top_efficiency / 100
+      bottom_score = tempo * bottom_efficiency / 100
+      if top_score.round == bottom_score.round
+        if top_score > bottom_score
+          top_score += 1.0
+        else
+          bottom_score += 1.0
+        end
+      end
+      @bracketology.round_of_sixteen[x][:top_score] = top_score
+      @bracketology.round_of_sixteen[x][:bottom_score] = bottom_score
+      if (x + 1) % 2 == 0 
+        if top_score > bottom_score
+          @bracketology.round_of_eight << { top: first_team, bottom: @bracketology.round_of_sixteen[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_sixteen[x][:top_seed] }
+        else
+          @bracketology.round_of_eight << { top: first_team, bottom: @bracketology.round_of_sixteen[x][:bottom], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_sixteen[x][:bottom_seed] }
+        end
+      else
+        if top_score > bottom_score
+          first_team = @bracketology.round_of_sixteen[x][:top]
+          first_seed = @bracketology.round_of_sixteen[x][:top_seed]
+        else
+          first_team = @bracketology.round_of_sixteen[x][:bottom]
+          first_seed = @bracketology.round_of_sixteen[x][:bottom_seed]
+        end
+      end
+    end
     @bracketology.save
   end
 end

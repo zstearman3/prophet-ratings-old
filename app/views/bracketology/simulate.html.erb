@@ -70,6 +70,14 @@
           <tr><td></td></tr>
         </table>
       </div>
+      <div class="round-four col-xs-3">
+        <table class="table bracketology">
+          <% game = @bracketology.round_of_eight[0] %>
+          <tr><td><%= game[:top_seed] %> <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+          <tr><td><%= game[:bottom_seed] %> <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
     </div>
     <div class="bottom-region col-xs-12">
       <h3>West Region</h3>
@@ -141,11 +149,27 @@
           <tr><td></td></tr>
         </table>
       </div>
+      <div class="round-four col-xs-3">
+        <table class="table bracketology">
+          <% game = @bracketology.round_of_eight[1] %>
+          <tr><td><%= game[:top_seed] %> <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+          <tr><td><%= game[:bottom_seed] %> <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
     </div>
   </div>
   <div class="right-brackets col-md-6 col-xs-12">
     <div class="top-region col-xs-12">
       <h3>South Region</h3>
+      <div class="round-four col-xs-3">
+        <table class="table bracketology">
+          <% game = @bracketology.round_of_eight[2] %>
+          <tr><td><%= game[:top_seed] %> <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+          <tr><td><%= game[:bottom_seed] %> <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
       <div class="round-three col-xs-3">
         <table class="table bracketology">
           <% game = @bracketology.round_of_sixteen[4] %>
@@ -217,6 +241,14 @@
     </div>
     <div class="bottom-region col-xs-12">
       <h3>East Region</h3>
+      <div class="round-four col-xs-3">
+        <table class="table bracketology">
+          <% game = @bracketology.round_of_eight[3] %>
+          <tr><td><%= game[:top_seed] %> <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+          <tr><td><%= game[:bottom_seed] %> <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+          <tr><td></td></tr>
+        </table>
+      </div>
       <div class="round-three col-xs-3">
         <table class="table bracketology">
           <% game = @bracketology.round_of_sixteen[6] %>
