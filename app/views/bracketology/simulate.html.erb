@@ -1,10 +1,154 @@
-<table>
-  <tr>
-    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[0][:favorite]).team.school + " " + @bracketology.round_of_sixtyfour[0][:favorite_score].round.to_s %></td>
-    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[0][:underdog]).team.school + " " + @bracketology.round_of_sixtyfour[0][:underdog_score].round.to_s %></td>
-  </tr>
-  <tr>
-    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[1][:favorite]).team.school + " " + @bracketology.round_of_sixtyfour[1][:favorite_score].round.to_s %></td>
-    <td><%= TeamSeason.find(@bracketology.round_of_sixtyfour[1][:underdog]).team.school + " " + @bracketology.round_of_sixtyfour[1][:underdog_score].round.to_s %></td>
-  </tr>
-</table>
+<div class="row">
+  <div class="left-brackets col-md-6 col-xs-12">
+    <div class="top-region col-xs-12">
+      <h3>Midwest Region</h3>
+      <table class="table bracketology">
+        <% game = @bracketology.round_of_sixtyfour[0] %>
+        <tr><td>1 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>16 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[31] %>
+        <tr><td>8 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>9 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[16] %>
+        <tr><td>5 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>12 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[15] %>
+        <tr><td>4 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>13 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[23] %>
+        <tr><td>6 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>11 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[8] %>
+        <tr><td>3 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>14 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[24] %>
+        <tr><td>7 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>10 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[7] %>
+        <tr><td>2 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>15 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+      </table>
+    </div>
+    <div class="bottom-region col-xs-12">
+      <h3>West Region</h3>
+        <table class="table bracketology">
+        <% game = @bracketology.round_of_sixtyfour[3] %>
+        <tr><td>1 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>16 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[28] %>
+        <tr><td>8 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>9 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[19] %>
+        <tr><td>5 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>12 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[12] %>
+        <tr><td>4 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>13 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[20] %>
+        <tr><td>6 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>11 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[11] %>
+        <tr><td>3 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>14 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[27] %>
+        <tr><td>7 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>10 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[4] %>
+        <tr><td>2 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>15 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="right-brackets col-md-6 col-xs-12">
+    <div class="top-region col-xs-12">
+      <h3>South Region</h3>
+        <table class="table bracketology">
+        <% game = @bracketology.round_of_sixtyfour[1] %>
+        <tr><td>1 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>16 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[30] %>
+        <tr><td>8 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>9 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[17] %>
+        <tr><td>5 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>12 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[14] %>
+        <tr><td>4 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>13 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[22] %>
+        <tr><td>6 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>11 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[9] %>
+        <tr><td>3 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>14 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[25] %>
+        <tr><td>7 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>10 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[6] %>
+        <tr><td>2 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>15 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+      </table>
+    </div>
+    <div class="bottom-region col-xs-12">
+      <h3>East Region</h3>
+      <table class="table bracketology">
+        <% game = @bracketology.round_of_sixtyfour[2] %>
+        <tr><td>1 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>16 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[29] %>
+        <tr><td>8 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>9 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[18] %>
+        <tr><td>5 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>12 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[13] %>
+        <tr><td>4 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>13 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[21] %>
+        <tr><td>6 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>11 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[10] %>
+        <tr><td>3 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>14 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[26] %>
+        <tr><td>7 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>10 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+        <% game = @bracketology.round_of_sixtyfour[5] %>
+        <tr><td>2 <%= TeamSeason.find(game[:top]).team.school + " " + game[:top_score].round.to_s %></td></tr>
+        <tr><td>15 <%= TeamSeason.find(game[:bottom]).team.school + " " + game[:bottom_score].round.to_s %></td></tr>
+        <tr><td></td></tr>
+      </table>
+    </div>
+  </div>
+</div>

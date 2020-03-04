@@ -123,26 +123,36 @@ class BracketologyController < ApplicationController
     one_std_dev = Math.sqrt(2 * (current_season.consistency ** 2))
     two_std_dev = Math.sqrt(2 * (one_std_dev ** 2))
     scoring_std_dev = Math.sqrt(100 + (two_std_dev ** 2))
+    last_one_in = @bracketology.tournament_field.index(@bracketology.last_four_in[3])
+    last_two_in = @bracketology.tournament_field.index(@bracketology.last_four_in[2])
+    puts last_one_in
+    puts last_two_in
     #### Play in Games ####
     @bracketology.round_of_sixtyfour = []
-    @bracketology.round_of_sixtyfour << { favorite: @bracketology.tournament_field[0], underdog: @bracketology.tournament_field[65], favorite_score: 0, underdog_score: 0, winner: nil }
-    @bracketology.round_of_sixtyfour << { favorite: @bracketology.tournament_field[1], underdog: @bracketology.tournament_field[64], favorite_score: 0, underdog_score: 0, winner: nil }
-    
+    for n in 0..31
+      m = 65 - n
+      if m <= last_two_in
+        m += -2
+      elsif m <= last_one_in
+        m += -1
+      end
+      @bracketology.round_of_sixtyfour << { top: @bracketology.tournament_field[n], bottom: @bracketology.tournament_field[m], top_score: 0, bottom_score: 0, winner: nil }
+    end
     #### First Round ####
-    for x in 0..1
-      favorite = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:favorite])
-      underdog = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:underdog])
+    for x in 0..31
+      top = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:top])
+      bottom = TeamSeason.find(@bracketology.round_of_sixtyfour[x][:bottom])
       fav_p = rand()
       fav_z = getZscore(fav_p)
       und_z = getZscore(rand())
       pace_z = getZscore(rand())
-      predicted_tempo = favorite.adj_tempo + underdog.adj_tempo - current_season.adj_tempo
-      pace_standard_dev = 9.0
-      favorite_efficiency = (favorite.adj_offensive_efficiency + underdog.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      underdog_efficiency = (favorite.adj_defensive_efficiency + underdog.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
+      pace_standard_dev = 6.5
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
-      @bracketology.round_of_sixtyfour[x][:favorite_score] = tempo * favorite_efficiency / 100
-      @bracketology.round_of_sixtyfour[x][:underdog_score] = tempo * underdog_efficiency / 100
+      @bracketology.round_of_sixtyfour[x][:top_score] = tempo * top_efficiency / 100
+      @bracketology.round_of_sixtyfour[x][:bottom_score] = tempo * bottom_efficiency / 100
     end
     
     @bracketology.save
