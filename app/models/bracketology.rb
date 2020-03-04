@@ -11,5 +11,5 @@ class Bracketology < ApplicationRecord
   serialize :round_of_eight, Array
   serialize :round_of_four, Array
   serialize :round_of_two, Array
-  belongs_to :user
+  belongs_to :user, required: false
 end
