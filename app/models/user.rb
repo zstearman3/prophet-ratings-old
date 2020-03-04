@@ -10,6 +10,7 @@ class User < ApplicationRecord
                       uniqueness: { case_sensitive: false }
     has_secure_password
     has_many :blog_posts
+    has_many :bracketologies
     validates :password, presence: true, length: {minimum: 6}, allow_nil: true
     
     # Returns the hash digest of the given string

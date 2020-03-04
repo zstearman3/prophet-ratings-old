@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200302190235) do
+ActiveRecord::Schema.define(version: 20200304213507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,9 @@ ActiveRecord::Schema.define(version: 20200302190235) do
     t.string "round_of_four"
     t.string "round_of_two"
     t.integer "champion_id"
+    t.boolean "completed", default: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_bracketologies_on_user_id"
   end
 
   create_table "conferences", force: :cascade do |t|
@@ -568,6 +571,7 @@ ActiveRecord::Schema.define(version: 20200302190235) do
 
   add_foreign_key "blog_posts", "teams"
   add_foreign_key "blog_posts", "users"
+  add_foreign_key "bracketologies", "users"
   add_foreign_key "games", "seasons"
   add_foreign_key "games", "stadia"
   add_foreign_key "games", "teams", column: "away_team_id"

@@ -116,13 +116,11 @@ class BracketologyController < ApplicationController
   
   def simulate
     if params[:id]
-      @bracketology = Bracketology.find_by(id: params[:id])
+      original_bracketology = Bracketology.find_by(id: params[:id])
     else
-      @bracketology = Bracketology.order(date: :desc).first
+      original_bracketology = Bracketology.order(date: :desc).first
     end
-    one_std_dev = Math.sqrt(2 * (current_season.consistency ** 2))
-    two_std_dev = Math.sqrt(2 * (one_std_dev ** 2))
-    scoring_std_dev = Math.sqrt(100 + (two_std_dev ** 2))
+    @bracketology = original_bracketology.dup
     last_one_in = @bracketology.tournament_field.index(@bracketology.last_four_in[3])
     last_two_in = @bracketology.tournament_field.index(@bracketology.last_four_in[2])
     puts last_one_in
@@ -155,8 +153,9 @@ class BracketologyController < ApplicationController
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       pace_standard_dev = 6.5
-      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      efficiency_deviation = current_season.consistency * 0.8
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -206,8 +205,8 @@ class BracketologyController < ApplicationController
       und_z = getZscore(rand())
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
-      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -248,8 +247,8 @@ class BracketologyController < ApplicationController
       und_z = getZscore(rand())
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
-      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -290,8 +289,8 @@ class BracketologyController < ApplicationController
       und_z = getZscore(rand())
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
-      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -332,8 +331,8 @@ class BracketologyController < ApplicationController
       und_z = getZscore(rand())
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
-      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+      top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+      bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -370,8 +369,8 @@ class BracketologyController < ApplicationController
     und_z = getZscore(rand())
     pace_z = getZscore(rand())
     predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
-    top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * current_season.consistency)
-    bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * current_season.consistency)
+    top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
+    bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
     tempo = predicted_tempo + (pace_z * pace_standard_dev)
     top_score = tempo * top_efficiency / 100
     bottom_score = tempo * bottom_efficiency / 100
@@ -391,6 +390,10 @@ class BracketologyController < ApplicationController
       @champion_seed = @bracketology.round_of_two[0][:bottom_seed]
       @bracketology.champion_id = @bracketology.round_of_two[0][:bottom]
     end
+    if logged_in?
+      @bracketology.user = current_user
+    end
+    @bracketology.completed = true
     @bracketology.save
   end
 end
