@@ -156,6 +156,59 @@ class BracketologyController < ApplicationController
       efficiency_deviation = current_season.consistency * 0.8
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -207,6 +260,59 @@ class BracketologyController < ApplicationController
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -249,6 +355,59 @@ class BracketologyController < ApplicationController
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -291,6 +450,59 @@ class BracketologyController < ApplicationController
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -333,6 +545,59 @@ class BracketologyController < ApplicationController
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
       tempo = predicted_tempo + (pace_z * pace_standard_dev)
       top_score = tempo * top_efficiency / 100
       bottom_score = tempo * bottom_efficiency / 100
@@ -371,6 +636,59 @@ class BracketologyController < ApplicationController
     predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
     top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
     bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
+      defensive_advantage = 0.0
+      assists_advantage = 0.0
+      three_pointers_advantage = 0.0
+      pace_advantage = 0.0
+      if top.defensive_style_advantage && bottom.defensive_style_advantage
+        if top.r_defensive_style > 0.1
+          defensive_advantage += top.defensive_style_advantage * (top.r_defensive_style / 0.15) * (bottom.defensive_aggression / 10.0)
+        end
+        
+        if bottom.r_defensive_style > 0.1
+          defensive_advantage += -bottom.defensive_style_advantage * (bottom.r_defensive_style / 0.15) * (top.defensive_aggression / 10.0)
+        end
+        
+        if top.r_assists > 0.1
+          assists_advantage += top.assists_advantage * (top.r_assists / 0.15) * ((bottom.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if bottom.r_assists > 0.1
+          assists_advantage += -bottom.assists_advantage * (bottom.r_assists / 0.15) * ((top.assists_percentage - current_season.assists_percentage) / 1.5)
+        end
+        
+        if top.r_three_pointers > 0.1
+          three_pointers_advantage += top.three_pointers_advantage * (top.r_three_pointers / 0.15) * ((bottom.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if bottom.r_three_pointers > 0.1
+          three_pointers_advantage += -bottom.three_pointers_advantage * (bottom.r_three_pointers / 0.15) * ((top.three_pointers_proficiency - current_season.three_pointers_proficiency) / 1.1)
+        end
+        
+        if top.r_pace > 0.1
+          pace_advantage += top.pace_advantage * (top.r_pace   / 0.15) * ((bottom.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        
+        if bottom.r_pace > 0.1
+          pace_advantage += -bottom.pace_advantage * (bottom.r_pace  / 0.15) * ((top.adj_tempo - current_season.adj_tempo) / 1.1)
+        end
+        defensive_advantage = 6.5 if defensive_advantage > 6.5
+        assists_advantage = 6.5 if assists_advantage > 6.5
+        three_pointers_advantage = 6.5 if three_pointers_advantage > 6.5
+        pace_advantage = 6.5 if pace_advantage > 6.5
+        defensive_advantage = -6.5 if defensive_advantage < -6.5
+        assists_advantage = -6.5 if assists_advantage < -6.5
+        three_pointers_advantage = -6.5 if three_pointers_advantage < -6.5
+        pace_advantage = -6.5 if pace_advantage < -6.5
+        top_efficiency += defensive_advantage / 2.0
+        bottom_efficiency += defensive_advantage / -2.0
+        top_efficiency += assists_advantage / 2.0
+        bottom_efficiency += assists_advantage / -2.0
+        top_efficiency += three_pointers_advantage / 2.0
+        bottom_efficiency += three_pointers_advantage / -2.0
+        top_efficiency += pace_advantage / 2.0
+        bottom_efficiency += pace_advantage / -2.0
+      end
     tempo = predicted_tempo + (pace_z * pace_standard_dev)
     top_score = tempo * top_efficiency / 100
     bottom_score = tempo * bottom_efficiency / 100
