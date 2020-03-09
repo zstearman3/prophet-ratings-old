@@ -115,10 +115,17 @@ class BracketologyController < ApplicationController
   end
   
   def simulate
+    if params[:custom_efficiency_deviation]
+      @custom_efficiency_deviation = params[:custom_efficiency_deviation].to_f
+    else
+      @custom_efficiency_deviation = 5
+    end
+    custom_efficiency_deviation = @custom_efficiency_deviation / 5
+    original_bracketology = Bracketology.find_by(master_bracket: true)
     if params[:id]
       original_bracketology = Bracketology.find_by(id: params[:id])
     else
-      original_bracketology = Bracketology.order(date: :desc).first
+      original_bracketology ||= Bracketology.order(date: :desc).first
     end
     @bracketology = original_bracketology.dup
     last_one_in = @bracketology.tournament_field.index(@bracketology.last_four_in[3])
@@ -153,7 +160,7 @@ class BracketologyController < ApplicationController
       pace_z = getZscore(rand())
       predicted_tempo = top.adj_tempo + bottom.adj_tempo - current_season.adj_tempo
       pace_standard_dev = 6.5
-      efficiency_deviation = current_season.consistency * 0.8
+      efficiency_deviation = current_season.consistency * 0.7 * custom_efficiency_deviation
       top_efficiency = (top.adj_offensive_efficiency + bottom.adj_defensive_efficiency - current_season.adj_offensive_efficiency) + (fav_z * efficiency_deviation)
       bottom_efficiency = (top.adj_defensive_efficiency + bottom.adj_offensive_efficiency - current_season.adj_offensive_efficiency) + (und_z * efficiency_deviation)
       defensive_advantage = 0.0
@@ -219,8 +226,8 @@ class BracketologyController < ApplicationController
           bottom_score += 1.0
         end
       end
-      @bracketology.round_of_sixtyfour[x][:top_score] = top_score
-      @bracketology.round_of_sixtyfour[x][:bottom_score] = bottom_score
+      @bracketology.round_of_sixtyfour[x][:top_score] = top_score.round(2)
+      @bracketology.round_of_sixtyfour[x][:bottom_score] = bottom_score.round(2)
 
       if top_score > bottom_score
         thirty_two << @bracketology.round_of_sixtyfour[x][:top]
@@ -237,7 +244,7 @@ class BracketologyController < ApplicationController
     @bracketology.round_of_thirtytwo << { top: thirty_two[3], bottom: thirty_two[28], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[3], bottom_seed: thirty_two_seeds[28] }
     @bracketology.round_of_thirtytwo << { top: thirty_two[19], bottom: thirty_two[12], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[19], bottom_seed: thirty_two_seeds[12] }
     @bracketology.round_of_thirtytwo << { top: thirty_two[20], bottom: thirty_two[11], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[20], bottom_seed: thirty_two_seeds[11] }
-    @bracketology.round_of_thirtytwo << { top: thirty_two[24], bottom: thirty_two[4], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[24], bottom_seed: thirty_two_seeds[4] }
+    @bracketology.round_of_thirtytwo << { top: thirty_two[27], bottom: thirty_two[4], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[27], bottom_seed: thirty_two_seeds[4] }
     @bracketology.round_of_thirtytwo << { top: thirty_two[1], bottom: thirty_two[30], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[1], bottom_seed: thirty_two_seeds[30] }
     @bracketology.round_of_thirtytwo << { top: thirty_two[17], bottom: thirty_two[14], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[17], bottom_seed: thirty_two_seeds[14] }
     @bracketology.round_of_thirtytwo << { top: thirty_two[22], bottom: thirty_two[9], top_score: 0, bottom_score: 0, top_seed: thirty_two_seeds[22], bottom_seed: thirty_two_seeds[9] }
@@ -323,8 +330,8 @@ class BracketologyController < ApplicationController
           bottom_score += 1.0
         end
       end
-      @bracketology.round_of_thirtytwo[x][:top_score] = top_score
-      @bracketology.round_of_thirtytwo[x][:bottom_score] = bottom_score
+      @bracketology.round_of_thirtytwo[x][:top_score] = top_score.round(2)
+      @bracketology.round_of_thirtytwo[x][:bottom_score] = bottom_score.round(2)
       if (x + 1) % 2 == 0 
         if top_score > bottom_score
           @bracketology.round_of_sixteen << { top: first_team, bottom: @bracketology.round_of_thirtytwo[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_thirtytwo[x][:top_seed] }
@@ -418,8 +425,8 @@ class BracketologyController < ApplicationController
           bottom_score += 1.0
         end
       end
-      @bracketology.round_of_sixteen[x][:top_score] = top_score
-      @bracketology.round_of_sixteen[x][:bottom_score] = bottom_score
+      @bracketology.round_of_sixteen[x][:top_score] = top_score.round(2)
+      @bracketology.round_of_sixteen[x][:bottom_score] = bottom_score.round(2)
       if (x + 1) % 2 == 0 
         if top_score > bottom_score
           @bracketology.round_of_eight << { top: first_team, bottom: @bracketology.round_of_sixteen[x][:top], top_score: 0, bottom_score: 0, top_seed: first_seed , bottom_seed: @bracketology.round_of_sixteen[x][:top_seed] }

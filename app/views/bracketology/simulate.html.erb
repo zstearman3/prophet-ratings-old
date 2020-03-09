@@ -1,4 +1,25 @@
 <div class="row tourney-simulation">
+  <div class="row filter-container">
+    <ul class="filter-navbar">
+      <li>
+        <%= form_tag simulation_path, :method => :get do %>
+          <li>
+            <%= hidden_field_tag 'id', @bracketology.id %>
+          </li>
+          <li>
+            Upset Modifier (default = 5)
+            <%= number_field_tag 'custom_efficiency_deviation', value = nil, options = {min: 0, max: 20, step: 1, value: @custom_efficiency_deviation.round }  %>
+          </li>
+          <li>
+            <%= submit_tag 'New Simulation', name: nil %>
+          </li>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to "Reset Options", simulation_path %>
+      </li>
+    </ul>
+  </div>
   <div class="top-region col-xs-12">
     <div class="left-brackets col-md-6 col-xs-12">
       <h3>Midwest Region</h3>
