@@ -1,6 +1,8 @@
 require 'net/http'
+require "#{Rails.root}/lib/predictions_calculator"
 require "#{Rails.root}/app/helpers/gaussian"
 include Gaussian
+include PredictionsCalculator
 
 namespace :calcs do
   task game_stats: :environment do
@@ -758,9 +760,8 @@ namespace :calcs do
         
         # # Matchup Specific Modifiers
         if game.home_team.stadium == game.stadium
-          season_home_advantage = 3.0
-          season_home_advantage = current_season.home_advantage unless current_season.home_advantage.nan?
-          home_advantage = (((4.0 * season_home_advantage) + home_team_season.home_advantage + away_team_season.home_advantage)/ 6.0).round(1)
+          home_advantage = matchup_modifiers(current_season, game, home_team_season, away_team_season)
+          puts home_advantage
           predicted_home_efficiency += home_advantage / 2.0
           predicted_away_efficiency += home_advantage / -2.0
         end
@@ -997,10 +998,6 @@ namespace :calcs do
         end
       end
     end
-  end
-  
-  task gaussian_test: :environment do
-    puts getProbability(-1.76)
   end
   
   task generate_preseason: :environment do
