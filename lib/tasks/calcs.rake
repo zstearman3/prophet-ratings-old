@@ -760,8 +760,7 @@ namespace :calcs do
         
         # # Matchup Specific Modifiers
         if game.home_team.stadium == game.stadium
-          home_advantage = matchup_modifiers(current_season, game, home_team_season, away_team_season)
-          puts home_advantage
+          home_advantage = home_advantage_calc(current_season, game, home_team_season, away_team_season)
           predicted_home_efficiency += home_advantage / 2.0
           predicted_away_efficiency += home_advantage / -2.0
         end
