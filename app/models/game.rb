@@ -9,4 +9,9 @@ class Game < ApplicationRecord
   belongs_to :player_of_the_game, :class_name => 'Player', :foreign_key => 'player_of_the_game_id', optional: true
   validates :status, presence: true
   validates :day, presence: true
+  
+  def display
+    "#{away_team.school} @ #{home_team.school}"
+  end
+  
 end
