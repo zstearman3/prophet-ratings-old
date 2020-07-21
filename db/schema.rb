@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200309185950) do
+ActiveRecord::Schema.define(version: 20200721021611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -315,6 +315,13 @@ ActiveRecord::Schema.define(version: 20200309185950) do
     t.boolean "top_play"
     t.index ["game_id"], name: "index_predictions_on_game_id"
     t.index ["season_id"], name: "index_predictions_on_season_id"
+  end
+
+  create_table "rankings", force: :cascade do |t|
+    t.date "date"
+    t.text "full_rankings"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "seasons", force: :cascade do |t|
