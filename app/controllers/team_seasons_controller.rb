@@ -21,8 +21,10 @@ class TeamSeasonsController < ApplicationController
   private 
   
     def set_instance_variables
-      team_seasons
-      conferences
+      @team_seasons = team_seasons
+      @conferences = conferences
+      @year = year.to_i
+      @conference_id = params[:conference_id]
     end
     
     def sort_column
@@ -39,16 +41,15 @@ class TeamSeasonsController < ApplicationController
     end
     
     def team_seasons
-      @team_seasons = TeamSeason.where(year: year)
-      @team_seasons = @team_seasons.where(conference_id: conference_ids) if conference_ids
-      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+      team_seasons = TeamSeason.where(year: year)
+      team_seasons = team_seasons.where(conference_id: conference_ids) if conference_ids
+      team_seasons = team_seasons.order("#{sort_column} #{sort_direction}")
     end
     
     def conferences
-      @conferences = Conference.order(name: :asc).all.as_json
-      @conferences << {"id" => 40, "name" => "Powers"}
-      @conferences << {"id" => 50, "name" => "Mid-Majors"}
-      @conferences.to_json 
+      conferences = Conference.order(name: :asc).all.as_json
+      conferences << {"id" => 40, "name" => "Powers"}
+      conferences << {"id" => 50, "name" => "Mid-Majors"}
     end
     
     def conference_ids
