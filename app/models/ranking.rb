@@ -1,5 +1,5 @@
 class Ranking < ApplicationRecord
-  before_save :get_full_rankings
+  before_create :get_full_rankings
   serialize :full_rankings
   
   def current_hash
