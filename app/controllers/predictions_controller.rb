@@ -160,4 +160,5 @@ class PredictionsController < ApplicationController
       init_direction ||= "asc"
       %w[asc desc].include?(params[:direction]) ? params[:direction] : init_direction
     end
+    
 end

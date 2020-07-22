@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',           '5.1.7'
+gem 'rails',           '~>5.2.0'
 gem 'bcrypt',          '3.1.12'
 gem 'bootstrap-sass',  '3.4.1'
 gem 'puma',            '3.9.1'
@@ -24,6 +24,7 @@ group :development do
   gem 'listen',                '3.1.5'
   gem 'spring',                '2.0.2'
   gem 'spring-watcher-listen', '2.0.1'
+  gem 'rails_best_practices',  '1.20.0'
 end
 
 group :development, :test do
