@@ -1,25 +1,22 @@
 <% provide(:title, 'Rankings') %>
-<% year = params[:season].to_i %>
-<% year = @team_seasons.first.year if year == 0 %>
-<% conference_id = params[:conference_id].to_i %>
 <% unless logged_in? %>
   <div class="signup-banner">
     <p>To see full advanced stats, predictions, and betting advice, please <%= link_to 'create a free account', signup_path %>. ProphetRatings is still in beta testing for the 2019-2020 season.
     Features are being added constantly, and the algorithm is being tuned to give the best possible predictions.</p>
   </div>
 <% end %>
-<%= link_to 'Previous Season', rankings_path(season: year - 1, conference_id: conference_id) %>
-<%= link_to 'Next Season', rankings_path(season: year + 1, conference_id: conference_id), class: 'align-right' unless year >= current_season.season %>
+<%= link_to 'Previous Season', rankings_path(season: @year - 1, conference_id: @conference_id) %>
+<%= link_to 'Next Season', rankings_path(season: @year + 1, conference_id: @conference_id), class: 'align-right' unless @year >= current_season.season %>
 <div class="row stats-container">
   <div class="row filter-container">
     <ul class="filter-navbar">
       <li>
         <%= form_tag rankings_path, :method => :get do %>
           <li>
-            <%= hidden_field_tag 'season', year %>
+            <%= hidden_field_tag 'season', @year %>
           </li>
           <li>
-            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, conference_id), {include_blank: 'Filter Conference'}) %>
+            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, @conference_id), {include_blank: 'Filter Conference'}) %>
           </li>
           <li>
             <%= submit_tag 'Filter', name: nil %>
@@ -27,8 +24,8 @@
         <% end %>
       </li>
       <li>
-        <%= link_to "Clear Filters", rankings_path(season: year), class: 'hidden-small' %>
-        <%= link_to "Clear", rankings_path(season: year), class: 'hidden-large' %>
+        <%= link_to "Clear Filters", rankings_path(season: @year), class: 'hidden-small' %>
+        <%= link_to "Clear", rankings_path(season: @year), class: 'hidden-large' %>
       </li>
     </ul>
   </div>
@@ -37,16 +34,16 @@
       <table class="table table-sm table-striped">
         <thead>
           <tr>
-            <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+            <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
             <th class="hidden-small">Conference</th>
             <th class="hidden-large">Conf</th>
-            <th class="min-width"><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-            <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", year, conference_id %></th>
-            <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year, conference_id %></th>
-            <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
-            <th><%= sort_link "adj_tempo", "AdjT", "desc", year, conference_id %></th>
+            <th class="min-width"><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "adj_tempo", "AdjT", "desc", @year, @conference_id %></th>
           </tr>
         </thead>
         <tbody>
@@ -55,10 +52,10 @@
             <tr>
               <td><%= x %></td>
               <td><%= season.adjem_rank %></td>
-              <% if year > current_season.season %>
+              <% if @year > current_season.season %>
                 <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
               <% else %>
-                <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+                <td><%= link_to season.team.school, team_path(season.team, year: @year) %></td>
               <% end %>
               <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
               <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
@@ -70,16 +67,16 @@
             </tr>
             <% if x % 20 == 0 %>
               <tr>
-                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
                 <th class="hidden-small">Conference</th>
                 <th class="hidden-large">Conf</th>
-                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-                <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", year, conference_id %></th>
-                <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", year, conference_id %></th>
-                <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
-                <th><%= sort_link "adj_tempo", "AdjT", "desc", year, conference_id %></th>
+                <th><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "adj_efficiency_margin", "Rating", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "adj_offensive_efficiency", "AdjO", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "adj_tempo", "AdjT", "desc", @year, @conference_id %></th>
               </tr>
             <% end %>
             <% x += 1 %>
