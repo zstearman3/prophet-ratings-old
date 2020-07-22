@@ -13,6 +13,10 @@ class Season < ApplicationRecord
     Season.find_by(season: CURRENT_YEAR)
   end
   
+  def self.current_year
+    CURRENT_YEAR
+  end
+  
   def rankings_to_hash
     rankings_hash = {}
     team_seasons.each do |team_season| 
