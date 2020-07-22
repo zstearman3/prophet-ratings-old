@@ -53,12 +53,12 @@
               <td><%= x %></td>
               <td><%= season.adjem_rank %></td>
               <% if @year > current_season.season %>
-                <td><%= link_to season.team.school, preseason_path(team: season.team) %></td>
+                <td><%= link_to season.school, preseason_path(team: season.team) %></td>
               <% else %>
-                <td><%= link_to season.team.school, team_path(season.team, year: @year) %></td>
+                <td><%= link_to season.school, team_path(season.team, year: @year) %></td>
               <% end %>
-              <td class="hidden-small"><%= link_to season.team.conference.name, season.team.conference %></td>
-              <td class="hidden-large"><%= link_to season.team.conference.abbreviation, season.team.conference %></td>
+              <td class="hidden-small"><%= link_to season.conference_name, season.conference %></td>
+              <td class="hidden-large"><%= link_to season.conference_abbr, season.conference %></td>
               <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
               <td><%= season.adj_efficiency_margin %></td>
               <td><%= season.adj_offensive_efficiency %></td>
