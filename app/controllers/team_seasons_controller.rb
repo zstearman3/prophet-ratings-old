@@ -21,28 +21,12 @@ class TeamSeasonsController < ApplicationController
   private 
   
     def set_instance_variables
-      @team_seasons = TeamSeason.where(year: year)
-      @team_seasons = @team_seasons.where(conference_id: conference_ids) if conference_ids
-      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
-      @conferences = Conference.order(name: :asc).all.as_json
-      @conferences << {"id" => 40, "name" => "Powers"}
-      @conferences << {"id" => 50, "name" => "Mid-Majors"}
-      @conferences.to_json 
-    end
-    
-    def sortable_columns
-      ['name', 'wins', 'adjem_rank', 'adj_offensive_efficiency', 'adj_defensive_efficiency', 'adj_tempo', 
-       'field_goals_percentage', 'effective_field_goals_percentage', 'three_pointers_percentage', 'assists_percentage',
-       'turnovers_percentage', 'free_throws_rate', 'assists_percentage_allowed', 'turnovers_percentage_allowed', 'free_throws_rate_allowed', 
-       'home_advantage', 'two_pointers_percentage', 'true_shooting_percentage', 'offensive_efficiency', 'free_throws_percentage',
-       'offensive_rebounds_percentage', 'defensive_rebounds_percentage', 'total_rebounds_percentage', 'offensive_rebounds', 'defensive_rebounds',
-       'rebounds', 'defensive_efficiency', 'steals_percentage', 'blocks_percentage', 'true_shooting_percentage_allowed', 'defensive_aggression',
-       'defensive_fingerprint', 'adj_efficiency_margin', 'consistency', 'conference_wins', 'strength_of_schedule', 'ooc_strength_of_schedule',
-       'two_pointers_percentage_allowed', 'three_pointers_percentage_allowed']
+      team_seasons
+      conferences
     end
     
     def sort_column
-      sortable_columns.include?(params[:column]) ? params[:column] : 'adjem_rank'
+      params[:column] ? params[:column] : 'adjem_rank'
     end
   
     def sort_direction(init_direction = nil)
@@ -52,6 +36,19 @@ class TeamSeasonsController < ApplicationController
     
     def year
       params[:season] ? params[:season] : Season.current_year
+    end
+    
+    def team_seasons
+      @team_seasons = TeamSeason.where(year: year)
+      @team_seasons = @team_seasons.where(conference_id: conference_ids) if conference_ids
+      @team_seasons = @team_seasons.order("#{sort_column} #{sort_direction}")
+    end
+    
+    def conferences
+      @conferences = Conference.order(name: :asc).all.as_json
+      @conferences << {"id" => 40, "name" => "Powers"}
+      @conferences << {"id" => 50, "name" => "Mid-Majors"}
+      @conferences.to_json 
     end
     
     def conference_ids
