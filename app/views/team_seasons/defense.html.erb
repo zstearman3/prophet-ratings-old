@@ -1,19 +1,16 @@
 <% provide(:title, 'Team Defense Stats') %>
-<% year = params[:season].to_i %>
-<% year = @team_seasons.first.year if year == 0 %>
-<% conference_id = params[:conference_id].to_i %>
-<%= link_to 'Previous Season', team_defense_path(season: year - 1, conference_id: conference_id) %>
-<%= link_to 'Next Season', team_defense_path(season: year + 1, conference_id: conference_id), class: 'align-right' %>
+<%= link_to 'Previous Season', team_defense_path(season: @year - 1, conference_id: @conference_id) %>
+<%= link_to 'Next Season', team_defense_path(season: @year + 1, conference_id: @conference_id), class: 'align-right' %>
 <div class="row stats-container">
   <div class="row filter-container">
     <ul class="filter-navbar">
       <li>
         <%= form_tag team_defense_path, :method => :get do %>
           <li>
-            <%= hidden_field_tag 'season', year %>
+            <%= hidden_field_tag 'season', @year %>
           </li>
           <li>
-            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, conference_id), {include_blank: 'Filter Conference'}) %>
+            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, @conference_id), {include_blank: 'Filter Conference'}) %>
           </li>
           <li>
             <%= submit_tag 'Filter', name: nil %>
@@ -21,8 +18,8 @@
         <% end %>
       </li>
       <li>
-        <%= link_to "Clear Filters", team_defense_path(season: year), class: 'hidden-small' %>
-        <%= link_to "Clear", team_defense_path(season: year), class: 'hidden-large' %>
+        <%= link_to "Clear Filters", team_defense_path(season: @year), class: 'hidden-small' %>
+        <%= link_to "Clear", team_defense_path(season: @year), class: 'hidden-large' %>
       </li>
     </ul>
   </div>
@@ -31,19 +28,19 @@
       <table class="table table-sm">
         <thead>
           <tr>
-            <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
-            <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-            <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
-            <th><%= sort_link "defensive_efficiency", "DEff", "asc", year, conference_id %></th>
-            <th><%= sort_link "steals_percentage", "Steals%", "desc", year, conference_id %></th>
-            <th><%= sort_link "blocks_percentage", "Blocks%", "desc", year, conference_id %></th>
-            <th><%= sort_link "two_pointers_percentage_allowed", "2P%A", "asc", year, conference_id %></th>
-            <th><%= sort_link "three_pointers_percentage_allowed", "3P%A", "asc", year, conference_id %></th>
-            <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", year, conference_id %></th>
-            <th><%= sort_link "defensive_aggression", "Aggression", "desc", year, conference_id %></th>
-            <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", year, conference_id %></th>
+            <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "defensive_efficiency", "DEff", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "steals_percentage", "Steals%", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "blocks_percentage", "Blocks%", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "two_pointers_percentage_allowed", "2P%A", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "three_pointers_percentage_allowed", "3P%A", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "defensive_aggression", "Aggression", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", @year, @conference_id %></th>
           </tr>
         </thead>
         <tbody>
@@ -52,7 +49,7 @@
             <tr>
               <td><%= x %></td>
               <td><%= season.adjem_rank %></td>
-              <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+              <td><%= link_to season.school, team_path(season.team_id, year: @year) %></td>
               <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
               <td><%= season.adj_defensive_efficiency %></td>
               <td><%= season.defensive_efficiency %></td>
@@ -66,19 +63,19 @@
             </tr>
             <% if x % 20 == 0 %>
               <tr>
-                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
-                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-                <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", year, conference_id %></th>
-                <th><%= sort_link "defensive_efficiency", "DEff", "asc", year, conference_id %></th>
-                <th><%= sort_link "steals_percentage", "Steals%", "desc", year, conference_id %></th>
-                <th><%= sort_link "blocks_percentage", "Blocks%", "desc", year, conference_id %></th>
-                <th><%= sort_link "two_pointers_percentage_allowed", "2P%A", "asc", year, conference_id %></th>
-                <th><%= sort_link "three_pointers_percentage_allowed", "3P%A", "asc", year, conference_id %></th>
-                <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", year, conference_id %></th>
-                <th><%= sort_link "defensive_aggression", "Aggression", "desc", year, conference_id %></th>
-                <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", year, conference_id %></th>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "adj_defensive_efficiency", "AdjD", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "defensive_efficiency", "DEff", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "steals_percentage", "Steals%", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "blocks_percentage", "Blocks%", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "two_pointers_percentage_allowed", "2P%A", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "three_pointers_percentage_allowed", "3P%A", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "true_shooting_percentage_allowed", "OppTS%", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "defensive_aggression", "Aggression", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "defensive_fingerprint", "DScheme", "asc", @year, @conference_id %></th>
               </tr>
             <% end %>
             <% x += 1 %>

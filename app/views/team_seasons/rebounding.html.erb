@@ -1,19 +1,16 @@
 <% provide(:title, 'Team Rebounding Stats') %>
-<% year = params[:season].to_i %>
-<% year = @team_seasons.first.year if year == 0 %>
-<% conference_id = params[:conference_id].to_i %>
-<%= link_to 'Previous Season', team_rebounding_path(season: year - 1, conference_id: conference_id) %>
-<%= link_to 'Next Season', team_rebounding_path(season: year + 1, conference_id: conference_id), class: 'align-right' %>
+<%= link_to 'Previous Season', team_rebounding_path(season: @year - 1, conference_id: @conference_id) %>
+<%= link_to 'Next Season', team_rebounding_path(season: @year + 1, conference_id: @conference_id), class: 'align-right' %>
 <div class="row stats-container">
   <div class="row filter-container">
     <ul class="filter-navbar">
       <li>
         <%= form_tag team_rebounding_path, :method => :get do %>
           <li>
-            <%= hidden_field_tag 'season', year %>
+            <%= hidden_field_tag 'season', @year %>
           </li>
           <li>
-            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, conference_id), {include_blank: 'Filter Conference'}) %>
+            <%= select_tag(:conference_id, options_for_select(@conferences.map { |obj| [obj['name'], obj['id']]}, @conference_id), {include_blank: 'Filter Conference'}) %>
           </li>
           <li>
             <%= submit_tag 'Filter', name: nil %>
@@ -21,8 +18,8 @@
         <% end %>
       </li>
       <li>
-        <%= link_to "Clear Filters", team_rebounding_path(season: year), class: 'hidden-small' %>
-        <%= link_to "Clear", team_rebounding_path(season: year), class: 'hidden-large' %>
+        <%= link_to "Clear Filters", team_rebounding_path(season: @year), class: 'hidden-small' %>
+        <%= link_to "Clear", team_rebounding_path(season: @year), class: 'hidden-large' %>
       </li>
     </ul>
   </div>
@@ -31,16 +28,16 @@
       <table class="table table-sm">
         <thead>
           <tr>
-            <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-            <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
-            <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-            <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year, conference_id %></th>
-            <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year, conference_id %></th>
-            <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year, conference_id %></th>
-            <th><%= sort_link "offensive_rebounds", "OREB", "desc", year, conference_id %></th>
-            <th><%= sort_link "defensive_rebounds", "DREB", "desc", year, conference_id %></th>
-            <th><%= sort_link "rebounds", "REB", "desc", year, conference_id %></th>
+            <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
+            <th><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "offensive_rebounds", "OREB", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "defensive_rebounds", "DREB", "desc", @year, @conference_id %></th>
+            <th><%= sort_link "rebounds", "REB", "desc", @year, @conference_id %></th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +46,7 @@
             <tr>
               <td><%= x %></td>
               <td><%= season.adjem_rank %></td>
-              <td><%= link_to season.team.school, team_path(season.team, year: year) %></td>
+              <td><%= link_to season.team.school, team_path(season.team, year: @year) %></td>
               <td><%= season.wins.to_s + "-" + season.losses.to_s %></td>
               <td><%= season.offensive_rebounds_percentage %></td>
               <td><%= season.defensive_rebounds_percentage %></td>
@@ -60,16 +57,16 @@
             </tr>
             <% if x % 20 == 0 %>
               <tr>
-                <th><%= sort_link "adjem_rank", "Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", year, conference_id %></th>
-                <th><%= sort_link "name", "Team", "asc", year, conference_id %></th>
-                <th><%= sort_link "wins", "Record", "desc", year, conference_id %></th>
-                <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", year, conference_id %></th>
-                <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", year, conference_id %></th>
-                <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", year, conference_id %></th>
-                <th><%= sort_link "offensive_rebounds", "OREB", "desc", year, conference_id %></th>
-                <th><%= sort_link "defensive_rebounds", "DREB", "desc", year, conference_id %></th>
-                <th><%= sort_link "rebounds", "REB", "desc", year, conference_id %></th>
+                <th><%= sort_link "adjem_rank", "Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "adjem_rank", "AdjEM Rank", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "name", "Team", "asc", @year, @conference_id %></th>
+                <th><%= sort_link "wins", "Record", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "offensive_rebounds_percentage", "ORB%", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "defensive_rebounds_percentage", "DRB%", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "total_rebounds_percentage", "TRB%", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "offensive_rebounds", "OREB", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "defensive_rebounds", "DREB", "desc", @year, @conference_id %></th>
+                <th><%= sort_link "rebounds", "REB", "desc", @year, @conference_id %></th>
               </tr>
             <% end %>
             <% x += 1 %>
