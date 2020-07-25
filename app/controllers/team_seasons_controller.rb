@@ -27,15 +27,6 @@ class TeamSeasonsController < ApplicationController
       @conference_id = params[:conference_id]
     end
     
-    def sort_column
-      params[:column] ? params[:column] : 'adjem_rank'
-    end
-  
-    def sort_direction(init_direction = nil)
-      init_direction ||= "asc"
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : init_direction
-    end
-    
     def year
       params[:season] ? params[:season] : Season.current_year
     end
@@ -50,4 +41,13 @@ class TeamSeasonsController < ApplicationController
       Conference.return_ids(params[:conference_id])
     end
     
+    def sort_column
+      params[:column] ? params[:column] : 'adjem_rank'
+    end
+  
+    def sort_direction(init_direction = nil)
+      init_direction ||= "asc"
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : init_direction
+    end
+      
 end
