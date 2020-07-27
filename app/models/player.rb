@@ -15,14 +15,6 @@ class Player < ApplicationRecord
     "##{jersey} #{full_name}"
   end
   
-  def height_in_feet
-    height.to_i == 0 ? nil : "#{height / 12}' #{height % 12}\""
-  end
-  
-  def weight_in_lbs
-    weight.to_i == 0 ? nil : "#{weight} lbs"
-  end
-  
   def description
     description_string = "#{year}"
     description_string += " • #{position}" if position
@@ -30,4 +22,15 @@ class Player < ApplicationRecord
     description_string += " • #{weight_in_lbs}" if weight_in_lbs
     return description_string
   end
+  
+  private
+  
+    def height_in_feet
+      height.to_i == 0 ? nil : "#{height / 12}' #{height % 12}\""
+    end
+    
+    def weight_in_lbs
+      weight.to_i == 0 ? nil : "#{weight} lbs"
+    end
+    
 end

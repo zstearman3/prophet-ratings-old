@@ -1,7 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-big_12:
-  name: Big XII
-
-big_10:
-  name: Big 10
