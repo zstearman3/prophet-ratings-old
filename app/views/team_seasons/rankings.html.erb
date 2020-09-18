@@ -48,11 +48,12 @@
         </thead>
         <tbody>
           <% x = 1 %>
+          <% @year > current_season.season ? preseason = true : preseason = false %>
           <% @team_seasons.each do |season| %>
             <tr>
               <td><%= x %></td>
               <td><%= season.adjem_rank %></td>
-              <% if @year > current_season.season %>
+              <% if preseason %>
                 <td><%= link_to season.school, preseason_path(team: season.team) %></td>
               <% else %>
                 <td><%= link_to season.school, team_path(season.team, year: @year) %></td>
