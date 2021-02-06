@@ -32,7 +32,7 @@ class TeamSeasonsController < ApplicationController
     end
     
     def team_seasons
-      team_seasons = TeamSeason.includes(:team).where(year: year)
+      team_seasons = TeamSeason.includes(team: [:conference]).where(year: year)
       team_seasons = team_seasons.where(conference_id: conference_ids) if conference_ids
       team_seasons = team_seasons.order("#{sort_column} #{sort_direction}")
     end
